@@ -7,6 +7,7 @@ public class FieldManager : MonoBehaviour
     public int state = 0;
     public GameObject[] neighbours;
     public int idx, idy;
+    public GameObject cell;
 
     // Use this for initialization
     void Start ()
