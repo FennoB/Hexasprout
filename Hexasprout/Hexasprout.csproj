@@ -322,11 +322,11 @@
     <Reference Include="Facebook.Unity.Settings">
       <HintPath>Library\FacebookSDK\Facebook.Unity.Settings.dll</HintPath>
     </Reference>
-    <Reference Include="TextMeshPro-2017.3-1.0.56-Runtime">
-      <HintPath>Assets\Resources\TextMesh Pro\Plugins\Editor DLL\TextMeshPro-2017.3-1.0.56-Runtime.dll</HintPath>
-    </Reference>
     <Reference Include="TextMeshPro-2017.3-1.0.56-Editor">
       <HintPath>Assets\Resources\TextMesh Pro\Plugins\Editor DLL\TextMeshPro-2017.3-1.0.56-Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="TextMeshPro-2017.3-1.0.56-Runtime">
+      <HintPath>Assets\Resources\TextMesh Pro\Plugins\Editor DLL\TextMeshPro-2017.3-1.0.56-Runtime.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
