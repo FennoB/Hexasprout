@@ -5,6 +5,10 @@ using UnityEngine;
 public class FieldManager : MonoBehaviour
 {
     public int state = 0;
+    //0 = Down left
+    //1 = Down
+    //... (circle)
+
     public GameObject[] neighbours;
     public int idx, idy;
     public GameObject cell;
