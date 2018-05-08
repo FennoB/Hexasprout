@@ -45,6 +45,7 @@ public class CellManager : MonoBehaviour
     // Death
     void Death()
     {
+        energy = 0;
         alive = false;
     }
 }
