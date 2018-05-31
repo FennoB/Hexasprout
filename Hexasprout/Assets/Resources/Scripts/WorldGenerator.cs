@@ -82,11 +82,37 @@ public class WorldGenerator : MonoBehaviour
         g.GetComponent<Transform>().SetParent(fields[2][2].GetComponent<Transform>());
         g.GetComponent<Transform>().localPosition = new Vector3(0, 0, -0.14f);
         fields[2][2].GetComponent<FieldManager>().cell = g;
+
+        GameObject e = Instantiate((GameObject)Resources.Load("Prefabs/StemCell", typeof(GameObject)));
+        e.GetComponent<Transform>().SetParent(fields[2][3].GetComponent<Transform>());
+        e.GetComponent<Transform>().localPosition = new Vector3(0, 0, -0.14f);
+        fields[2][3].GetComponent<FieldManager>().cell = e;
+
+        g.GetComponent<CellManager>().ConnectWith(e.GetComponent<CellManager>(), 3);
+
+    }
+
+    // Fixed update is called at fixed timestep
+    private void FixedUpdate()
+    {
+        GameObject[] cells = GameObject.FindGameObjectsWithTag("Cell");
+        foreach (GameObject c in cells)
+        {
+            CellManager cm = c.GetComponent<CellManager>();
+            cm.DiffusionCalc();
+        }
+
+        foreach (GameObject c in cells)
+        {
+            CellManager cm = c.GetComponent<CellManager>();
+            cm.DiffusionApply();
+        }
     }
 
     // Update is called once per frame
     void Update ()
     {
-		
-	}
+    }
+
+
 }
