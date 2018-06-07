@@ -313,6 +313,7 @@
     <Compile Include="Assets\Resources\Scripts\CellSpecs\StorageCellSpec.cs" />
     <Compile Include="Assets\Resources\Scripts\CellSpecs\WorkerCellSpec.cs" />
     <Compile Include="Assets\Resources\Scripts\FieldManager.cs" />
+    <Compile Include="Assets\Resources\Scripts\ViewDrag.cs" />
     <Compile Include="Assets\Resources\Scripts\WorldGenerator.cs" />
     <Compile Include="Assets\Resources\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark01.cs" />
     <Compile Include="Assets\Resources\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark01_UGUI.cs" />

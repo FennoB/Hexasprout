@@ -28,7 +28,7 @@ public class HeartCellSpec : MonoBehaviour {
     }
 
     // Fixed Update
-    void FixedUpdate()
+    public void OwnFixedUpdate()
     {
         if (GetComponent<CellManager>().alive)
         {

@@ -26,6 +26,7 @@ public class WorldGenerator : MonoBehaviour
                 newField.transform.position = new Vector2(-100.0f + (float) i * 1.5f + (float)(j % 2) * 0.75f, -50 + 0.25f * j);
                 newField.GetComponent<FieldManager>().idx = i;
                 newField.GetComponent<FieldManager>().idy = j;
+                newField.GetComponent<FieldManager>().warmth = Random.value;
                 fields[i][j] = newField;
             }
         }
@@ -88,7 +89,13 @@ public class WorldGenerator : MonoBehaviour
         e.GetComponent<Transform>().localPosition = new Vector3(0, 0, -0.14f);
         fields[2][3].GetComponent<FieldManager>().cell = e;
 
+        GameObject f = Instantiate((GameObject)Resources.Load("Prefabs/LeafCell", typeof(GameObject)));
+        f.GetComponent<Transform>().SetParent(fields[3][4].GetComponent<Transform>());
+        f.GetComponent<Transform>().localPosition = new Vector3(0, 0, -0.14f);
+        fields[3][4].GetComponent<FieldManager>().cell = f;
+
         g.GetComponent<CellManager>().ConnectWith(e.GetComponent<CellManager>(), 3);
+        e.GetComponent<CellManager>().ConnectWith(f.GetComponent<CellManager>(), 3);
 
     }
 
@@ -96,6 +103,18 @@ public class WorldGenerator : MonoBehaviour
     private void FixedUpdate()
     {
         GameObject[] cells = GameObject.FindGameObjectsWithTag("Cell");
+
+        foreach (GameObject c in cells)
+        {
+            if(c.GetComponent<LeafCellSpec>() != null)
+            {
+                c.GetComponent<LeafCellSpec>().Absorb();
+            }
+
+            CellManager cm = c.GetComponent<CellManager>();
+            cm.OwnFixedUpdate();
+        }
+
         foreach (GameObject c in cells)
         {
             CellManager cm = c.GetComponent<CellManager>();
@@ -110,9 +129,8 @@ public class WorldGenerator : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update ()
+    void Update()
     {
     }
-
 
 }

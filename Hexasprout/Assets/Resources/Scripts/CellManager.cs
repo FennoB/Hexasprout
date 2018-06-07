@@ -11,6 +11,7 @@ public class Juice
     public float blueCharged;
     public float yellow;
     public float black;
+    public float bluePotency;
 
     public Juice()
     {
@@ -20,6 +21,7 @@ public class Juice
         blueCharged = 0;
         yellow = 0;
         black = 0;
+        bluePotency = 2.0f;
     }
 }
 
@@ -31,7 +33,8 @@ public class CellManager : MonoBehaviour
     public float energyConvert = 0.5f; // Convertion of chemical to cellenegy per minute (2 minutes to reload battery)
     public bool alive = true;
     public float diffusionFactor = 0.5f;    // Diffusion speed. Behaviour undefined when > 1.0f
-    
+    public int cellType = -1;           // Celltypes: stem=0, leaf=1, worker=2, heart=3, storage=4, breed=5
+
     public Juice juice;
     public Juice diffusionDelta;
     public GameObject[] connections;
@@ -51,7 +54,7 @@ public class CellManager : MonoBehaviour
 	}
 
     // Update is called once per frame
-    void FixedUpdate()
+    public void OwnFixedUpdate()
     {
         if (alive)
         {
@@ -159,6 +162,7 @@ public class CellManager : MonoBehaviour
     //Juice Diffusion Apply
     public void DiffusionApply()
     {
+        //deltaTime sollte niemals > 1.0f sein, sonst sind schwingeffekte möglich
         juice.red           += Time.deltaTime * diffusionDelta.red;
         juice.green         += Time.deltaTime * diffusionDelta.green;
         juice.blue          += Time.deltaTime * diffusionDelta.blue;

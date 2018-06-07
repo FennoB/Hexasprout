@@ -12,6 +12,7 @@ public class FieldManager : MonoBehaviour
     public GameObject[] neighbours;
     public int idx, idy;
     public GameObject cell;
+    public float warmth;
 
     // Use this for initialization
     void Start ()
@@ -21,7 +22,6 @@ public class FieldManager : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
     {
-
         CheckState();
         SetApperance();
 	}
@@ -65,11 +65,11 @@ public class FieldManager : MonoBehaviour
     {
         if (state == 2)
         {
-            GetComponent<SpriteRenderer>().color = new Color(1f,1f,1f);
+            GetComponent<SpriteRenderer>().color = new Color(warmth, 0.5f, 1.0f - warmth);
         }
         else if (state == 1)
         {
-            GetComponent<SpriteRenderer>().color = new Color(0.5f, 0.5f, 0.5f);
+            GetComponent<SpriteRenderer>().color = new Color(0.5f * warmth, 0.25f, 0.5f - 0.5f * warmth);
         }
         else if(state == 0) 
         {
