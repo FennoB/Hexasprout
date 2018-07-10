@@ -37,7 +37,7 @@ GameObject:
   - component: {fileID: 4730031323729840}
   - component: {fileID: 114959760435859854}
   m_Layer: 0
-  m_Name: storageCell
+  m_Name: StorageCell
   m_TagString: Cell
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

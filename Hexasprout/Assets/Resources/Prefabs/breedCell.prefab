@@ -37,7 +37,7 @@ GameObject:
   - component: {fileID: 4730031323729840}
   - component: {fileID: 114959760435859854}
   m_Layer: 0
-  m_Name: breedCell
+  m_Name: BreedCell
   m_TagString: Cell
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -125,6 +125,7 @@ MonoBehaviour:
     blueCharged: 0
     yellow: 0
     black: 0
+    bluePotency: 2
   diffusionDelta:
     red: 0
     green: 0
@@ -132,6 +133,7 @@ MonoBehaviour:
     blueCharged: 0
     yellow: 0
     black: 0
+    bluePotency: 2
   connections: []
   tempid: 0
 --- !u!212 &212094485156092258

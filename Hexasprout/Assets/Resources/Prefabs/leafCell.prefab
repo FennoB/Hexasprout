@@ -38,7 +38,7 @@ GameObject:
   - component: {fileID: 114959760435859854}
   - component: {fileID: 114212710785875986}
   m_Layer: 0
-  m_Name: leafCell
+  m_Name: LeafCell
   m_TagString: Cell
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
