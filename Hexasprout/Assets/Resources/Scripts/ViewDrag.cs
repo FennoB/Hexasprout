@@ -52,7 +52,7 @@ public class ViewDrag : MonoBehaviour
                     doubleClick = false;
 
                     hit = Physics2D.Raycast(point, Vector2.zero);
-                    if (hit.collider.gameObject.tag == "Field")
+                    if (hit.collider != null && hit.collider.gameObject.tag == "Field")
                     {
                         FieldManager fm = hit.collider.gameObject.GetComponent<FieldManager>();
                         if (fm.cell == null)

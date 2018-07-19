@@ -85,8 +85,9 @@ public class CellManager : MonoBehaviour
     void UseEnergy()
     {
         energy -= energyUse * (Time.deltaTime / 60.0f);     // Usage = energyUse * deltaTime in minutes
-        if(energy <= 0)
+        if(energy <= 0 || alive == false)   // alive == false --> externally set to false -> Death() has to be called too!
         {
+            // NJJjaaaaarrgrgrghghuhuhuuu!!!!!1........
             Death();
         }
     }
@@ -111,6 +112,8 @@ public class CellManager : MonoBehaviour
     {
         energy = 0;
         alive = false;
+        GameObject child = transform.GetChild(0).gameObject;
+        child.GetComponent<SpriteRenderer>().color = new Color(0.2f, 0.2f, 0.2f, 1.0f);
     }
 
     // Juice Diffusion Calculation

@@ -28,6 +28,14 @@ public class WorldGenerator : MonoBehaviour
                 newField.GetComponent<FieldManager>().idy = j;
                 newField.GetComponent<FieldManager>().warmth = Random.value;
                 fields[i][j] = newField;
+
+                //// Resource?
+                //if(Random.Range(0, 100) < 5)
+                //{
+                //    // Resource!
+                //    int resclass = Random.Range(0, 5);
+                //    if (resclass)
+                //}
             }
         }
 
