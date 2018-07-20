@@ -15,6 +15,9 @@ public class FieldManager : MonoBehaviour
     public GameObject resource;
     public float warmth;
 
+    private bool selected = false;//true if field is selected by double click
+    private bool neighbourSelected = false;// true if a neighbourfield is selected
+
     // Use this for initialization
     void Start ()
     {
@@ -25,6 +28,7 @@ public class FieldManager : MonoBehaviour
     {
         CheckState();
         SetApperance();
+        SetSelectedApperance();
 	}
 
     public void ConnectWithFieldAsNB(FieldManager m, int conID)
@@ -77,9 +81,44 @@ public class FieldManager : MonoBehaviour
             GetComponent<SpriteRenderer>().color = new Color(0f, 0f, 0f);
         }
     }
+    /**
+     *field is more green if it is selected
+     *field is more yellow if it is a neighbour of a selected field
+     */
+    public void SetSelectedApperance()
+    {
+        if (selected)
+        {
+            GetComponent<SpriteRenderer>().color = new Color(0f, 1f, 0f);
+        }
+        if (neighbourSelected)
+        {
+            GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 0f);
+        }
+    }
 
+    public void SetSelected(bool selected)
+    {
+        this.selected = selected;
+    }
+    public void SetNeighbourSelected(bool neighbourSelected)
+    {
+        this.neighbourSelected = neighbourSelected;
+    }
     public int GetState()
     {
         return state;
+    }
+    public bool GetSelected()
+    {
+        return selected;
+    }
+    public bool GetNeighbourSelected()
+    {
+        return neighbourSelected;
+    }
+    public GameObject[] GetNeighbours()
+    {
+        return neighbours;
     }
 }

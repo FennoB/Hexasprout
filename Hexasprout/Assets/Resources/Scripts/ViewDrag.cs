@@ -1,22 +1,24 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class ViewDrag : MonoBehaviour
 {
-    Vector3 hit_position = Vector3.zero;
-    Vector3 current_position = Vector3.zero;
-    Vector3 camera_position = Vector3.zero;
-    float z = 0.0f;
-    float doubleClickTimer;
-    bool doubleClick;
+    private Vector3 hit_position = Vector3.zero;
+    private Vector3 current_position = Vector3.zero;
+    private Vector3 camera_position = Vector3.zero;
+    private int tapCounter = 0;
+    //float z = 0.0f;
+    //float doubleClickTimer;
+    //bool doubleClick;
 
     // Use this for initialization
-    void Start()
+    /*void Start()
     {
         doubleClick = false;
         doubleClickTimer = Time.unscaledTime;
-    }
+    }*/
 
     void Update()
     {
@@ -38,13 +40,15 @@ public class ViewDrag : MonoBehaviour
 
     void TouchHandling()
     {
-        RaycastHit2D hit;
-
-        Vector2 point = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-
         if (Input.GetMouseButtonUp(0))
         {
-            if (doubleClick)
+            tapCounter++;
+            if (tapCounter == 1)
+            {
+                StartCoroutine("DoubleClicked");
+            }
+        }
+            /*if (doubleClick)
             {
                 if (Time.unscaledTime - doubleClickTimer < 0.4f)
                 {
@@ -70,7 +74,8 @@ public class ViewDrag : MonoBehaviour
                                 {
                                     if (fm.neighbours[i].GetComponent<FieldManager>().cell != null)
                                     {
-                                        g.GetComponent<CellManager>().ConnectWith(fm.neighbours[i].GetComponent<FieldManager>().cell.GetComponent<CellManager>(), i);
+                                        g.GetComponent<CellManager>().ConnectWith
+                                            (fm.neighbours[i].GetComponent<FieldManager>().cell.GetComponent<CellManager>(), i);
                                     }
                                 }
                             }
@@ -93,10 +98,129 @@ public class ViewDrag : MonoBehaviour
                 doubleClick = true;
                 doubleClickTimer = Time.unscaledTime;
             }
+        }*/
+    }
+
+    IEnumerator DoubleClicked ()
+    {
+        yield return new WaitForSeconds(0.5f);
+        if (tapCounter > 1)
+        {
+            Vector2 point = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            RaycastHit2D hit = Physics2D.Raycast(point, Vector2.zero);
+
+
+            // if a field is hit by double click 
+            if (hit.collider != null && hit.collider.gameObject.tag == "Field")
+            {
+                FieldManager fm = hit.collider.gameObject.GetComponent<FieldManager>();
+
+                //if selected field is neighbourselected, it means that player want to build new cell there
+                if (fm.cell == null && fm.GetNeighbourSelected())
+                {
+                    CreateCell(fm);
+
+                    ResetSelectStateOfCells(GameObject.Find("World").GetComponent<WorldGenerator>().GetFields());
+                    /*FieldManager selected = GetSelectedCell(fm);
+                    if (selected != null)
+                    {
+                        selected.SetSelected(false);
+                        for (int i = 0; i < 6; i++)
+                        {
+                            if (fm.GetNeighbours()[i] != null)
+                            {
+                                selected.GetNeighbours()[i].gameObject.GetComponent<FieldManager>().SetNeighbourSelected(false);
+                            }
+                        }
+
+                    }*/
+                }
+                //means that player want to build connection between neighbourselected cell and selected cell
+                //TODO buid connection
+                if (fm.cell != null && fm.GetNeighbourSelected())
+                {
+                    ResetSelectStateOfCells(GameObject.Find("World").GetComponent<WorldGenerator>().GetFields());
+                    /*FieldManager selected = GetSelectedCell(fm);
+                    if (selected != null)
+                    {
+                        selected.SetSelected(false);
+                        for (int i = 0; i < 6; i++)
+                        {
+                            if (fm.GetNeighbours()[i] != null)
+                            {
+                                selected.GetNeighbours()[i].gameObject.GetComponent<FieldManager>().SetNeighbourSelected(false);
+                            }
+                        }
+                    }*/
+                }
+                //first tap, select a cell
+                if (fm.cell != null && !fm.GetNeighbourSelected())
+                {
+                    ResetSelectStateOfCells(GameObject.Find("World").GetComponent<WorldGenerator>().GetFields());
+                    fm.SetSelected(true);
+                    for (int i = 0; i < 6; i++)
+                    {
+                        if (fm.GetNeighbours()[i] != null)
+                        {
+                            fm.GetNeighbours()[i].gameObject.GetComponent<FieldManager>().SetNeighbourSelected(true);
+                        }
+                    }
+                }
+            }
+        }
+        tapCounter = 0; 
+    }
+    //get selected cell if your're on an neighbourselected cell
+    FieldManager GetSelectedCell(FieldManager fm)
+    {
+        FieldManager selected = null;
+        for (int i = 0; i < 6; i++)
+        {
+            if (fm.GetNeighbours()[i] != null)
+            {
+                if (fm.GetNeighbours()[i].GetComponent<FieldManager>().GetSelected())
+                {
+                    selected = fm.GetNeighbours()[i].GetComponent<FieldManager>();
+                    break;
+                }
+            }
+        }
+        return selected;
+    }
+
+    void CreateCell(FieldManager fm)
+    {
+        // Cell creation
+        GameObject g = Instantiate((GameObject)Resources.Load("Prefabs/StemCell", typeof(GameObject)));
+        g.GetComponent<Transform>().SetParent(fm.gameObject.GetComponent<Transform>());
+        g.GetComponent<Transform>().localPosition = new Vector3(0, 0, -0.14f);
+        fm.gameObject.GetComponent<FieldManager>().cell = g;
+
+        // Neighbour Cells
+        for (int i = 0; i < 6; i++)
+        {
+            if (fm.neighbours[i] != null)
+            {
+                if (fm.neighbours[i].GetComponent<FieldManager>().cell != null)
+                {
+                    g.GetComponent<CellManager>().ConnectWith
+                        (fm.neighbours[i].GetComponent<FieldManager>().cell.GetComponent<CellManager>(), i);
+                }
+            }
         }
     }
 
-
+    public void ResetSelectStateOfCells(GameObject[][] fields)
+    {
+        for (int i = 0; i < fields.Length; i++)
+        {
+            for (int j = 0; j < fields[i].Length; j++)
+            {
+                fields[i][j].GetComponent<FieldManager>().SetSelected(false);
+                fields[i][j].GetComponent<FieldManager>().SetNeighbourSelected(false);
+            }
+        }
+    }
 
     void LeftMouseDrag()
     {
