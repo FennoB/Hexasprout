@@ -121,4 +121,16 @@ public class FieldManager : MonoBehaviour
     {
         return neighbours;
     }
+    public GameObject GetCell()
+    {
+        return cell;
+    }
+    public int GetIdx()
+    {
+        return idx;
+    }
+    public int GetIdy()
+    {
+        return idy;
+    }
 }

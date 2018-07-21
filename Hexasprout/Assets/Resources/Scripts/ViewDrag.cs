@@ -119,10 +119,11 @@ public class ViewDrag : MonoBehaviour
                 if (fm.cell == null && fm.GetNeighbourSelected())
                 {
                     CreateCell(fm);
+                    FieldManager selected = GetSelectedCell(fm);
+                    MakeCellConnection(selected, fm);
 
                     ResetSelectStateOfCells(GameObject.Find("World").GetComponent<WorldGenerator>().GetFields());
-                    /*FieldManager selected = GetSelectedCell(fm);
-                    if (selected != null)
+                    /*if (selected != null)
                     {
                         selected.SetSelected(false);
                         for (int i = 0; i < 6; i++)
@@ -136,12 +137,13 @@ public class ViewDrag : MonoBehaviour
                     }*/
                 }
                 //means that player want to build connection between neighbourselected cell and selected cell
-                //TODO buid connection
                 if (fm.cell != null && fm.GetNeighbourSelected())
                 {
+                    FieldManager selected = GetSelectedCell(fm);
+                    MakeCellConnection(selected, fm);
+
                     ResetSelectStateOfCells(GameObject.Find("World").GetComponent<WorldGenerator>().GetFields());
-                    /*FieldManager selected = GetSelectedCell(fm);
-                    if (selected != null)
+                    /*if (selected != null)
                     {
                         selected.SetSelected(false);
                         for (int i = 0; i < 6; i++)
@@ -196,8 +198,10 @@ public class ViewDrag : MonoBehaviour
         g.GetComponent<Transform>().localPosition = new Vector3(0, 0, -0.14f);
         fm.gameObject.GetComponent<FieldManager>().cell = g;
 
+
+        //Code from Fenno, I think, it's not in the interest of the Game that a new cell is connected to each other
         // Neighbour Cells
-        for (int i = 0; i < 6; i++)
+        /*for (int i = 0; i < 6; i++)
         {
             if (fm.neighbours[i] != null)
             {
@@ -207,6 +211,53 @@ public class ViewDrag : MonoBehaviour
                         (fm.neighbours[i].GetComponent<FieldManager>().cell.GetComponent<CellManager>(), i);
                 }
             }
+        }*/
+    }
+    /**
+     *This method makes a connection between two cells by only know the FieldManagers of the cells 
+     */
+    public void MakeCellConnection(FieldManager first, FieldManager second)
+    {
+        Debug.Log(first.GetIdx());
+        Debug.Log(first.GetIdy());
+
+        Debug.Log(second.GetIdx());
+        Debug.Log(second.GetIdy());
+        //case connection to down left
+        if (first.GetIdx() == second.GetIdx() && first.GetIdy() == (second.GetIdy() - 1))
+        {
+            Debug.Log("0");
+            second.GetCell().GetComponent<CellManager>().ConnectWith(first.GetCell().GetComponent<CellManager>(), 0);
+        }
+        //case connection down
+        else if (first.GetIdx() == second.GetIdx() && first.GetIdy() == (second.GetIdy() - 2))
+        {
+            Debug.Log("1");
+            second.GetCell().GetComponent<CellManager>().ConnectWith(first.GetCell().GetComponent<CellManager>(), 1);
+        }
+        //case connection down right
+        else if (first.GetIdx() == (second.GetIdx() + 1) && first.GetIdy() == (second.GetIdy() - 1))
+        {
+            Debug.Log("2");
+            second.GetCell().GetComponent<CellManager>().ConnectWith(first.GetCell().GetComponent<CellManager>(), 2);
+        }
+        //case connection up right
+        else if (first.GetIdx() == (second.GetIdx() + 1) && first.GetIdy() == (second.GetIdy() + 1))
+        {
+            Debug.Log("3");
+            second.GetCell().GetComponent<CellManager>().ConnectWith(first.GetCell().GetComponent<CellManager>(), 3);
+        }
+        //case connection up
+        else if (first.GetIdx() == second.GetIdx() && first.GetIdy() == (second.GetIdy() + 2))
+        {
+            Debug.Log("4");
+            second.GetCell().GetComponent<CellManager>().ConnectWith(first.GetCell().GetComponent<CellManager>(), 4);
+        }
+        //case connection up left
+        else if (first.GetIdx() == second.GetIdx() && first.GetIdy() == (second.GetIdy() + 1))
+        {
+            Debug.Log("5");
+            second.GetCell().GetComponent<CellManager>().ConnectWith(first.GetCell().GetComponent<CellManager>(), 5);
         }
     }
 
