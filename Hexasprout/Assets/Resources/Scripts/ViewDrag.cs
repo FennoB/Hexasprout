@@ -221,6 +221,8 @@ public class ViewDrag : MonoBehaviour
     }
     /**
      *This method makes a connection between two cells by only know the FieldManagers of the cells 
+     * The Connection get established from second, the Animation made from first
+     * 
      */
     public void MakeCellConnection(FieldManager first, FieldManager second)
     {
@@ -230,51 +232,103 @@ public class ViewDrag : MonoBehaviour
         Debug.Log(second.GetIdx());
         Debug.Log(second.GetIdy());
         //case connection to down left
-        if (first.GetIdx() == second.GetIdx() && first.GetIdy() == (second.GetIdy() - 1))
+        if (first.GetIdy() % 2 == 0)
+        {   
+            if (first.GetIdx() - 1 == second.GetIdx() && first.GetIdy() - 1 == second.GetIdy())
+            {
+                Debug.Log("0");
+                
+                first.GetCell().GetComponent<CellManager>().ConnectWith(second.GetCell().GetComponent<CellManager>(), 0);
+                first.GetCell().GetComponent<CellManager>().SetDownLeftAnimation();
+            }
+        }
+        if (first.GetIdy() % 2 == 1)
         {
-            Debug.Log("0");
-            second.GetCell().GetComponent<CellManager>().ConnectWith(first.GetCell().GetComponent<CellManager>(), 0);
-            first.GetCell().GetComponent<CellManager>().SetUpRightAnimation();
+            if (first.GetIdx() == second.GetIdx() && first.GetIdy() - 1 == second.GetIdy())
+            {
+                Debug.Log("0");
+                first.GetCell().GetComponent<CellManager>().ConnectWith(second.GetCell().GetComponent<CellManager>(), 0);
+                first.GetCell().GetComponent<CellManager>().SetDownLeftAnimation();
+            }
         }
         //case connection down
-        else if (first.GetIdx() == second.GetIdx() && first.GetIdy() == (second.GetIdy() - 2))
+        if (first.GetIdx() == second.GetIdx() && first.GetIdy() - 2 == second.GetIdy())
         {
             Debug.Log("1");
-            second.GetCell().GetComponent<CellManager>().ConnectWith(first.GetCell().GetComponent<CellManager>(), 1);
-           
+            first.GetCell().GetComponent<CellManager>().ConnectWith(second.GetCell().GetComponent<CellManager>(), 1);
+
             //second.GetCell().GetComponent<CellManager>().SetUpAnimation();
-            first.GetCell().GetComponent<CellManager>().SetUpAnimation();
-        }
-        //case connection down right
-        else if (first.GetIdx() == (second.GetIdx() + 1) && first.GetIdy() == (second.GetIdy() - 1))
-        {
-            Debug.Log("2");
-            second.GetCell().GetComponent<CellManager>().ConnectWith(first.GetCell().GetComponent<CellManager>(), 2);
-            first.GetCell().GetComponent<CellManager>().SetUpLeftAnimation();
-        }
-        //case connection up right
-        else if (first.GetIdx() == (second.GetIdx() + 1) && first.GetIdy() == (second.GetIdy() + 1))
-        {
-            Debug.Log("3");
-            second.GetCell().GetComponent<CellManager>().ConnectWith(first.GetCell().GetComponent<CellManager>(), 3);
-
-            first.GetCell().GetComponent<CellManager>().SetDownLeftAnimation();
-        }
-        //case connection up
-        else if (first.GetIdx() == second.GetIdx() && first.GetIdy() == (second.GetIdy() + 2))
-        {
-            Debug.Log("4");
-            second.GetCell().GetComponent<CellManager>().ConnectWith(first.GetCell().GetComponent<CellManager>(), 4);
-
             first.GetCell().GetComponent<CellManager>().SetDownAnimation();
         }
-        //case connection up left
-        else if (first.GetIdx() == second.GetIdx() && first.GetIdy() == (second.GetIdy() + 1))
+        //case connection down right
+        if (first.GetIdy() % 2 == 0)
         {
-            Debug.Log("5");
-            second.GetCell().GetComponent<CellManager>().ConnectWith(first.GetCell().GetComponent<CellManager>(), 5);
-            first.GetCell().GetComponent<CellManager>().SetDownRightAnimation();
+            if (first.GetIdx() == second.GetIdx() && first.GetIdy() - 1 == second.GetIdy())
+            {
+                Debug.Log("2");
+                first.GetCell().GetComponent<CellManager>().ConnectWith(second.GetCell().GetComponent<CellManager>(), 2);
+                first.GetCell().GetComponent<CellManager>().SetDownRightAnimation();
+            }
         }
+        if (first.GetIdy() % 2 == 1)
+        {
+            if (first.GetIdx() + 1 == second.GetIdx() && first.GetIdy() - 1 == second.GetIdy())
+            {
+                Debug.Log("2");
+                first.GetCell().GetComponent<CellManager>().ConnectWith(second.GetCell().GetComponent<CellManager>(), 2);
+                first.GetCell().GetComponent<CellManager>().SetDownRightAnimation();
+            }
+        }
+
+        //case connection up right
+        if (first.GetIdy() % 2 == 0)
+        {
+            if (first.GetIdx() == second.GetIdx() && first.GetIdy() + 1 == second.GetIdy())
+            {
+                Debug.Log("3");
+                first.GetCell().GetComponent<CellManager>().ConnectWith(second.GetCell().GetComponent<CellManager>(), 3);
+
+                first.GetCell().GetComponent<CellManager>().SetUpRightAnimation();
+            }
+        }
+        if (first.GetIdy() % 2 == 1)
+        {
+            if (first.GetIdx() + 1 == second.GetIdx() && first.GetIdy() + 1 == second.GetIdy())
+            {
+                Debug.Log("3");
+                first.GetCell().GetComponent<CellManager>().ConnectWith(second.GetCell().GetComponent<CellManager>(), 3);
+
+                first.GetCell().GetComponent<CellManager>().SetUpRightAnimation();
+            }
+        }
+        //case connection up
+        if (first.GetIdx() == second.GetIdx() && first.GetIdy() + 2 == second.GetIdy())
+        {
+            Debug.Log("4");
+            first.GetCell().GetComponent<CellManager>().ConnectWith(second.GetCell().GetComponent<CellManager>(), 4);
+
+            first.GetCell().GetComponent<CellManager>().SetUpAnimation();
+        }
+        //case connection up left
+        if (first.GetIdy() % 2 == 0)
+        {
+            if (first.GetIdx() - 1 == second.GetIdx() && first.GetIdy() + 1 == second.GetIdy())
+            {
+                Debug.Log("5");
+                first.GetCell().GetComponent<CellManager>().ConnectWith(second.GetCell().GetComponent<CellManager>(), 5);
+                first.GetCell().GetComponent<CellManager>().SetUpLeftAnimation();
+            }
+        }
+        if (first.GetIdy() % 2 == 1)
+        {
+            if (first.GetIdx() == second.GetIdx() && first.GetIdy() + 1 == second.GetIdy())
+            {
+                Debug.Log("5");
+                first.GetCell().GetComponent<CellManager>().ConnectWith(second.GetCell().GetComponent<CellManager>(), 5);
+                first.GetCell().GetComponent<CellManager>().SetUpLeftAnimation();
+            }
+        }
+        Debug.Log("Next");
     }
 
     public void ResetSelectStateOfCells(GameObject[][] fields)
