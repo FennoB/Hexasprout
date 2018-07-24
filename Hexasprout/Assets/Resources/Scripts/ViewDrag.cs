@@ -9,6 +9,8 @@ public class ViewDrag : MonoBehaviour
     private Vector3 current_position = Vector3.zero;
     private Vector3 camera_position = Vector3.zero;
     private int tapCounter = 0;
+
+    private int doubleClickCounter = 0;
     //float z = 0.0f;
     //float doubleClickTimer;
     //bool doubleClick;
@@ -115,14 +117,30 @@ public class ViewDrag : MonoBehaviour
             {
                 FieldManager fm = hit.collider.gameObject.GetComponent<FieldManager>();
 
+                //first tap, select a cell
+                if (fm.cell != null && !fm.GetNeighbourSelected() && doubleClickCounter == 0)
+                {
+                    ResetSelectStateOfCells(GameObject.Find("World").GetComponent<WorldGenerator>().GetFields());
+                    fm.SetSelected(true);
+                    for (int i = 0; i < 6; i++)
+                    {
+                        if (fm.GetNeighbours()[i] != null)
+                        {
+                            fm.GetNeighbours()[i].gameObject.GetComponent<FieldManager>().SetNeighbourSelected(true);
+                        }
+                    }
+                    doubleClickCounter = 1;
+                }
+
                 //if selected field is neighbourselected, it means that player want to build new cell there
-                if (fm.cell == null && fm.GetNeighbourSelected())
+                if (fm.cell == null && fm.GetNeighbourSelected() && doubleClickCounter == 1)
                 {
                     CreateCell(fm);
                     FieldManager selected = GetSelectedCell(fm);
                     MakeCellConnection(selected, fm);
 
                     ResetSelectStateOfCells(GameObject.Find("World").GetComponent<WorldGenerator>().GetFields());
+                    doubleClickCounter = 0;
                     /*if (selected != null)
                     {
                         selected.SetSelected(false);
@@ -137,12 +155,13 @@ public class ViewDrag : MonoBehaviour
                     }*/
                 }
                 //means that player want to build connection between neighbourselected cell and selected cell
-                if (fm.cell != null && fm.GetNeighbourSelected())
+                if (fm.cell != null && fm.GetNeighbourSelected() && doubleClickCounter == 1)
                 {
                     FieldManager selected = GetSelectedCell(fm);
                     MakeCellConnection(selected, fm);
 
                     ResetSelectStateOfCells(GameObject.Find("World").GetComponent<WorldGenerator>().GetFields());
+                    doubleClickCounter = 0;
                     /*if (selected != null)
                     {
                         selected.SetSelected(false);
@@ -154,19 +173,6 @@ public class ViewDrag : MonoBehaviour
                             }
                         }
                     }*/
-                }
-                //first tap, select a cell
-                if (fm.cell != null && !fm.GetNeighbourSelected())
-                {
-                    ResetSelectStateOfCells(GameObject.Find("World").GetComponent<WorldGenerator>().GetFields());
-                    fm.SetSelected(true);
-                    for (int i = 0; i < 6; i++)
-                    {
-                        if (fm.GetNeighbours()[i] != null)
-                        {
-                            fm.GetNeighbours()[i].gameObject.GetComponent<FieldManager>().SetNeighbourSelected(true);
-                        }
-                    }
                 }
             }
         }
@@ -228,36 +234,46 @@ public class ViewDrag : MonoBehaviour
         {
             Debug.Log("0");
             second.GetCell().GetComponent<CellManager>().ConnectWith(first.GetCell().GetComponent<CellManager>(), 0);
+            first.GetCell().GetComponent<CellManager>().SetUpRightAnimation();
         }
         //case connection down
         else if (first.GetIdx() == second.GetIdx() && first.GetIdy() == (second.GetIdy() - 2))
         {
             Debug.Log("1");
             second.GetCell().GetComponent<CellManager>().ConnectWith(first.GetCell().GetComponent<CellManager>(), 1);
+           
+            //second.GetCell().GetComponent<CellManager>().SetUpAnimation();
+            first.GetCell().GetComponent<CellManager>().SetUpAnimation();
         }
         //case connection down right
         else if (first.GetIdx() == (second.GetIdx() + 1) && first.GetIdy() == (second.GetIdy() - 1))
         {
             Debug.Log("2");
             second.GetCell().GetComponent<CellManager>().ConnectWith(first.GetCell().GetComponent<CellManager>(), 2);
+            first.GetCell().GetComponent<CellManager>().SetUpLeftAnimation();
         }
         //case connection up right
         else if (first.GetIdx() == (second.GetIdx() + 1) && first.GetIdy() == (second.GetIdy() + 1))
         {
             Debug.Log("3");
             second.GetCell().GetComponent<CellManager>().ConnectWith(first.GetCell().GetComponent<CellManager>(), 3);
+
+            first.GetCell().GetComponent<CellManager>().SetDownLeftAnimation();
         }
         //case connection up
         else if (first.GetIdx() == second.GetIdx() && first.GetIdy() == (second.GetIdy() + 2))
         {
             Debug.Log("4");
             second.GetCell().GetComponent<CellManager>().ConnectWith(first.GetCell().GetComponent<CellManager>(), 4);
+
+            first.GetCell().GetComponent<CellManager>().SetDownAnimation();
         }
         //case connection up left
         else if (first.GetIdx() == second.GetIdx() && first.GetIdy() == (second.GetIdy() + 1))
         {
             Debug.Log("5");
             second.GetCell().GetComponent<CellManager>().ConnectWith(first.GetCell().GetComponent<CellManager>(), 5);
+            first.GetCell().GetComponent<CellManager>().SetDownRightAnimation();
         }
     }
 
