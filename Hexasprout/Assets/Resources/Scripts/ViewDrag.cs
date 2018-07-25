@@ -11,16 +11,6 @@ public class ViewDrag : MonoBehaviour
     private int tapCounter = 0;
 
     private int doubleClickCounter = 0;
-    //float z = 0.0f;
-    //float doubleClickTimer;
-    //bool doubleClick;
-
-    // Use this for initialization
-    /*void Start()
-    {
-        doubleClick = false;
-        doubleClickTimer = Time.unscaledTime;
-    }*/
 
     void Update()
     {
@@ -50,64 +40,16 @@ public class ViewDrag : MonoBehaviour
                 StartCoroutine("DoubleClicked");
             }
         }
-            /*if (doubleClick)
-            {
-                if (Time.unscaledTime - doubleClickTimer < 0.4f)
-                {
-                    // Double clicked!
-                    doubleClick = false;
-
-                    hit = Physics2D.Raycast(point, Vector2.zero);
-                    if (hit.collider != null && hit.collider.gameObject.tag == "Field")
-                    {
-                        FieldManager fm = hit.collider.gameObject.GetComponent<FieldManager>();
-                        if (fm.cell == null)
-                        {
-                            // Cell creation
-                            GameObject g = Instantiate((GameObject)Resources.Load("Prefabs/StemCell", typeof(GameObject)));
-                            g.GetComponent<Transform>().SetParent(fm.gameObject.GetComponent<Transform>());
-                            g.GetComponent<Transform>().localPosition = new Vector3(0, 0, -0.14f);
-                            fm.gameObject.GetComponent<FieldManager>().cell = g;
-
-                            // Neighbour Cells
-                            for (int i = 0; i < 6; i++)
-                            {
-                                if (fm.neighbours[i] != null)
-                                {
-                                    if (fm.neighbours[i].GetComponent<FieldManager>().cell != null)
-                                    {
-                                        g.GetComponent<CellManager>().ConnectWith
-                                            (fm.neighbours[i].GetComponent<FieldManager>().cell.GetComponent<CellManager>(), i);
-                                    }
-                                }
-                            }
-
-                        }
-                        else
-                        {
-                            hit.collider.gameObject.GetComponent<FieldManager>().warmth = Random.value;
-                        }
-                    }
-                }
-                else
-                {
-                    // Next time?
-                    doubleClickTimer = Time.unscaledTime;
-                }
-            }
-            else
-            {
-                doubleClick = true;
-                doubleClickTimer = Time.unscaledTime;
-            }
-        }*/
     }
 
+
+    //Doubleclicked is in a Coroutine for handling the Clickevent over time
     IEnumerator DoubleClicked ()
     {
         yield return new WaitForSeconds(0.5f);
         if (tapCounter > 1)
         {
+            //the field hit by the user
             Vector2 point = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             RaycastHit2D hit = Physics2D.Raycast(point, Vector2.zero);
 
@@ -120,6 +62,7 @@ public class ViewDrag : MonoBehaviour
                 //first tap, select a cell
                 if (fm.cell != null && !fm.GetNeighbourSelected() && doubleClickCounter == 0)
                 {
+                    //reseting old selected cells and set the new ones
                     ResetSelectStateOfCells(GameObject.Find("World").GetComponent<WorldGenerator>().GetFields());
                     fm.SetSelected(true);
                     for (int i = 0; i < 6; i++)
@@ -141,18 +84,6 @@ public class ViewDrag : MonoBehaviour
 
                     ResetSelectStateOfCells(GameObject.Find("World").GetComponent<WorldGenerator>().GetFields());
                     doubleClickCounter = 0;
-                    /*if (selected != null)
-                    {
-                        selected.SetSelected(false);
-                        for (int i = 0; i < 6; i++)
-                        {
-                            if (fm.GetNeighbours()[i] != null)
-                            {
-                                selected.GetNeighbours()[i].gameObject.GetComponent<FieldManager>().SetNeighbourSelected(false);
-                            }
-                        }
-
-                    }*/
                 }
                 //means that player want to build connection between neighbourselected cell and selected cell
                 if (fm.cell != null && fm.GetNeighbourSelected() && doubleClickCounter == 1)
@@ -162,17 +93,6 @@ public class ViewDrag : MonoBehaviour
 
                     ResetSelectStateOfCells(GameObject.Find("World").GetComponent<WorldGenerator>().GetFields());
                     doubleClickCounter = 0;
-                    /*if (selected != null)
-                    {
-                        selected.SetSelected(false);
-                        for (int i = 0; i < 6; i++)
-                        {
-                            if (fm.GetNeighbours()[i] != null)
-                            {
-                                selected.GetNeighbours()[i].gameObject.GetComponent<FieldManager>().SetNeighbourSelected(false);
-                            }
-                        }
-                    }*/
                 }
             }
         }
@@ -203,21 +123,6 @@ public class ViewDrag : MonoBehaviour
         g.GetComponent<Transform>().SetParent(fm.gameObject.GetComponent<Transform>());
         g.GetComponent<Transform>().localPosition = new Vector3(0, 0, -0.14f);
         fm.gameObject.GetComponent<FieldManager>().cell = g;
-
-
-        //Code from Fenno, I think, it's not in the interest of the Game that a new cell is connected to each other
-        // Neighbour Cells
-        /*for (int i = 0; i < 6; i++)
-        {
-            if (fm.neighbours[i] != null)
-            {
-                if (fm.neighbours[i].GetComponent<FieldManager>().cell != null)
-                {
-                    g.GetComponent<CellManager>().ConnectWith
-                        (fm.neighbours[i].GetComponent<FieldManager>().cell.GetComponent<CellManager>(), i);
-                }
-            }
-        }*/
     }
     /**
      *This method makes a connection between two cells by only know the FieldManagers of the cells 
@@ -226,18 +131,12 @@ public class ViewDrag : MonoBehaviour
      */
     public void MakeCellConnection(FieldManager first, FieldManager second)
     {
-        Debug.Log(first.GetIdx());
-        Debug.Log(first.GetIdy());
-
-        Debug.Log(second.GetIdx());
-        Debug.Log(second.GetIdy());
         //case connection to down left
+        //the neighbourfield has another id, if the selected field is in an uneven row than it has in a even one
         if (first.GetIdy() % 2 == 0)
         {   
             if (first.GetIdx() - 1 == second.GetIdx() && first.GetIdy() - 1 == second.GetIdy())
-            {
-                Debug.Log("0");
-                
+            {   
                 first.GetCell().GetComponent<CellManager>().ConnectWith(second.GetCell().GetComponent<CellManager>(), 0);
                 first.GetCell().GetComponent<CellManager>().SetDownLeftAnimation();
             }
@@ -246,7 +145,6 @@ public class ViewDrag : MonoBehaviour
         {
             if (first.GetIdx() == second.GetIdx() && first.GetIdy() - 1 == second.GetIdy())
             {
-                Debug.Log("0");
                 first.GetCell().GetComponent<CellManager>().ConnectWith(second.GetCell().GetComponent<CellManager>(), 0);
                 first.GetCell().GetComponent<CellManager>().SetDownLeftAnimation();
             }
@@ -254,10 +152,7 @@ public class ViewDrag : MonoBehaviour
         //case connection down
         if (first.GetIdx() == second.GetIdx() && first.GetIdy() - 2 == second.GetIdy())
         {
-            Debug.Log("1");
             first.GetCell().GetComponent<CellManager>().ConnectWith(second.GetCell().GetComponent<CellManager>(), 1);
-
-            //second.GetCell().GetComponent<CellManager>().SetUpAnimation();
             first.GetCell().GetComponent<CellManager>().SetDownAnimation();
         }
         //case connection down right
@@ -265,7 +160,6 @@ public class ViewDrag : MonoBehaviour
         {
             if (first.GetIdx() == second.GetIdx() && first.GetIdy() - 1 == second.GetIdy())
             {
-                Debug.Log("2");
                 first.GetCell().GetComponent<CellManager>().ConnectWith(second.GetCell().GetComponent<CellManager>(), 2);
                 first.GetCell().GetComponent<CellManager>().SetDownRightAnimation();
             }
@@ -274,7 +168,6 @@ public class ViewDrag : MonoBehaviour
         {
             if (first.GetIdx() + 1 == second.GetIdx() && first.GetIdy() - 1 == second.GetIdy())
             {
-                Debug.Log("2");
                 first.GetCell().GetComponent<CellManager>().ConnectWith(second.GetCell().GetComponent<CellManager>(), 2);
                 first.GetCell().GetComponent<CellManager>().SetDownRightAnimation();
             }
@@ -285,9 +178,7 @@ public class ViewDrag : MonoBehaviour
         {
             if (first.GetIdx() == second.GetIdx() && first.GetIdy() + 1 == second.GetIdy())
             {
-                Debug.Log("3");
                 first.GetCell().GetComponent<CellManager>().ConnectWith(second.GetCell().GetComponent<CellManager>(), 3);
-
                 first.GetCell().GetComponent<CellManager>().SetUpRightAnimation();
             }
         }
@@ -295,18 +186,14 @@ public class ViewDrag : MonoBehaviour
         {
             if (first.GetIdx() + 1 == second.GetIdx() && first.GetIdy() + 1 == second.GetIdy())
             {
-                Debug.Log("3");
                 first.GetCell().GetComponent<CellManager>().ConnectWith(second.GetCell().GetComponent<CellManager>(), 3);
-
                 first.GetCell().GetComponent<CellManager>().SetUpRightAnimation();
             }
         }
         //case connection up
         if (first.GetIdx() == second.GetIdx() && first.GetIdy() + 2 == second.GetIdy())
         {
-            Debug.Log("4");
             first.GetCell().GetComponent<CellManager>().ConnectWith(second.GetCell().GetComponent<CellManager>(), 4);
-
             first.GetCell().GetComponent<CellManager>().SetUpAnimation();
         }
         //case connection up left
@@ -314,7 +201,6 @@ public class ViewDrag : MonoBehaviour
         {
             if (first.GetIdx() - 1 == second.GetIdx() && first.GetIdy() + 1 == second.GetIdy())
             {
-                Debug.Log("5");
                 first.GetCell().GetComponent<CellManager>().ConnectWith(second.GetCell().GetComponent<CellManager>(), 5);
                 first.GetCell().GetComponent<CellManager>().SetUpLeftAnimation();
             }
@@ -323,14 +209,16 @@ public class ViewDrag : MonoBehaviour
         {
             if (first.GetIdx() == second.GetIdx() && first.GetIdy() + 1 == second.GetIdy())
             {
-                Debug.Log("5");
                 first.GetCell().GetComponent<CellManager>().ConnectWith(second.GetCell().GetComponent<CellManager>(), 5);
                 first.GetCell().GetComponent<CellManager>().SetUpLeftAnimation();
             }
         }
-        Debug.Log("Next");
     }
 
+    /*
+     *In this method we are iterating throug all cells, in order to deselect all 
+     * 
+     */
     public void ResetSelectStateOfCells(GameObject[][] fields)
     {
         for (int i = 0; i < fields.Length; i++)

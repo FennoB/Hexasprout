@@ -38,7 +38,8 @@ public class CellManager : MonoBehaviour
     public Juice juice;
     public Juice diffusionDelta;
     public GameObject[] connections;
-
+    
+    //Here are the animators for the different directions of the connections of a cell
     public Animator animConnectionUp;
     public Animator animConnectionDown;
     public Animator animConnectionRightUp;
@@ -58,8 +59,8 @@ public class CellManager : MonoBehaviour
         }
 
         juice.blueCharged = 1.0f;
-        //Debug.Log(this.gameObject.transform.GetChild(2).GetChild(0).name);
-
+      
+        //at the moment are the Animations only defined for stemcells, the selected child is the gameObject which is animated
         if (this.gameObject.name.Equals("StemCell(Clone)"))
         {
             animConnectionUp = this.gameObject.transform.GetChild(2).GetChild(0).GetComponent<Animator>();
@@ -98,7 +99,7 @@ public class CellManager : MonoBehaviour
         juice.blue += delta;
         energy += delta;
     }
-
+    //Here are methods for triggering the different animations
     public void SetUpAnimation()
     {
         animConnectionUp.SetTrigger("BuildUp");

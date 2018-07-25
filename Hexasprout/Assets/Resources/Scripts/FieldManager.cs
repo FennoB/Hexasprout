@@ -96,7 +96,7 @@ public class FieldManager : MonoBehaviour
             GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 0f);
         }
     }
-
+    //Here are getters and setters for the different fields of the cellmanager
     public void SetSelected(bool selected)
     {
         this.selected = selected;
