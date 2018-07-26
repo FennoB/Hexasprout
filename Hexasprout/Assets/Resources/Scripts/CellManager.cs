@@ -38,6 +38,14 @@ public class CellManager : MonoBehaviour
     public Juice juice;
     public Juice diffusionDelta;
     public GameObject[] connections;
+    
+    //Here are the animators for the different directions of the connections of a cell
+    public Animator animConnectionUp;
+    public Animator animConnectionDown;
+    public Animator animConnectionRightUp;
+    public Animator animConnectionRightDown;
+    public Animator animConnectionLeftUp;
+    public Animator animConnectionLeftDown;
 
     public int tempid;      // My ID in the most recently generated Heartmap
 
@@ -51,7 +59,18 @@ public class CellManager : MonoBehaviour
         }
 
         juice.blueCharged = 1.0f;
-	}
+      
+        //at the moment are the Animations only defined for stemcells, the selected child is the gameObject which is animated
+        if (this.gameObject.name.Equals("StemCell(Clone)"))
+        {
+            animConnectionUp = this.gameObject.transform.GetChild(2).GetChild(0).GetComponent<Animator>();
+            animConnectionDown = this.gameObject.transform.GetChild(2).GetChild(1).GetComponent<Animator>();
+            animConnectionLeftDown = this.gameObject.transform.GetChild(2).GetChild(2).GetChild(0).GetComponent<Animator>();
+            animConnectionLeftUp = this.gameObject.transform.GetChild(2).GetChild(3).GetChild(0).GetComponent<Animator>();
+            animConnectionRightDown = this.gameObject.transform.GetChild(2).GetChild(4).GetChild(0).GetComponent<Animator>();
+            animConnectionRightUp = this.gameObject.transform.GetChild(2).GetChild(5).GetChild(0).GetComponent<Animator>();
+        }
+    }
 
     // Update is called once per frame
     public void OwnFixedUpdate()
@@ -80,6 +99,33 @@ public class CellManager : MonoBehaviour
         juice.blue += delta;
         energy += delta;
     }
+    //Here are methods for triggering the different animations
+    public void SetUpAnimation()
+    {
+        animConnectionUp.SetTrigger("BuildUp");
+    }
+
+    public void SetDownAnimation()
+    {
+        animConnectionDown.SetTrigger("BuildDown");
+    }
+    public void SetDownLeftAnimation()
+    {
+        animConnectionLeftDown.SetTrigger("BuildLeftDown");
+    }
+    public void SetUpLeftAnimation()
+    {
+        animConnectionLeftUp.SetTrigger("BuildLeftUp");
+    }
+    public void SetDownRightAnimation()
+    {
+        animConnectionRightDown.SetTrigger("BuildRightDown");
+    }
+    public void SetUpRightAnimation()
+    {
+        animConnectionRightUp.SetTrigger("BuildRightUp");
+    }
+
 
     // Use energy for living
     void UseEnergy()
