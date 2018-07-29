@@ -44,7 +44,7 @@ public class TouchManager : MonoBehaviour
                 tapUpCounter = 0;
                 StartCoroutine("SingleClicked");
                 //Debug.Log("Begin");
-                //Debug.Log(tapUpCounter);
+                Debug.Log(tapUpCounter);
             }
             //if (Input.GetMouseButtonUp(0))
             if (touch.phase == TouchPhase.Ended)
@@ -75,6 +75,10 @@ public class TouchManager : MonoBehaviour
                 if (fm.GetCell() != null)
                 {
                     fm.GetCell().GetComponent<StemCellSpec>().ActivateOptionScript();
+                    if (selectedCell != null && !selectedCell.Equals(fm.GetCell()))
+                    {
+                        selectedCell.GetComponent<StemCellSpec>().DeactivateOptionScript();
+                    }
                     selectedCell = fm.GetCell();
                 }
                 else
