@@ -89,9 +89,29 @@ public class WorldGenerator : MonoBehaviour
 
         // Hard code dummy cell
         CreateStemCell(fields[2][2].GetComponent<FieldManager>());
+        //Hard code Material
+        CreateRedMaterial(fields[2][3].GetComponent<FieldManager>());
         
     }
-    
+
+
+    //TODO 
+    public void CreateRedMaterial(FieldManager fm)
+    {
+        if (fm != null || fm.cell == null)
+        {
+            GameObject p = (GameObject)Resources.Load("Prefabs/Materials/Red", typeof(GameObject));
+            GameObject g = Instantiate(p);
+            g.GetComponent<Transform>().SetParent(fm.gameObject.GetComponent<Transform>());
+            g.GetComponent<Transform>().localPosition = new Vector3(0, 0, -0.14f);
+            fm.cell = g;
+        }
+        else
+        {
+            // throw Exception
+        }
+    }
+
     public bool CreateStemCell(FieldManager fm)
     {
         // Fieldmanager valid?

@@ -54,7 +54,6 @@ public class TouchManager : MonoBehaviour
                 tapCounter++;
                 if (tapCounter == 1)
                 {
-
                     StartCoroutine("DoubleClicked");
                 }
             }
