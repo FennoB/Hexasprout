@@ -4,13 +4,12 @@ using UnityEngine;
 
 public class StemCellSpec : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    public void ActivateOptionScript()
+    {
+        this.gameObject.transform.GetChild(3).GetComponent<Canvas>().enabled = true;
+    }
+    public void DeactivateOptionScript()
+    {
+        this.gameObject.transform.GetChild(3).GetComponent<Canvas>().enabled = false;
+    }
 }
