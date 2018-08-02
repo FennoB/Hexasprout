@@ -11,9 +11,10 @@ public class FieldManager : MonoBehaviour
 
     public GameObject[] neighbours;
     public int idx, idy;
-    public GameObject cell;
-    public GameObject material;
-    public GameObject resource;
+    
+    public GameObject cell = null;
+    public GameObject material = null;
+    
     public float warmth;
 
 

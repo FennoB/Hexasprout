@@ -60,7 +60,7 @@ public class CellManager : MonoBehaviour
         }
 
         juice.blueCharged = 1.0f;
-      
+        
         //at the moment are the Animations only defined for stemcells, the selected child is the gameObject which is animated
         if (this.gameObject.name.Equals("StemCell(Clone)"))
         {
@@ -100,6 +100,7 @@ public class CellManager : MonoBehaviour
         juice.blue += delta;
         energy += delta;
     }
+
     //Here are methods for triggering the different animations
     public void SetUpAnimation()
     {
