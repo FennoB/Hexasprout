@@ -11,8 +11,8 @@ public class FieldManager : MonoBehaviour
 
     public GameObject[] neighbours;
     public int idx, idy;
-    public GameObject cell;
-    public GameObject resource;
+    public GameObject cell = null;
+    public GameObject resource = null;
     public float warmth;
 
     private bool selected = false;//true if field is selected by double click

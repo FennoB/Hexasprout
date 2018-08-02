@@ -164,6 +164,7 @@ public class WorldGenerator : MonoBehaviour
     void Update()
     {
     }
+
     public GameObject[][] GetFields()
     {
         return fields;
