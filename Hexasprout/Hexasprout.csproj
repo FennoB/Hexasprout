@@ -291,6 +291,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Resources\Scripts\ButtonScript.cs" />
     <Compile Include="Assets\Resources\Scripts\CellManager.cs" />
     <Compile Include="Assets\Resources\Scripts\CellSpecs\BreedCellSpec.cs" />
     <Compile Include="Assets\Resources\Scripts\CellSpecs\HeartCellSpec.cs" />
@@ -299,7 +300,8 @@
     <Compile Include="Assets\Resources\Scripts\CellSpecs\StorageCellSpec.cs" />
     <Compile Include="Assets\Resources\Scripts\CellSpecs\WorkerCellSpec.cs" />
     <Compile Include="Assets\Resources\Scripts\FieldManager.cs" />
-    <Compile Include="Assets\Resources\Scripts\TouchManager.cs" />
+    <Compile Include="Assets\Resources\Scripts\GUIManager.cs" />
+    <Compile Include="Assets\Resources\Scripts\materialScripts\MaterialManager.cs" />
     <Compile Include="Assets\Resources\Scripts\WorldGenerator.cs" />
     <Compile Include="Assets\Resources\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark01.cs" />
     <Compile Include="Assets\Resources\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark01_UGUI.cs" />
