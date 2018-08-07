@@ -21,16 +21,7 @@ public class Juice
         yellow = 0;
         black = 0;
     }
-
-    static public bool operator==(Juice a, Juice b)
-    {
-
-    }
-
-    static public bool operator!=(Juice a, Juice b)
-    {
-        return !(a == b);
-    }
+    
 }
 
 public enum CellType

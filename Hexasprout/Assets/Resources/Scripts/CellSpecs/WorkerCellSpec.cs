@@ -25,4 +25,6 @@ public class WorkerCellSpec : MonoBehaviour {
     {
 
     }
+    public void EventHandler(GUI_Event e, GUIManager gm)
+    { }
 }
