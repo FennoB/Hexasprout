@@ -13,24 +13,10 @@ public class StorageCellSpec : MonoBehaviour
 	// Use this for initialization
 	void Start ()
     {
-        content.red             = 0;
-        content.black           = 0;
-        content.blue            = 0;
-        content.blueCharged     = 0;
-        content.green           = 0;
-        content.yellow          = 0;
-        capacities.red          = 10.0f;
-        capacities.black        = 10.0f;
-        capacities.blue         = 10.0f;
-        capacities.blueCharged  = 10.0f;
-        capacities.green        = 10.0f;
-        capacities.yellow       = 10.0f;
-        target.red              = 0;
-        target.black            = 0;
-        target.blue             = 0;
-        target.blueCharged      = 0;
-        target.green            = 0;
-        target.yellow           = 0;
+        content = new Juice();
+        capacities = new Juice();
+        target = new Juice();
+        capacities.SetAllTo(10.0f);
     }
 
     // Update is called once per frame
@@ -42,9 +28,13 @@ public class StorageCellSpec : MonoBehaviour
     // Storage functions
     void StorageHandling()
     {
-        Juice juice = GetComponent<CellManager>().juice;
-        Juice deltas;
+        // Get rid of buggy situations:
         
+        
+        // Get some data and create some variables
+        Juice juice = GetComponent<CellManager>().juice;    // Juice of the cell
+        Juice delta = target - content;     // Amount of juice to be stored/released
+
     }
 
     // EventHandler

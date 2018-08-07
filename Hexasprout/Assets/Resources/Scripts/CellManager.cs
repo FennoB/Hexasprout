@@ -22,14 +22,48 @@ public class Juice
         black = 0;
     }
 
-    static public bool operator==(Juice a, Juice b)
+    public void SetAllTo(float value)
     {
-
+        red = value;
+        green = value;
+        blue = value;
+        blueCharged = value;
+        yellow = value;
+        black = value;
     }
 
-    static public bool operator!=(Juice a, Juice b)
+    public static Juice operator+(Juice a, Juice b)
     {
-        return !(a == b);
+        Juice result = new Juice();
+        result.red = a.red + b.red;
+        result.green = a.green + b.green;
+        result.blue = a.blue + b.blue;
+        result.blueCharged = a.blueCharged + b.blueCharged;
+        result.yellow = a.yellow + b.yellow;
+        result.black = a.black + b.black;
+        return result;
+    }
+
+    public static Juice operator*(Juice a, float scale)
+    {
+        Juice result = new Juice();
+        result.red = a.red * scale;
+        result.green = a.green * scale;
+        result.blue = a.blue * scale;
+        result.blueCharged = a.blueCharged * scale;
+        result.yellow = a.yellow * scale;
+        result.black = a.black * scale;
+        return result;
+    }
+
+    public static Juice operator-(Juice a, Juice b)
+    {
+        return (b * -1.0f) + a;
+    }
+
+    public static Juice operator/(Juice a, float div)
+    {
+        return a * (1.0f / div);
     }
 }
 
@@ -77,8 +111,11 @@ public class CellManager : MonoBehaviour
             connections[i] = null;
         }
 
-        juice.blueCharged = 1.0f;
-        
+        juice = new Juice
+        {
+            blueCharged = 1.0f
+        };
+
         //at the moment are the Animations only defined for stemcells, the selected child is the gameObject which is animated
         if (this.gameObject.name.Equals("StemCell(Clone)"))
         {

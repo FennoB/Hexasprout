@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Cell
   - Field
+  - Slider
   layers:
   - Default
   - TransparentFX
