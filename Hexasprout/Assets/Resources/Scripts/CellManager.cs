@@ -11,7 +11,6 @@ public class Juice
     public float blueCharged;
     public float yellow;
     public float black;
-    public float bluePotency;
 
     public Juice()
     {
@@ -21,7 +20,16 @@ public class Juice
         blueCharged = 0;
         yellow = 0;
         black = 0;
-        bluePotency = 2.0f;
+    }
+
+    static public bool operator==(Juice a, Juice b)
+    {
+
+    }
+
+    static public bool operator!=(Juice a, Juice b)
+    {
+        return !(a == b);
     }
 }
 
