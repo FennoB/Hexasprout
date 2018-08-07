@@ -5,7 +5,11 @@ using System;
 
 public enum GUI_Event
 {
-    Menu = -1,
+
+    Grow = -4,
+    Decompose,
+    CloseMenu,
+    OpenMenu,
     BtnDestroy,
     BtnTransmorph,
     BtnSpecialize,
@@ -153,7 +157,7 @@ public class GUIManager : MonoBehaviour
         if (CellMenuOpen)
         {
             // Is this in the selection?
-            if (fm.GetNeighbourSelected())
+            if (fm.State == FieldState.Grow || fm.State == FieldState.Decompose)
             {
                 // Tapped on a cell?
                 if (fm.GetCell() == null)
@@ -163,7 +167,7 @@ public class GUIManager : MonoBehaviour
                 }
 
                 // Connect
-                MakeCellConnection(CellMenuTarget, fm);
+                ModifyCellConnection(CellMenuTarget, fm);
             }
 
             CloseCellMenu();
@@ -195,22 +199,23 @@ public class GUIManager : MonoBehaviour
         CloseCellMenu();
 
         // Open Slider menu
-        target.GetCell().GetComponent<StemCellSpec>().ActivateOptionScript();
+        //target.GetCell().GetComponent<StemCellSpec>().ActivateOptionScript();
 
         // Set Field to Selection Mode
-        target.SetSelected(true);
+        //target.State = FieldState.Selected;
 
-        // Set Neighbours to Selection Mode
+        /*// Set Neighbours to Selection Mode
         for (int i = 0; i < 6; i++)
         {
             if (target.GetNeighbours()[i] != null)
             {
-                target.GetNeighbours()[i].GetComponent<FieldManager>().SetNeighbourSelected(true);
+                //target.GetNeighbours()[i].GetComponent<FieldManager>().SetNeighbourSelected(true);
             }
-        }
-
+        }*/
+        
         CellMenuTarget = target;
         CellMenuOpen = true;
+        EventHandler(GUI_Event.OpenMenu);
     }
 
     // Calles to close cell menus
@@ -219,10 +224,10 @@ public class GUIManager : MonoBehaviour
         if (CellMenuOpen)
         {
             // Close Slider menu
-            CellMenuTarget.GetCell().GetComponent<StemCellSpec>().DeactivateOptionScript();
-
+            //CellMenuTarget.GetCell().GetComponent<StemCellSpec>().DeactivateOptionScript();
+            EventHandler(GUI_Event.CloseMenu);
             // Close Selection menu
-            ResetSelectStateOfCells(GameObject.Find("World").GetComponent<WorldGenerator>().GetFields());
+            //ResetSelectStateOfCells(GameObject.Find("World").GetComponent<WorldGenerator>().GetFields());
             CellMenuOpen = false;
         }
     }
@@ -273,7 +278,7 @@ public class GUIManager : MonoBehaviour
     }
 
     // A cell connection is established and the animation starts
-    public void MakeCellConnection(FieldManager first, FieldManager second)
+    public void ModifyCellConnection(FieldManager first, FieldManager second)
     {
         //case connection to down left
         //the neighbourfield has another id, if the selected field is in an uneven row than it has in a even one
@@ -360,7 +365,7 @@ public class GUIManager : MonoBehaviour
     }
 
     // Goes through all field an disables all selection modes
-    public void ResetSelectStateOfCells(GameObject[][] fields)
+    /*public void ResetSelectStateOfCells(GameObject[][] fields)
     {
         for (int i = 0; i < fields.Length; i++)
         {
@@ -370,7 +375,7 @@ public class GUIManager : MonoBehaviour
                 fields[i][j].GetComponent<FieldManager>().SetNeighbourSelected(false);
             }
         }
-    }
+    }*/
 
     // Used to drag camera with moving finger on screen
     void LeftMouseDrag()
