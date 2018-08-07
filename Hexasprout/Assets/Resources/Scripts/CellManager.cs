@@ -25,6 +25,17 @@ public class Juice
     }
 }
 
+public enum CellType
+{
+    None = -1,
+    Stemcell,
+    Leafcell,
+    Workercell,
+    Heartcell,
+    Storagecell,
+    Breedcell
+}
+
 public class CellManager : MonoBehaviour
 {
     public float energy = 1.0f;        // Energy battery
@@ -33,7 +44,7 @@ public class CellManager : MonoBehaviour
     public float energyConvert = 0.5f; // Convertion of chemical to cellenegy per minute (2 minutes to reload battery)
     public bool alive = true;
     public float diffusionFactor = 0.5f;    // Diffusion speed. Behaviour undefined when > 1.0f
-    public int cellType = -1;           // Celltypes: stem=0, leaf=1, worker=2, heart=3, storage=4, breed=5
+    public CellType cellType = CellType.None;        // Celltypes: stem=0, leaf=1, worker=2, heart=3, storage=4, breed=5
 
     public Juice juice;
     public Juice diffusionDelta;
@@ -82,6 +93,36 @@ public class CellManager : MonoBehaviour
         }
     }
 
+    // Handle events
+    public void EventHandler(GUI_Event e, GUIManager gm)
+    {
+        // Own stuff
+
+        // Cell specs
+        switch(cellType)
+        {
+            case CellType.Stemcell:
+                GetComponent<StemCellSpec>().EventHandler(e, gm);
+                break;
+            case CellType.Leafcell:
+                GetComponent<LeafCellSpec>().EventHandler(e, gm);
+                break;
+            case CellType.Workercell:
+                GetComponent<WorkerCellSpec>().EventHandler(e, gm);
+                break;
+            case CellType.Heartcell:
+                GetComponent<HeartCellSpec>().EventHandler(e, gm);
+                break;
+            case CellType.Storagecell:
+                GetComponent<StorageCellSpec>().EventHandler(e, gm);
+                break;
+            case CellType.Breedcell:
+                GetComponent<BreedCellSpec>().EventHandler(e, gm);
+                break;
+        }
+        
+    }
+
     // Absorb energy from blood
     void AbsorbEnergy()
     {
@@ -105,7 +146,6 @@ public class CellManager : MonoBehaviour
     {
         animConnectionUp.SetTrigger("BuildUp");
     }
-
     public void SetDownAnimation()
     {
         animConnectionDown.SetTrigger("BuildDown");

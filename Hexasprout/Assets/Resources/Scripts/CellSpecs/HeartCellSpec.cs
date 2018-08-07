@@ -392,4 +392,11 @@ public class HeartCellSpec : MonoBehaviour {
         // Return if we found any solutions
         return solutions;
     }
+
+    // EventHandler
+    public void EventHandler(GUI_Event e, GUIManager gm)
+    {
+
+    }
+
 }

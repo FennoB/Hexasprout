@@ -13,4 +13,11 @@ public class BreedCellSpec : MonoBehaviour {
 	void Update () {
 		
 	}
+
+    // EventHandler
+    public void EventHandler(GUI_Event e, GUIManager gm)
+    {
+
+    }
+
 }

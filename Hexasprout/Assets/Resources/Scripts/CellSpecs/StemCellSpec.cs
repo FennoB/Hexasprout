@@ -12,4 +12,11 @@ public class StemCellSpec : MonoBehaviour {
     {
         this.gameObject.transform.GetChild(3).GetComponent<Canvas>().enabled = false;
     }
+
+    // EventHandler
+    public void EventHandler(GUI_Event e, GUIManager gm)
+    {
+
+    }
+
 }
