@@ -32,4 +32,11 @@ public class LeafCellSpec : MonoBehaviour {
         cm.juice.blueCharged += conv;
         cm.juice.blue -= conv;
     }
+
+    // EventHandler
+    public void EventHandler(GUI_Event e, GUIManager gm)
+    {
+
+    }
+
 }
