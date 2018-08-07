@@ -4,7 +4,10 @@ using UnityEngine;
 
 public class MaterialManager : MonoBehaviour {
 
+    public enum Type {black, red, yellow, green, blue}
+
     private int load;
+    public Type type;
 
     private void Awake()
     {
@@ -28,5 +31,9 @@ public class MaterialManager : MonoBehaviour {
         {
             return true;
         }
+    }
+    public void SetType(Type type)
+    {
+        this.type = type;
     }
 }

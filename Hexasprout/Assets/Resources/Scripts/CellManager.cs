@@ -34,6 +34,7 @@ public class CellManager : MonoBehaviour
     public bool alive = true;
     public float diffusionFactor = 0.5f;    // Diffusion speed. Behaviour undefined when > 1.0f
     public int cellType = -1;           // Celltypes: stem=0, leaf=1, worker=2, heart=3, storage=4, breed=5
+    public int maxConnectionCount = 6;
 
     public Juice juice;
     public Juice diffusionDelta;

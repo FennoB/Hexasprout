@@ -90,17 +90,17 @@ public class WorldGenerator : MonoBehaviour
         // Hard code dummy cell
         CreateStemCell(fields[2][2].GetComponent<FieldManager>());
         //Hard code Material
-        CreateRedMaterial(fields[2][3].GetComponent<FieldManager>());
+        CreateRedMaterial(fields[2][3].GetComponent<FieldManager>(), "red");
         
     }
 
 
-    //TODO 
-    public void CreateRedMaterial(FieldManager fm)
+    
+    public void CreateRedMaterial(FieldManager fm, string type)
     {
         if (fm != null || fm.cell == null)
         {
-            GameObject p = (GameObject)Resources.Load("Prefabs/Materials/Red", typeof(GameObject));
+            GameObject p = (GameObject)Resources.Load("Prefabs/Materials/" + type, typeof(GameObject));
             GameObject g = Instantiate(p);
             g.GetComponent<Transform>().SetParent(fm.gameObject.GetComponent<Transform>());
             g.GetComponent<Transform>().localPosition = new Vector3(0, 0, -0.14f);
@@ -111,6 +111,10 @@ public class WorldGenerator : MonoBehaviour
             // throw Exception
         }
     }
+
+
+
+
 
     public bool CreateStemCell(FieldManager fm)
     {

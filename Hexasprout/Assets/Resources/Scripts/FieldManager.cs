@@ -12,9 +12,12 @@ public class FieldManager : MonoBehaviour
     public GameObject[] neighbours;
     public int idx, idy;
     public GameObject cell;
+    public GameObject material;
     public GameObject resource;
     public float warmth;
 
+
+    public bool occupied = false;
     private bool selected = false;//true if field is selected by double click
     private bool neighbourSelected = false;// true if a neighbourfield is selected
 
@@ -104,6 +107,10 @@ public class FieldManager : MonoBehaviour
     public void SetNeighbourSelected(bool neighbourSelected)
     {
         this.neighbourSelected = neighbourSelected;
+    }
+    public void SetOccupied(bool occupied)
+    {
+        this.occupied = occupied;
     }
     public int GetState()
     {
