@@ -98,13 +98,13 @@ public class WorldGenerator : MonoBehaviour
     
     public void CreateRedMaterial(FieldManager fm, string type)
     {
-        if (fm != null || fm.cell == null)
+        if (fm != null || fm.Cell == null)
         {
             GameObject p = (GameObject)Resources.Load("Prefabs/Materials/" + type, typeof(GameObject));
             GameObject g = Instantiate(p);
             g.GetComponent<Transform>().SetParent(fm.gameObject.GetComponent<Transform>());
             g.GetComponent<Transform>().localPosition = new Vector3(0, 0, -0.14f);
-            fm.cell = g;
+            fm.material = g;
         }
         else
         {
@@ -119,7 +119,7 @@ public class WorldGenerator : MonoBehaviour
     public bool CreateStemCell(FieldManager fm)
     {
         // Fieldmanager valid?
-        if(fm == null || fm.cell != null)
+        if(fm == null || fm.Cell != null)
         {
             // Nope
             return false;
@@ -151,7 +151,7 @@ public class WorldGenerator : MonoBehaviour
         // Link with field
         g.GetComponent<Transform>().SetParent(fm.gameObject.GetComponent<Transform>());
         g.GetComponent<Transform>().localPosition = new Vector3(0, 0, -0.14f);
-        fm.cell = g;
+        fm.Cell = g;
         return true;
     }
 

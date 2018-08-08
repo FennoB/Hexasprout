@@ -142,7 +142,15 @@ public class CellManager : MonoBehaviour
     public void EventHandler(GUI_Event e, GUIManager gm)
     {
         // Own stuff
-
+        switch (e)
+        {
+            case GUI_Event.OpenMenu:
+                OpenMenu();
+                break;
+            case GUI_Event.CloseMenu:
+                CloseMenu();
+                break;
+        }
         // Cell specs
         switch(cellType)
         {
@@ -165,9 +173,16 @@ public class CellManager : MonoBehaviour
                 GetComponent<BreedCellSpec>().EventHandler(e, gm);
                 break;
         }
-        
     }
 
+    void OpenMenu()
+    {
+        Debug.Log("Menü offen");
+    }
+    void CloseMenu()
+    {
+        Debug.Log("Menü zu");
+    }
     // Absorb energy from blood
     void AbsorbEnergy()
     {

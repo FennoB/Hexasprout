@@ -9,7 +9,8 @@ public enum FieldState
     HasCell, 
     Selected,
     Grow,
-    Decompose
+    Decompose,
+    SuperSelected
 }
 
 
@@ -20,11 +21,11 @@ public class FieldManager : MonoBehaviour
     //1 = Down
     //... (circle)
 
-    public GameObject[] neighbours;
+    public FieldManager[] neighbours;
     public int idx, idy;
-    
-    
-    public GameObject cell = null;
+
+
+    private GameObject cell = null;
     public GameObject material = null;
     
     public float warmth;
@@ -46,7 +47,7 @@ public class FieldManager : MonoBehaviour
     {
         if (State <= FieldState.HasCell)
         { 
-        CheckState();
+            CheckState();
         }
         SetApperance();
 	}
@@ -57,7 +58,7 @@ public class FieldManager : MonoBehaviour
         {
             if(neighbours[conID] == null)
             {
-                neighbours[conID] = m.gameObject;
+                neighbours[conID] = m;
                 m.ConnectWithFieldAsNB(this, (conID + 3) % 6);  //Gegenverbindung anfordern
             }
         }
@@ -65,7 +66,7 @@ public class FieldManager : MonoBehaviour
 
     public void CheckState()
     {
-        if (cell != null )
+        if (Cell != null )
         {
             State = FieldState.HasCell;
         }
@@ -111,13 +112,9 @@ public class FieldManager : MonoBehaviour
 
         }
         }
-    public GameObject[] GetNeighbours()
+    public FieldManager[] GetNeighbours()
     {
         return neighbours;
-    }
-    public GameObject GetCell()
-    {
-        return cell;
     }
     public int GetIdx()
     {
@@ -137,6 +134,19 @@ public class FieldManager : MonoBehaviour
         set
         {
             state = value;
+        }
+    }
+
+    public GameObject Cell
+    {
+        get
+        {
+            return cell;
+        }
+
+        set
+        {
+            cell = value;
         }
     }
 }
