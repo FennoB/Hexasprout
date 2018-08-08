@@ -30,31 +30,20 @@ public class HeartCellSpec : MonoBehaviour {
     // Fixed Update
     public void OwnFixedUpdate()
     {
-        if (GetComponent<CellManager>().alive)
+        for (int i = 0; i < cycletimers.Count; i++)
         {
-            for (int i = 0; i < cycletimers.Count; i++)
-            {
-                cycletimers[i] += Time.deltaTime;
-            }
-
-            if (heartmap != null && cyclespeed != null)
-            {
-                Pump();
-            }
-            else
-            {
-                UpdateHeartmap();
-            }
+            cycletimers[i] += Time.deltaTime;
         }
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        if(GetComponent<CellManager>().alive)
+        if (heartmap != null && cyclespeed != null)
         {
-
+            Pump();
         }
+        else
+        {
+            UpdateHeartmap();
+        }
+
     }
 
     // Pumps Juice through the heartcycles in heartmap
@@ -117,7 +106,7 @@ public class HeartCellSpec : MonoBehaviour {
         // Every Heart has a heartmap
         // A Heartcycle describes:
         // - The speed of the cycle
-        // - The decisions the path takes
+        // - The decisions (forks) the path takes
 
         // The Heartcycles will be collected and calculated within this function.
 

@@ -19,4 +19,9 @@ public class StemCellSpec : MonoBehaviour {
 
     }
 
+    // Update is called once per frame
+    public void OwnFixedUpdate()
+    {
+
+    }
 }

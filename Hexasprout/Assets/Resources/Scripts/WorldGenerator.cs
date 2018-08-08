@@ -162,11 +162,6 @@ public class WorldGenerator : MonoBehaviour
 
         foreach (GameObject c in cells)
         {
-            if(c.GetComponent<LeafCellSpec>() != null)
-            {
-                c.GetComponent<LeafCellSpec>().Absorb();
-            }
-
             CellManager cm = c.GetComponent<CellManager>();
             cm.OwnFixedUpdate();
         }

@@ -34,26 +34,35 @@ public class Juice
 
     public static Juice operator+(Juice a, Juice b)
     {
-        Juice result = new Juice();
-        result.red = a.red + b.red;
-        result.green = a.green + b.green;
-        result.blue = a.blue + b.blue;
-        result.blueCharged = a.blueCharged + b.blueCharged;
-        result.yellow = a.yellow + b.yellow;
-        result.black = a.black + b.black;
+        Juice result = new Juice
+        {
+            red = a.red + b.red,
+            green = a.green + b.green,
+            blue = a.blue + b.blue,
+            blueCharged = a.blueCharged + b.blueCharged,
+            yellow = a.yellow + b.yellow,
+            black = a.black + b.black
+        };
         return result;
     }
 
     public static Juice operator*(Juice a, float scale)
     {
-        Juice result = new Juice();
-        result.red = a.red * scale;
-        result.green = a.green * scale;
-        result.blue = a.blue * scale;
-        result.blueCharged = a.blueCharged * scale;
-        result.yellow = a.yellow * scale;
-        result.black = a.black * scale;
+        Juice result = new Juice
+        {
+            red = a.red * scale,
+            green = a.green * scale,
+            blue = a.blue * scale,
+            blueCharged = a.blueCharged * scale,
+            yellow = a.yellow * scale,
+            black = a.black * scale
+        };
         return result;
+    }
+
+    public static Juice operator*(float scale, Juice a)
+    {
+        return a * scale;
     }
 
     public static Juice operator-(Juice a, Juice b)
@@ -64,6 +73,97 @@ public class Juice
     public static Juice operator/(Juice a, float div)
     {
         return a * (1.0f / div);
+    }
+
+    public float Sum
+    {
+        get
+        {
+            return red + green + blue + blueCharged + yellow + black;
+        }
+    }
+
+    public Juice Copy
+    {
+        get
+        {
+            Juice result = new Juice();
+            result.red = red;
+            result.green = green;
+            result.blue = blue;
+            result.blueCharged = blueCharged;
+            result.yellow = yellow;
+            result.black = black;
+            return result;
+        }
+    }
+
+    public Juice PositivesOnly
+    {
+        get
+        {
+            Juice result = Copy;
+
+            if (red < 0)
+            {
+                result.red = 0;
+            }
+            if (green < 0)
+            {
+                result.green = 0;
+            }
+            if (blue < 0)
+            {
+                result.blue = 0;
+            }
+            if (blueCharged < 0)
+            {
+                result.blueCharged = 0;
+            }
+            if (yellow < 0)
+            {
+                result.yellow = 0;
+            }
+            if (black < 0)
+            {
+                result.black = 0;
+            }
+            return result;
+        }
+    }
+
+    public Juice AbsoluteValues
+    {
+        get
+        {
+            Juice result = Copy;
+
+            if (red < 0)
+            {
+                result.red = -red;
+            }
+            if (green < 0)
+            {
+                result.green = -green;
+            }
+            if (blue < 0)
+            {
+                result.blue = -blue;
+            }
+            if (blueCharged < 0)
+            {
+                result.blueCharged = -blueCharged;
+            }
+            if (yellow < 0)
+            {
+                result.yellow = -yellow;
+            }
+            if (black < 0)
+            {
+                result.black = -black;
+            }
+            return result;
+        }
     }
 }
 
@@ -135,6 +235,28 @@ public class CellManager : MonoBehaviour
         {
             AbsorbEnergy();
             UseEnergy();
+
+            switch(cellType)
+            {
+                case CellType.Stemcell:
+                    GetComponent<StemCellSpec>().OwnFixedUpdate();
+                    break;
+                case CellType.Leafcell:
+                    GetComponent<LeafCellSpec>().OwnFixedUpdate();
+                    break;
+                case CellType.Workercell:
+                    GetComponent<WorkerCellSpec>().OwnFixedUpdate();
+                    break;
+                case CellType.Storagecell:
+                    GetComponent<StorageCellSpec>().OwnFixedUpdate();
+                    break;
+                case CellType.Heartcell:
+                    GetComponent<HeartCellSpec>().OwnFixedUpdate();
+                    break;
+                case CellType.Breedcell:
+                    GetComponent<BreedCellSpec>().OwnFixedUpdate();
+                    break;
+            }
         }
     }
 
@@ -264,31 +386,12 @@ public class CellManager : MonoBehaviour
             {
                 Juice buf = connections[i].GetComponent<CellManager>().juice;
                 Juice otherDifDelta = connections[i].GetComponent<CellManager>().diffusionDelta;
-                Juice delta = new Juice()
-                {
-                    //Calculate deltas
-                    red         = (juice.red - buf.red)                 * diffusionFactor * 0.1666f,
-                    green       = (juice.green - buf.green)             * diffusionFactor * 0.1666f,
-                    blue        = (juice.blue - buf.blue)               * diffusionFactor * 0.1666f,
-                    blueCharged = (juice.blueCharged - buf.blueCharged) * diffusionFactor * 0.1666f,
-                    yellow      = (juice.yellow - buf.yellow)           * diffusionFactor * 0.1666f,
-                    black       = (juice.black - buf.black)             * diffusionFactor * 0.1666f
-                };
+                Juice delta = (juice - buf) * diffusionFactor * 0.1666f;
+
 
                 //Add deltas to diffusionDeltas
-                diffusionDelta.red          -= delta.red;
-                diffusionDelta.green        -= delta.green;
-                diffusionDelta.blue         -= delta.blue;
-                diffusionDelta.blueCharged  -= delta.blueCharged;
-                diffusionDelta.yellow       -= delta.yellow;
-                diffusionDelta.black        -= delta.black;
-
-                otherDifDelta.red           += delta.red;
-                otherDifDelta.green         += delta.green;
-                otherDifDelta.blue          += delta.blue;
-                otherDifDelta.blueCharged   += delta.blueCharged;
-                otherDifDelta.yellow        += delta.yellow;
-                otherDifDelta.black         += delta.black;
+                diffusionDelta -= delta;
+                otherDifDelta  += delta;
             }
         }
         
@@ -298,11 +401,6 @@ public class CellManager : MonoBehaviour
     public void DiffusionApply()
     {
         //deltaTime sollte niemals > 1.0f sein, sonst sind schwingeffekte möglich
-        juice.red           += Time.deltaTime * diffusionDelta.red;
-        juice.green         += Time.deltaTime * diffusionDelta.green;
-        juice.blue          += Time.deltaTime * diffusionDelta.blue;
-        juice.blueCharged   += Time.deltaTime * diffusionDelta.blueCharged;
-        juice.yellow        += Time.deltaTime * diffusionDelta.yellow;
-        juice.black         += Time.deltaTime * diffusionDelta.black;
+        juice += Time.deltaTime * diffusionDelta;
     }
 }

@@ -7,13 +7,15 @@ public class LeafCellSpec : MonoBehaviour {
     public float conversionMax;
 
 	// Use this for initialization
-	void Start () {
+	void Start ()
+    {
 		
 	}
 
     // Update is called fixed
-    void FixedUpdate()
+    public void OwnFixedUpdate()
     {
+        Absorb();
     }
 
     public void Absorb()

@@ -16,6 +16,12 @@ public class WorkerCellSpec : MonoBehaviour {
 
     GameObject[] materialNeighbours;
 
+    // Update is called once per frame
+    public void OwnFixedUpdate()
+    {
+
+    }
+
     void MakeConnection()
     {
 
