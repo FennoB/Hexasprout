@@ -1,25 +1,28 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class WorkerCellSpec : MonoBehaviour {
 
-    private float miningFactorBlue = 5;
-    private float miningFactorYellow = 5;
-    private float miningFactorBlack = 5;
-    private float miningFactorGreen = 5;
-    private float miningFactorRed = 5;
+    private float miningFactorBlue = 0.1f;
+    private float miningFactorYellow = 0.1f;
+    private float miningFactorBlack = 0.1f;
+    private float miningFactorGreen = 0.1f;
+    private float miningFactorRed = 0.1f;
 
     private int maxWorkerConnections = 1; 
     
     public MaterialManager[] materialNeighbours;
     public FieldManager Field;
     public CellManager CellManager;
+    private Juice juice;
 
     private void Awake()
     {
         materialNeighbours = new MaterialManager[6];
         CellManager = this.gameObject.GetComponentInParent<CellManager>();
+        Juice = CellManager.juice;
 
         CellManager.animConnectionUp = this.gameObject.transform.GetChild(2).GetChild(0).GetComponent<Animator>();
         CellManager.animConnectionDown = this.gameObject.transform.GetChild(2).GetChild(1).GetComponent<Animator>();
@@ -44,10 +47,63 @@ public class WorkerCellSpec : MonoBehaviour {
                 break;
         }
     }
+    public void OwnFixedUpdate()
+    {
+        for (int i = 0; i < materialNeighbours.Length; i++)
+        {
+            if (materialNeighbours[i] != null)
+            {
+                MaterialManager.Type type = materialNeighbours[i].type;
+                if(!materialNeighbours[i].LoadEmptyAfterTake(GetRightMiningFactor(type)) && 1 - Juice.Sum < MiningFactorBlack)
+                {
+                    switch (materialNeighbours[i].type)
+                    {
+                        case MaterialManager.Type.black:
+                            materialNeighbours[i].DecreaseLoad(miningFactorBlack);
+                            Juice.black += miningFactorBlack;
+                            break;
+                        case MaterialManager.Type.blue:
+                            materialNeighbours[i].DecreaseLoad(miningFactorBlue);
+                            Juice.blue += miningFactorBlue;
+                            break;
+                        case MaterialManager.Type.green:
+                            materialNeighbours[i].DecreaseLoad(miningFactorGreen);
+                            Juice.green += miningFactorGreen;
+                            break;
+                        case MaterialManager.Type.red:
+                            materialNeighbours[i].DecreaseLoad(miningFactorRed);
+                            Juice.red += miningFactorRed;
+                            break;
+                        case MaterialManager.Type.yellow:
+                            materialNeighbours[i].DecreaseLoad(miningFactorYellow);
+                            Juice.yellow += miningFactorYellow;
+                            break;
+                    }
+                }
+            }
+        }
+    }
+    public float GetRightMiningFactor(MaterialManager.Type type)
+    {
+        switch (type)
+        {
+            case MaterialManager.Type.black:
+                return MiningFactorBlack;
+            case MaterialManager.Type.blue:
+                return MiningFactorBlue;
+            case MaterialManager.Type.green:
+                return MiningFactorGreen;
+            case MaterialManager.Type.red:
+                return MiningFactorRed;
+            case MaterialManager.Type.yellow:
+                return MiningFactorYellow;
+        }
+        return 0f;
+    }
+
 
     void BuildWorkerConnection()
     {
-        
         if (GetCountWorkingConnections() < MaxWorkerConnections)
         {
             for (int i = 0; i < Field.neighbours.Length; i++)
@@ -58,7 +114,6 @@ public class WorkerCellSpec : MonoBehaviour {
                     {
                         if (Field.neighbours[i].HasMaterial())
                         {
-                            Debug.Log(i);
                             MaterialNeighbours[i] = Field.neighbours[i].Material.GetComponent<MaterialManager>();
                             CellManager.BuildVisualConnection(i);
                         }
@@ -66,7 +121,6 @@ public class WorkerCellSpec : MonoBehaviour {
                 }
             }
         }
-
     }
 
     int GetCountWorkingConnections()
@@ -183,6 +237,19 @@ public class WorkerCellSpec : MonoBehaviour {
         set
         {
             maxWorkerConnections = value;
+        }
+    }
+
+    public Juice Juice
+    {
+        get
+        {
+            return juice;
+        }
+
+        set
+        {
+            juice = value;
         }
     }
 }

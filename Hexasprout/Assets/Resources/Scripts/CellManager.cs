@@ -21,7 +21,7 @@ public class Juice
         yellow = 0;
         black = 0;
     }
-
+    
     public void SetAllTo(float value)
     {
         red = value;
@@ -64,6 +64,13 @@ public class Juice
     public static Juice operator/(Juice a, float div)
     {
         return a * (1.0f / div);
+    }
+    public float Sum
+    {
+        get
+        {
+            return red + green + blue + blueCharged + yellow + black;
+        }
     }
 }
 
