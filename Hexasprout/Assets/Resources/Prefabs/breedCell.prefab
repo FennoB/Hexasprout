@@ -37,7 +37,7 @@ GameObject:
   - component: {fileID: 4730031323729840}
   - component: {fileID: 114959760435859854}
   m_Layer: 0
-  m_Name: breedCell
+  m_Name: BreedCell
   m_TagString: Cell
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -117,7 +117,7 @@ MonoBehaviour:
   energyConvert: 0.5
   alive: 1
   diffusionFactor: 0.5
-  cellType: -1
+  cellType: 5
   juice:
     red: 0
     green: 0
@@ -125,7 +125,6 @@ MonoBehaviour:
     blueCharged: 0
     yellow: 0
     black: 0
-    bluePotency: 2
   diffusionDelta:
     red: 0
     green: 0
@@ -133,8 +132,13 @@ MonoBehaviour:
     blueCharged: 0
     yellow: 0
     black: 0
-    bluePotency: 2
   connections: []
+  animConnectionUp: {fileID: 0}
+  animConnectionDown: {fileID: 0}
+  animConnectionRightUp: {fileID: 0}
+  animConnectionRightDown: {fileID: 0}
+  animConnectionLeftUp: {fileID: 0}
+  animConnectionLeftDown: {fileID: 0}
   tempid: 0
 --- !u!212 &212094485156092258
 SpriteRenderer:
@@ -149,7 +153,6 @@ SpriteRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
-  m_RenderingLayerMask: 4294967295
   m_Materials:
   - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
@@ -194,7 +197,6 @@ SpriteRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
-  m_RenderingLayerMask: 4294967295
   m_Materials:
   - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:

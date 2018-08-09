@@ -156,8 +156,23 @@ public class GUIManager : MonoBehaviour
         // Cell menu open?
         if (CellMenuOpen)
         {
-            // Is this in the selection?
-            if (fm.State == FieldState.Grow || fm.State == FieldState.Decompose)
+            /*if (fm.Cell == null)
+            {
+                CreateCell(fm);
+            }*/
+            if (fm.State == FieldState.Grow)
+            {
+                fm.State = FieldState.SuperSelected;
+                CellMenuTarget.Cell.GetComponent<CellManager>().EventHandler(GUI_Event.Grow, this);
+            }
+            if (fm.State == FieldState.Decompose)
+            {
+                fm.State = FieldState.SuperSelected;
+                CellMenuTarget.Cell.GetComponent<CellManager>().EventHandler(GUI_Event.Decompose, this);
+            }
+            
+            /*/ Is this in the selection?
+            /if (fm.State == FieldState.Grow || fm.State == FieldState.Decompose)
             {
                 // Tapped on a cell?
                 if (fm.GetCell() == null)
@@ -169,27 +184,104 @@ public class GUIManager : MonoBehaviour
                 // Connect
                 ModifyCellConnection(CellMenuTarget, fm);
             }
-
+            */
             CloseCellMenu();
+            //ResetSelectedCells(GameObject.FindGameObjectWithTag("World"));
+            ResetSelectedCells();
         }
         else
         {
             // Tapped on a cell?
-            if (fm.GetCell() != null)
+            if (fm.Cell != null)
             {
                 // Yes. Open Cell menu
                 OpenCellMenu(fm);
+                fm.State = FieldState.Selected;
+                //and visualize connection to neighbours
+                for (int i = 0; i < fm.GetNeighbours().Length; i++)
+                {
+                    if (fm.GetNeighbours()[i] != null)
+                    {
+                        if (fm.GetNeighbours()[i].GetComponent<FieldManager>().Cell == null)
+                        {
+                            fm.GetNeighbours()[i].GetComponent<FieldManager>().State = FieldState.Grow;
+                        }
+                        else
+                        {
+                            if (fm.Cell.GetComponent<CellManager>().connections[i] == null)
+                            {
+                                fm.GetNeighbours()[i].GetComponent<FieldManager>().State = FieldState.Grow;
+                            }
+                            else
+                            {
+                                
+                                fm.GetNeighbours()[i].GetComponent<FieldManager>().State = FieldState.Decompose;
+                            }
+                        }
+                    }
+                }
             }
         }
     }
+    /*void ResetSelectedCells(GameObject world)
+    {
+        GameObject[][] fields = world.GetComponent<WorldGenerator>().GetFields();
+        for (int i = 0; i < fields.Length; i++)
+        {
+            for (int j = 0; j < fields[i].Length; j++)
+            {
+                if (fields[i][j].GetComponent<FieldManager>().State == FieldState.Decompose ||
+                    fields[i][j].GetComponent<FieldManager>().State == FieldState.Grow ||
+                    fields[i][j].GetComponent<FieldManager>().State == FieldState.Selected ||
+                    fields[i][j].GetComponent<FieldManager>().State == FieldState.SuperSelected)
+                {
+                    if (fields[i][j].GetComponent<FieldManager>().GetCell() == null)
+                    {
+                        fields[i][j].GetComponent<FieldManager>().State = FieldState.Visible;
+                    }
+                    else
+                    {
+                        fields[i][j].GetComponent<FieldManager>().State = FieldState.HasCell;
+                    }
+                }
+            }
+        }
+    }*/
+    void ResetSelectedCells()
+    {
+        if (CellMenuTarget != null)
+        {
+            for (int i = 0; i < CellMenuTarget.GetNeighbours().Length; i++)
+            {
+                if (CellMenuTarget.GetNeighbours()[i] != null)
+                {
+                    if (CellMenuTarget.GetNeighbours()[i].State == FieldState.Decompose ||
+                       CellMenuTarget.GetNeighbours()[i].State == FieldState.Grow ||
+                       CellMenuTarget.GetNeighbours()[i].State == FieldState.Selected ||
+                       CellMenuTarget.GetNeighbours()[i].State == FieldState.SuperSelected)
+                    {
+                        if (CellMenuTarget.GetNeighbours()[i].Cell == null)
+                        {
+                            CellMenuTarget.GetNeighbours()[i].State = FieldState.Visible;
+                        }
+                        else
+                        {
+                            CellMenuTarget.GetNeighbours()[i].State = FieldState.HasCell;
+                        }
+                    }
+                }
+            }
+            CellMenuTarget.State = FieldState.HasCell;
+        }
 
+    }
     // Handles other button events
     public void EventHandler(GUI_Event e)
     {
         // Give event to menu cell
         if(CellMenuOpen)
         {
-            CellMenuTarget.cell.GetComponent<CellManager>().EventHandler(e, this);
+            CellMenuTarget.Cell.GetComponent<CellManager>().EventHandler(e, this);
         }
     }
 
@@ -217,6 +309,8 @@ public class GUIManager : MonoBehaviour
         CellMenuOpen = true;
         EventHandler(GUI_Event.OpenMenu);
     }
+
+
 
     // Calles to close cell menus
     public void CloseCellMenu()
@@ -278,7 +372,7 @@ public class GUIManager : MonoBehaviour
     }
 
     // A cell connection is established and the animation starts
-    public void ModifyCellConnection(FieldManager first, FieldManager second)
+    /*public void ModifyCellConnection(FieldManager first, FieldManager second)
     {
         //case connection to down left
         //the neighbourfield has another id, if the selected field is in an uneven row than it has in a even one
@@ -286,39 +380,39 @@ public class GUIManager : MonoBehaviour
         {   
             if (first.GetIdx() - 1 == second.GetIdx() && first.GetIdy() - 1 == second.GetIdy())
             {   
-                first.GetCell().GetComponent<CellManager>().ConnectWith(second.GetCell().GetComponent<CellManager>(), 0);
-                first.GetCell().GetComponent<CellManager>().SetDownLeftAnimation();
+                first.Cell.GetComponent<CellManager>().ConnectWith(second.Cell.GetComponent<CellManager>(), 0);
+                first.Cell.GetComponent<CellManager>().SetDownLeftAnimation();
             }
         }
         if (first.GetIdy() % 2 == 1)
         {
             if (first.GetIdx() == second.GetIdx() && first.GetIdy() - 1 == second.GetIdy())
             {
-                first.GetCell().GetComponent<CellManager>().ConnectWith(second.GetCell().GetComponent<CellManager>(), 0);
-                first.GetCell().GetComponent<CellManager>().SetDownLeftAnimation();
+                first.Cell.GetComponent<CellManager>().ConnectWith(second.Cell.GetComponent<CellManager>(), 0);
+                first.Cell.GetComponent<CellManager>().SetDownLeftAnimation();
             }
         }
         //case connection down
         if (first.GetIdx() == second.GetIdx() && first.GetIdy() - 2 == second.GetIdy())
         {
-            first.GetCell().GetComponent<CellManager>().ConnectWith(second.GetCell().GetComponent<CellManager>(), 1);
-            first.GetCell().GetComponent<CellManager>().SetDownAnimation();
+            first.Cell.GetComponent<CellManager>().ConnectWith(second.Cell.GetComponent<CellManager>(), 1);
+            first.Cell.GetComponent<CellManager>().SetDownAnimation();
         }
         //case connection down right
         if (first.GetIdy() % 2 == 0)
         {
             if (first.GetIdx() == second.GetIdx() && first.GetIdy() - 1 == second.GetIdy())
             {
-                first.GetCell().GetComponent<CellManager>().ConnectWith(second.GetCell().GetComponent<CellManager>(), 2);
-                first.GetCell().GetComponent<CellManager>().SetDownRightAnimation();
+                first.Cell.GetComponent<CellManager>().ConnectWith(second.Cell.GetComponent<CellManager>(), 2);
+                first.Cell.GetComponent<CellManager>().SetDownRightAnimation();
             }
         }
         if (first.GetIdy() % 2 == 1)
         {
             if (first.GetIdx() + 1 == second.GetIdx() && first.GetIdy() - 1 == second.GetIdy())
             {
-                first.GetCell().GetComponent<CellManager>().ConnectWith(second.GetCell().GetComponent<CellManager>(), 2);
-                first.GetCell().GetComponent<CellManager>().SetDownRightAnimation();
+                first.Cell.GetComponent<CellManager>().ConnectWith(second.Cell.GetComponent<CellManager>(), 2);
+                first.Cell.GetComponent<CellManager>().SetDownRightAnimation();
             }
         }
 
@@ -327,42 +421,42 @@ public class GUIManager : MonoBehaviour
         {
             if (first.GetIdx() == second.GetIdx() && first.GetIdy() + 1 == second.GetIdy())
             {
-                first.GetCell().GetComponent<CellManager>().ConnectWith(second.GetCell().GetComponent<CellManager>(), 3);
-                first.GetCell().GetComponent<CellManager>().SetUpRightAnimation();
+                first.Cell.GetComponent<CellManager>().ConnectWith(second.Cell.GetComponent<CellManager>(), 3);
+                first.Cell.GetComponent<CellManager>().SetUpRightAnimation();
             }
         }
         if (first.GetIdy() % 2 == 1)
         {
             if (first.GetIdx() + 1 == second.GetIdx() && first.GetIdy() + 1 == second.GetIdy())
             {
-                first.GetCell().GetComponent<CellManager>().ConnectWith(second.GetCell().GetComponent<CellManager>(), 3);
-                first.GetCell().GetComponent<CellManager>().SetUpRightAnimation();
+                first.Cell.GetComponent<CellManager>().ConnectWith(second.Cell.GetComponent<CellManager>(), 3);
+                first.Cell.GetComponent<CellManager>().SetUpRightAnimation();
             }
         }
         //case connection up
         if (first.GetIdx() == second.GetIdx() && first.GetIdy() + 2 == second.GetIdy())
         {
-            first.GetCell().GetComponent<CellManager>().ConnectWith(second.GetCell().GetComponent<CellManager>(), 4);
-            first.GetCell().GetComponent<CellManager>().SetUpAnimation();
+            first.Cell.GetComponent<CellManager>().ConnectWith(second.Cell.GetComponent<CellManager>(), 4);
+            first.Cell.GetComponent<CellManager>().SetUpAnimation();
         }
         //case connection up left
         if (first.GetIdy() % 2 == 0)
         {
             if (first.GetIdx() - 1 == second.GetIdx() && first.GetIdy() + 1 == second.GetIdy())
             {
-                first.GetCell().GetComponent<CellManager>().ConnectWith(second.GetCell().GetComponent<CellManager>(), 5);
-                first.GetCell().GetComponent<CellManager>().SetUpLeftAnimation();
+                first.Cell.GetComponent<CellManager>().ConnectWith(second.Cell.GetComponent<CellManager>(), 5);
+                first.Cell.GetComponent<CellManager>().SetUpLeftAnimation();
             }
         }
         if (first.GetIdy() % 2 == 1)
         {
             if (first.GetIdx() == second.GetIdx() && first.GetIdy() + 1 == second.GetIdy())
             {
-                first.GetCell().GetComponent<CellManager>().ConnectWith(second.GetCell().GetComponent<CellManager>(), 5);
-                first.GetCell().GetComponent<CellManager>().SetUpLeftAnimation();
+                first.Cell.GetComponent<CellManager>().ConnectWith(second.Cell.GetComponent<CellManager>(), 5);
+                first.Cell.GetComponent<CellManager>().SetUpLeftAnimation();
             }
         }
-    }
+    }*/
 
     // Goes through all field an disables all selection modes
     /*public void ResetSelectStateOfCells(GameObject[][] fields)
