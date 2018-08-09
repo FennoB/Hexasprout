@@ -89,6 +89,7 @@ public class WorldGenerator : MonoBehaviour
 
         // Hard code dummy cell
         CreateStemCell(fields[2][2].GetComponent<FieldManager>());
+        CreateWorkerCell(fields[2][1].GetComponent<FieldManager>());
         //Hard code Material
         CreateRedMaterial(fields[2][3].GetComponent<FieldManager>(), "red");
         
@@ -98,13 +99,29 @@ public class WorldGenerator : MonoBehaviour
     
     public void CreateRedMaterial(FieldManager fm, string type)
     {
-        if (fm != null || fm.cell == null)
+        if (fm != null || fm.Cell == null)
         {
             GameObject p = (GameObject)Resources.Load("Prefabs/Materials/" + type, typeof(GameObject));
             GameObject g = Instantiate(p);
             g.GetComponent<Transform>().SetParent(fm.gameObject.GetComponent<Transform>());
             g.GetComponent<Transform>().localPosition = new Vector3(0, 0, -0.14f);
-            fm.cell = g;
+            fm.Material = g;
+        }
+        else
+        {
+            // throw Exception
+        }
+    }
+
+    public void CreateWorkerCell(FieldManager fm)
+    {
+        if (fm != null || fm.Cell == null)
+        {
+            GameObject p = (GameObject)Resources.Load("Prefabs/Cells/WorkerCell", typeof(GameObject));
+            GameObject g = Instantiate(p);
+            g.GetComponent<Transform>().SetParent(fm.gameObject.GetComponent<Transform>());
+            g.GetComponent<Transform>().localPosition = new Vector3(0, 0, -0.14f);
+            fm.Cell = g;
         }
         else
         {
@@ -119,7 +136,7 @@ public class WorldGenerator : MonoBehaviour
     public bool CreateStemCell(FieldManager fm)
     {
         // Fieldmanager valid?
-        if(fm == null || fm.cell != null)
+        if(fm == null || fm.Cell != null)
         {
             // Nope
             return false;
@@ -127,7 +144,7 @@ public class WorldGenerator : MonoBehaviour
 
         // Wheee
         // Load Prefab
-        GameObject p = (GameObject)Resources.Load("Prefabs/StemCell", typeof(GameObject));
+        GameObject p = (GameObject)Resources.Load("Prefabs/Cells/StemCell", typeof(GameObject));
 
         // Prefab valid?
         if (p == null)
@@ -151,7 +168,7 @@ public class WorldGenerator : MonoBehaviour
         // Link with field
         g.GetComponent<Transform>().SetParent(fm.gameObject.GetComponent<Transform>());
         g.GetComponent<Transform>().localPosition = new Vector3(0, 0, -0.14f);
-        fm.cell = g;
+        fm.Cell = g;
         return true;
     }
 

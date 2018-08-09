@@ -6,30 +6,30 @@ public class MaterialManager : MonoBehaviour {
 
     public enum Type {black, red, yellow, green, blue}
 
-    private int load;
+    public float load;
     public Type type;
 
     private void Awake()
     {
         load = (int)Random.Range(0f, 100f);
     }
-    public int GetLoad()
+    public float GetLoad()
     {
         return load;
     }
-    public void DecreaseLoad(int take)
+    public void DecreaseLoad(float take)
     {
-        load = load - take;
+        load = load - take * Time.deltaTime;
     }
-    public bool CheckLoadEmptyAfterTake(int take)
+    public bool LoadEmptyAfterTake(float take)
     {
         if (load - take < 0)
         {
-            return false;
+            return true;
         }
         else
         {
-            return true;
+            return false;
         }
     }
     public void SetType(Type type)
