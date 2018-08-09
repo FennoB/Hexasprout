@@ -117,7 +117,7 @@ public class WorldGenerator : MonoBehaviour
     {
         if (fm != null || fm.Cell == null)
         {
-            GameObject p = (GameObject)Resources.Load("Prefabs/WorkerCell", typeof(GameObject));
+            GameObject p = (GameObject)Resources.Load("Prefabs/Cells/WorkerCell", typeof(GameObject));
             GameObject g = Instantiate(p);
             g.GetComponent<Transform>().SetParent(fm.gameObject.GetComponent<Transform>());
             g.GetComponent<Transform>().localPosition = new Vector3(0, 0, -0.14f);
@@ -144,7 +144,7 @@ public class WorldGenerator : MonoBehaviour
 
         // Wheee
         // Load Prefab
-        GameObject p = (GameObject)Resources.Load("Prefabs/StemCell", typeof(GameObject));
+        GameObject p = (GameObject)Resources.Load("Prefabs/Cells/StemCell", typeof(GameObject));
 
         // Prefab valid?
         if (p == null)
