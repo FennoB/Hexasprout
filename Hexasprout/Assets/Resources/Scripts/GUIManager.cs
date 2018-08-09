@@ -156,10 +156,10 @@ public class GUIManager : MonoBehaviour
         // Cell menu open?
         if (CellMenuOpen)
         {
-            if (fm.Cell == null)
+            /*if (fm.Cell == null)
             {
                 CreateCell(fm);
-            }
+            }*/
             if (fm.State == FieldState.Grow)
             {
                 fm.State = FieldState.SuperSelected;
@@ -200,7 +200,7 @@ public class GUIManager : MonoBehaviour
                 //and visualize connection to neighbours
                 for (int i = 0; i < fm.GetNeighbours().Length; i++)
                 {
-                    if (fm.GetNeighbours() != null)
+                    if (fm.GetNeighbours()[i] != null)
                     {
                         if (fm.GetNeighbours()[i].GetComponent<FieldManager>().Cell == null)
                         {
@@ -208,12 +208,13 @@ public class GUIManager : MonoBehaviour
                         }
                         else
                         {
-                            if (fm.GetNeighbours()[i].GetComponent<FieldManager>().Cell.GetComponent<CellManager>().connections[i] == null)
+                            if (fm.Cell.GetComponent<CellManager>().connections[i] == null)
                             {
                                 fm.GetNeighbours()[i].GetComponent<FieldManager>().State = FieldState.Grow;
                             }
                             else
                             {
+                                
                                 fm.GetNeighbours()[i].GetComponent<FieldManager>().State = FieldState.Decompose;
                             }
                         }
@@ -252,18 +253,21 @@ public class GUIManager : MonoBehaviour
         {
             for (int i = 0; i < CellMenuTarget.GetNeighbours().Length; i++)
             {
-                if (CellMenuTarget.GetNeighbours()[i].State == FieldState.Decompose ||
-                   CellMenuTarget.GetNeighbours()[i].State == FieldState.Grow ||
-                   CellMenuTarget.GetNeighbours()[i].State == FieldState.Selected ||
-                   CellMenuTarget.GetNeighbours()[i].State == FieldState.SuperSelected)
+                if (CellMenuTarget.GetNeighbours()[i] != null)
                 {
-                    if (CellMenuTarget.GetNeighbours()[i].Cell == null)
+                    if (CellMenuTarget.GetNeighbours()[i].State == FieldState.Decompose ||
+                       CellMenuTarget.GetNeighbours()[i].State == FieldState.Grow ||
+                       CellMenuTarget.GetNeighbours()[i].State == FieldState.Selected ||
+                       CellMenuTarget.GetNeighbours()[i].State == FieldState.SuperSelected)
                     {
-                        CellMenuTarget.GetNeighbours()[i].State = FieldState.Visible;
-                    }
-                    else
-                    {
-                        CellMenuTarget.GetNeighbours()[i].State = FieldState.HasCell;
+                        if (CellMenuTarget.GetNeighbours()[i].Cell == null)
+                        {
+                            CellMenuTarget.GetNeighbours()[i].State = FieldState.Visible;
+                        }
+                        else
+                        {
+                            CellMenuTarget.GetNeighbours()[i].State = FieldState.HasCell;
+                        }
                     }
                 }
             }
@@ -368,7 +372,7 @@ public class GUIManager : MonoBehaviour
     }
 
     // A cell connection is established and the animation starts
-    public void ModifyCellConnection(FieldManager first, FieldManager second)
+    /*public void ModifyCellConnection(FieldManager first, FieldManager second)
     {
         //case connection to down left
         //the neighbourfield has another id, if the selected field is in an uneven row than it has in a even one
@@ -452,7 +456,7 @@ public class GUIManager : MonoBehaviour
                 first.Cell.GetComponent<CellManager>().SetUpLeftAnimation();
             }
         }
-    }
+    }*/
 
     // Goes through all field an disables all selection modes
     /*public void ResetSelectStateOfCells(GameObject[][] fields)

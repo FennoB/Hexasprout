@@ -86,12 +86,12 @@ public class CellManager : MonoBehaviour
     public float energyConvert = 0.5f; // Convertion of chemical to cellenegy per minute (2 minutes to reload battery)
     public bool alive = true;
     public float diffusionFactor = 0.5f;    // Diffusion speed. Behaviour undefined when > 1.0f
-    public CellType cellType = CellType.None;        // Celltypes: stem=0, leaf=1, worker=2, heart=3, storage=4, breed=5
+    public CellType cellType = CellType.Stemcell;        // Celltypes: stem=0, leaf=1, worker=2, heart=3, storage=4, breed=5
 
     public Juice juice;
     public Juice diffusionDelta;
     public GameObject[] connections;
-    
+
     //Here are the animators for the different directions of the connections of a cell
     public Animator animConnectionUp;
     public Animator animConnectionDown;
@@ -117,15 +117,7 @@ public class CellManager : MonoBehaviour
         };
 
         //at the moment are the Animations only defined for stemcells, the selected child is the gameObject which is animated
-        if (this.gameObject.name.Equals("StemCell(Clone)"))
-        {
-            animConnectionUp = this.gameObject.transform.GetChild(2).GetChild(0).GetComponent<Animator>();
-            animConnectionDown = this.gameObject.transform.GetChild(2).GetChild(1).GetComponent<Animator>();
-            animConnectionLeftDown = this.gameObject.transform.GetChild(2).GetChild(2).GetChild(0).GetComponent<Animator>();
-            animConnectionLeftUp = this.gameObject.transform.GetChild(2).GetChild(3).GetChild(0).GetComponent<Animator>();
-            animConnectionRightDown = this.gameObject.transform.GetChild(2).GetChild(4).GetChild(0).GetComponent<Animator>();
-            animConnectionRightUp = this.gameObject.transform.GetChild(2).GetChild(5).GetChild(0).GetComponent<Animator>();
-        }
+        
     }
 
     // Update is called once per frame
@@ -152,10 +144,11 @@ public class CellManager : MonoBehaviour
                 break;
         }
         // Cell specs
-        switch(cellType)
+        switch (cellType)
         {
             case CellType.Stemcell:
                 GetComponent<StemCellSpec>().EventHandler(e, gm);
+                
                 break;
             case CellType.Leafcell:
                 GetComponent<LeafCellSpec>().EventHandler(e, gm);
@@ -171,6 +164,30 @@ public class CellManager : MonoBehaviour
                 break;
             case CellType.Breedcell:
                 GetComponent<BreedCellSpec>().EventHandler(e, gm);
+                break;
+        }
+    }
+    public void BuildVisualConnection(int neighbour)
+    {
+        switch (neighbour)
+        {
+            case 0:
+                SetDownLeftAnimation();
+                break;
+            case 1:
+                SetDownAnimation();
+                break;
+            case 2:
+                SetDownRightAnimation();
+                break;
+            case 3:
+                SetUpRightAnimation();
+                break;
+            case 4:
+                SetUpAnimation();
+                break;
+            case 5:
+                SetUpLeftAnimation();
                 break;
         }
     }

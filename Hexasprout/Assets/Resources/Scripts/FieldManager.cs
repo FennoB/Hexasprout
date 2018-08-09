@@ -16,7 +16,7 @@ public enum FieldState
 
 public class FieldManager : MonoBehaviour
 {
-    private FieldState state = FieldState.Invisible;
+    public FieldState state = FieldState.Invisible;
     //0 = Down left
     //1 = Down
     //... (circle)
@@ -27,7 +27,7 @@ public class FieldManager : MonoBehaviour
 
     private GameObject cell = null;
     public GameObject material = null;
-    
+
     public float warmth;
 
     
@@ -111,7 +111,19 @@ public class FieldManager : MonoBehaviour
                 break;
 
         }
+    }
+
+    public bool HasMaterial()
+    {
+        if (Material != null)
+        {
+            return true;
         }
+        else
+        {
+            return false;
+        }
+    }
     public FieldManager[] GetNeighbours()
     {
         return neighbours;
@@ -147,6 +159,19 @@ public class FieldManager : MonoBehaviour
         set
         {
             cell = value;
+        }
+    }
+
+    public GameObject Material
+    {
+        get
+        {
+            return material;
+        }
+
+        set
+        {
+            material = value;
         }
     }
 }
