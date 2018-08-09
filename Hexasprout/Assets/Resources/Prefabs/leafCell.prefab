@@ -138,7 +138,6 @@ MonoBehaviour:
     blueCharged: 0
     yellow: 0
     black: 0
-    bluePotency: 2
   diffusionDelta:
     red: 0
     green: 0
@@ -146,8 +145,13 @@ MonoBehaviour:
     blueCharged: 0
     yellow: 0
     black: 0
-    bluePotency: 2
   connections: []
+  animConnectionUp: {fileID: 0}
+  animConnectionDown: {fileID: 0}
+  animConnectionRightUp: {fileID: 0}
+  animConnectionRightDown: {fileID: 0}
+  animConnectionLeftUp: {fileID: 0}
+  animConnectionLeftDown: {fileID: 0}
   tempid: 0
 --- !u!212 &212094485156092258
 SpriteRenderer:
@@ -192,7 +196,7 @@ SpriteRenderer:
   m_Size: {x: 1, y: 0.5}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
 --- !u!212 &212828709813512262
 SpriteRenderer:
@@ -229,12 +233,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 638ed7e706b93c342968c91692a39e59, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 74c2ef9cb09046945b75906485caf515, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 0.5}
+  m_Size: {x: 1, y: 0.875}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1

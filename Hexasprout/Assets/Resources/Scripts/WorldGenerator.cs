@@ -23,7 +23,7 @@ public class WorldGenerator : MonoBehaviour
             {
                 GameObject newField = Instantiate((GameObject)Resources.Load("Prefabs/Field", typeof(GameObject)));
                 newField.transform.SetParent(transform);
-                newField.transform.position = new Vector2(-100.0f + (float) i * 1.5f + (float)(j % 2) * 0.75f, -50 + 0.25f * j);
+                newField.transform.position = new Vector2(-100.0f + (float) i * 1.5f + (float)(j % 2) * 0.75f, -50 + 0.5f * j / 1.1428f);
                 newField.GetComponent<FieldManager>().idx = i;
                 newField.GetComponent<FieldManager>().idy = j;
                 newField.GetComponent<FieldManager>().warmth = Random.value;
