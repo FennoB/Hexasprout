@@ -6,7 +6,7 @@ public class MaterialManager : MonoBehaviour {
 
     public enum Type {black, red, yellow, green, blue}
 
-    private float load;
+    public float load;
     public Type type;
 
     private void Awake()
@@ -19,17 +19,17 @@ public class MaterialManager : MonoBehaviour {
     }
     public void DecreaseLoad(float take)
     {
-        load = load - take;
+        load = load - take * Time.deltaTime;
     }
     public bool LoadEmptyAfterTake(float take)
     {
         if (load - take < 0)
         {
-            return false;
+            return true;
         }
         else
         {
-            return true;
+            return false;
         }
     }
     public void SetType(Type type)

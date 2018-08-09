@@ -5,11 +5,11 @@ using UnityEngine;
 
 public class WorkerCellSpec : MonoBehaviour {
 
-    private float miningFactorBlue = 0.1f;
-    private float miningFactorYellow = 0.1f;
-    private float miningFactorBlack = 0.1f;
-    private float miningFactorGreen = 0.1f;
-    private float miningFactorRed = 0.1f;
+    private float miningFactorBlue = 0.01f;
+    private float miningFactorYellow = 0.01f;
+    private float miningFactorBlack = 0.01f;
+    private float miningFactorGreen = 0.01f;
+    private float miningFactorRed = 0.01f;
 
     private int maxWorkerConnections = 1; 
     
@@ -17,6 +17,7 @@ public class WorkerCellSpec : MonoBehaviour {
     public FieldManager Field;
     public CellManager CellManager;
     private Juice juice;
+    public bool StartFlag = true;
 
     private void Awake()
     {
@@ -49,13 +50,56 @@ public class WorkerCellSpec : MonoBehaviour {
     }
     public void OwnFixedUpdate()
     {
+        Juice = CellManager.juice;
         for (int i = 0; i < materialNeighbours.Length; i++)
         {
             if (materialNeighbours[i] != null)
             {
-                MaterialManager.Type type = materialNeighbours[i].type;
-                if(!materialNeighbours[i].LoadEmptyAfterTake(GetRightMiningFactor(type)) && 1 - Juice.Sum < MiningFactorBlack)
+                MaterialManager.Type type = materialNeighbours[i].type;   
+                if (!materialNeighbours[i].LoadEmptyAfterTake(GetRightMiningFactor(type)) && (1 - Juice.Sum > GetRightMiningFactor(type)))
                 {
+                    switch (materialNeighbours[i].type)
+                    {
+                        case MaterialManager.Type.black:
+                            materialNeighbours[i].DecreaseLoad(miningFactorBlack);
+                            Juice.black += miningFactorBlack * Time.deltaTime;
+                            break;
+                        case MaterialManager.Type.blue:
+                            materialNeighbours[i].DecreaseLoad(miningFactorBlue);
+                            Juice.blue += miningFactorBlue * Time.deltaTime;
+                            break;
+                        case MaterialManager.Type.green:
+                            materialNeighbours[i].DecreaseLoad(miningFactorGreen);
+                            Juice.green += miningFactorGreen * Time.deltaTime;
+                            break;
+                        case MaterialManager.Type.red:
+                            materialNeighbours[i].DecreaseLoad(miningFactorRed);
+                            Juice.red += miningFactorRed * Time.deltaTime;
+                            break;
+                        case MaterialManager.Type.yellow:
+                            materialNeighbours[i].DecreaseLoad(miningFactorYellow);
+                            Juice.yellow += miningFactorYellow * Time.deltaTime;
+                            break;
+                    }
+                }
+            }
+        }
+    }
+    /*IEnumerator FarmMaterial()
+    {
+        yield return new WaitForSeconds(1f);
+        for (int i = 0; i < materialNeighbours.Length; i++)
+        {
+            if (materialNeighbours[i] != null)
+            {
+                Debug.Log("Boing");
+                MaterialManager.Type type = materialNeighbours[i].type;
+                //Debug.Log(GetRightMiningFactor(type));
+                Debug.Log(Juice.Sum);
+                if (!materialNeighbours[i].LoadEmptyAfterTake(GetRightMiningFactor(type)) && (1 - Juice.Sum > GetRightMiningFactor(type)))
+                {
+                    Debug.Log("jo");
+                    Debug.Log(materialNeighbours[i].type);
                     switch (materialNeighbours[i].type)
                     {
                         case MaterialManager.Type.black:
@@ -71,6 +115,7 @@ public class WorkerCellSpec : MonoBehaviour {
                             Juice.green += miningFactorGreen;
                             break;
                         case MaterialManager.Type.red:
+                            Debug.Log("im Red");
                             materialNeighbours[i].DecreaseLoad(miningFactorRed);
                             Juice.red += miningFactorRed;
                             break;
@@ -82,7 +127,8 @@ public class WorkerCellSpec : MonoBehaviour {
                 }
             }
         }
-    }
+        StartFlag = true;
+    }*/
     public float GetRightMiningFactor(MaterialManager.Type type)
     {
         switch (type)

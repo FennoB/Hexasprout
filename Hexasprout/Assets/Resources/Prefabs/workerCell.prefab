@@ -181,7 +181,7 @@ GameObject:
   - component: {fileID: 114959760435859854}
   - component: {fileID: 114653220438463252}
   m_Layer: 0
-  m_Name: WorkerCell
+  m_Name: workerCell
   m_TagString: Cell
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -606,6 +606,7 @@ MonoBehaviour:
   materialNeighbours: []
   Field: {fileID: 0}
   CellManager: {fileID: 0}
+  StartFlag: 1
 --- !u!114 &114959760435859854
 MonoBehaviour:
   m_ObjectHideFlags: 1
