@@ -205,6 +205,9 @@ public class CellManager : MonoBehaviour
 	// Use this for initialization
 	void Awake ()
     {
+        // Reset Substance Deltas
+        diffusionDelta = new Juice();
+
         connections = new GameObject[6];
         for(int i = 0; i < 6; i++)
         {
@@ -405,9 +408,6 @@ public class CellManager : MonoBehaviour
     // Juice Diffusion Calculation
     public void DiffusionCalc()
     {
-        // Reset Substance Deltas
-        diffusionDelta = new Juice();
-
         // Calculation of new Substance Deltas 0, 1, 2        
         for (int i = 0; i < 3; i++)
         {
@@ -423,7 +423,7 @@ public class CellManager : MonoBehaviour
 
                 //Add deltas to diffusionDeltas
                 diffusionDelta -= delta;
-                otherDifDelta  += delta;
+                connections[i].GetComponent<CellManager>().diffusionDelta += delta;
             }
         }
         
@@ -434,5 +434,9 @@ public class CellManager : MonoBehaviour
     {
         //deltaTime sollte niemals > 1.0f sein, sonst sind schwingeffekte möglich
         juice += Time.deltaTime * diffusionDelta;
+
+        // Reset Substance Deltas
+        diffusionDelta = new Juice();
+
     }
 }
