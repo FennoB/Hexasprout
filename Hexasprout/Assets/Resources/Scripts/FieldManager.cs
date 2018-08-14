@@ -78,7 +78,7 @@ public class FieldManager : MonoBehaviour
             {
                 if (neighbours[i] != null)
                 {
-                    if (neighbours[i].GetComponent<FieldManager>().State == FieldState.HasCell)
+                    if (neighbours[i].GetComponent<FieldManager>().Cell != null)
                     {
                         State = FieldState.Visible;
                     }

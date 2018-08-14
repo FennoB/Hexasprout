@@ -39,6 +39,9 @@ public class WorkerCellSpec : MonoBehaviour {
             case GUI_Event.Grow:
                 BuildWorkerConnection();
                 break;
+            case GUI_Event.Decompose:
+                DecomposeWorkerConnection();
+                break;
         }
     }
     public void OwnFixedUpdate()
@@ -87,50 +90,20 @@ public class WorkerCellSpec : MonoBehaviour {
             }
         }
     }
-    /*IEnumerator FarmMaterial()
+
+    void DecomposeWorkerConnection()
     {
-        yield return new WaitForSeconds(1f);
-        for (int i = 0; i < materialNeighbours.Length; i++)
+        for (int i = 0; i < Field.neighbours.Length; i++)
         {
-            if (materialNeighbours[i] != null)
+            if (Field.neighbours[i] != null)
             {
-                Debug.Log("Boing");
-                MaterialManager.Type type = materialNeighbours[i].type;
-                //Debug.Log(GetRightMiningFactor(type));
-                Debug.Log(Juice.Sum);
-                if (!materialNeighbours[i].LoadEmptyAfterTake(GetRightMiningFactor(type)) && (1 - Juice.Sum > GetRightMiningFactor(type)))
+                if (Field.neighbours[i].State == FieldState.SuperSelected)
                 {
-                    Debug.Log("jo");
-                    Debug.Log(materialNeighbours[i].type);
-                    switch (materialNeighbours[i].type)
-                    {
-                        case MaterialManager.Type.black:
-                            materialNeighbours[i].DecreaseLoad(miningFactorBlack);
-                            Juice.black += miningFactorBlack;
-                            break;
-                        case MaterialManager.Type.blue:
-                            materialNeighbours[i].DecreaseLoad(miningFactorBlue);
-                            Juice.blue += miningFactorBlue;
-                            break;
-                        case MaterialManager.Type.green:
-                            materialNeighbours[i].DecreaseLoad(miningFactorGreen);
-                            Juice.green += miningFactorGreen;
-                            break;
-                        case MaterialManager.Type.red:
-                            Debug.Log("im Red");
-                            materialNeighbours[i].DecreaseLoad(miningFactorRed);
-                            Juice.red += miningFactorRed;
-                            break;
-                        case MaterialManager.Type.yellow:
-                            materialNeighbours[i].DecreaseLoad(miningFactorYellow);
-                            Juice.yellow += miningFactorYellow;
-                            break;
-                    }
+                    MaterialNeighbours[i] = null;   
                 }
             }
         }
-        StartFlag = true;
-    }*/
+    }
 
     void BuildWorkerConnection()
     {
@@ -178,7 +151,6 @@ public class WorkerCellSpec : MonoBehaviour {
             miningFactorBlue = value;
         }
     }
-
     public float MiningFactorYellow
     {
         get
@@ -191,7 +163,6 @@ public class WorkerCellSpec : MonoBehaviour {
             miningFactorYellow = value;
         }
     }
-
     public float MiningFactorBlack
     {
         get
@@ -204,7 +175,6 @@ public class WorkerCellSpec : MonoBehaviour {
             miningFactorBlack = value;
         }
     }
-
     public float MiningFactorGreen
     {
         get
@@ -217,7 +187,6 @@ public class WorkerCellSpec : MonoBehaviour {
             miningFactorGreen = value;
         }
     }
-
     public float MiningFactorRed
     {
         get
@@ -230,20 +199,6 @@ public class WorkerCellSpec : MonoBehaviour {
             miningFactorRed = value;
         }
     }
-
-    public int MaxWorkerConnections
-    {
-        get
-        {
-            return MaxWorkerConnections1;
-        }
-
-        set
-        {
-            MaxWorkerConnections1 = value;
-        }
-    }
-
     public MaterialManager[] MaterialNeighbours
     {
         get
@@ -256,20 +211,6 @@ public class WorkerCellSpec : MonoBehaviour {
             materialNeighbours = value;
         }
     }
-
-    public int MaxWorkerConnections1
-    {
-        get
-        {
-            return maxWorkerConnections;
-        }
-
-        set
-        {
-            maxWorkerConnections = value;
-        }
-    }
-
     public Juice Juice
     {
         get
@@ -280,6 +221,18 @@ public class WorkerCellSpec : MonoBehaviour {
         set
         {
             juice = value;
+        }
+    }
+    public int MaxWorkerConnections
+    {
+        get
+        {
+            return maxWorkerConnections;
+        }
+
+        set
+        {
+            maxWorkerConnections = value;
         }
     }
 }

@@ -9,14 +9,17 @@ public class StorageCellSpec : MonoBehaviour
     public Juice capacities;
     public Juice target;
     public float maxSpeedPerSecond;
+    public FieldManager Field;
 
-	// Use this for initialization
-	void Start ()
+    // Use this for initialization
+    void Start ()
     {
         content = new Juice();
         capacities = new Juice();
         target = new Juice();
         capacities.SetAllTo(10.0f);
+
+        Field = this.gameObject.transform.parent.GetComponentInParent<FieldManager>();
     }
 
     // Update is called once per frame
@@ -59,10 +62,32 @@ public class StorageCellSpec : MonoBehaviour
         juice -= delta;
     }
 
-    // EventHandler
     public void EventHandler(GUI_Event e, GUIManager gm)
     {
+        switch (e)
+        {
+            case GUI_Event.Grow:
+                BuildConnection();
+                break;
+        }
+    }
 
+    void BuildConnection()
+    {
+        for (int i = 0; i < Field.neighbours.Length; i++)
+        {
+            if (Field.neighbours[i] != null)
+            {
+                if (Field.neighbours[i].State == FieldState.SuperSelected && !Field.neighbours[i].HasMaterial())
+                {
+                    if (Field.neighbours[i].Cell == null)
+                    {
+                        GameObject.Find("World").GetComponent<WorldGenerator>().CreateStemCell(Field.neighbours[i]);
+                    }
+                    Field.Cell.GetComponent<CellManager>().ConnectWith(Field.neighbours[i].Cell.GetComponent<CellManager>(), i);
+                }
+            }
+        }
     }
 
 }
