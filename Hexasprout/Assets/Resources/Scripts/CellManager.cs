@@ -187,6 +187,7 @@ public class CellManager : MonoBehaviour
     public bool alive = true;
     public float diffusionFactor = 0.5f;    // Diffusion speed. Behaviour undefined when > 1.0f
     public CellType cellType = CellType.Stemcell;        // Celltypes: stem=0, leaf=1, worker=2, heart=3, storage=4, breed=5
+    public FieldManager Field;
 
     public Juice juice;
     public Juice diffusionDelta;
@@ -217,11 +218,13 @@ public class CellManager : MonoBehaviour
         juice = new Juice
         {
             blueCharged = 1.0f
-        };
+        };  
+    }
 
-        //at the moment are the Animations only defined for stemcells, the selected child is the gameObject which is animated
-        
-        }
+    private void Start()
+    {
+        Field = this.gameObject.transform.parent.GetComponentInParent<FieldManager>();
+    }
 
     // Update is called once per frame
     public void OwnFixedUpdate()
@@ -266,6 +269,9 @@ public class CellManager : MonoBehaviour
                 break;
             case GUI_Event.CloseMenu:
                 CloseMenu();
+                break;
+            case GUI_Event.Decompose:
+                DecomposeConnection();
                 break;
         }
         // Cell specs
@@ -369,6 +375,20 @@ public class CellManager : MonoBehaviour
         animConnectionRightUp.SetTrigger("BuildRightUp");
     }
 
+    void DecomposeConnection()
+    {
+        for (int i = 0; i < Field.neighbours.Length; i++)
+        {
+            if (Field.neighbours[i] != null)
+            {
+                if (Field.neighbours[i].State == FieldState.SuperSelected && !Field.neighbours[i].HasMaterial())
+                {
+                    Field.Cell.GetComponent<CellManager>().DecomposeWith(Field.neighbours[i].Cell.GetComponent<CellManager>(), i);
+                }
+            }
+        }
+    }
+
 
     // Use energy for living
     void UseEnergy()
@@ -393,6 +413,21 @@ public class CellManager : MonoBehaviour
 
             //You know me
             cm.ConnectWith(this, (conID + 3) % 6);
+        }
+    }
+
+    // Decompose a Connnection to a neighbour
+    public void DecomposeWith(CellManager cm, int conID)
+    {
+        // is there a connection established?
+        if (connections[conID] != null)
+        {
+            //No. Connect!
+            //I know you
+            connections[conID] = null;
+
+            //You know me
+            cm.DecomposeWith(this, (conID + 3) % 6);
         }
     }
 

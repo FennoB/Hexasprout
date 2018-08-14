@@ -153,13 +153,9 @@ public class GUIManager : MonoBehaviour
     // Called when user tapped on a field
     void TappedOnField(FieldManager fm)
     {
-        // Cell menu open?
+        // Cell menu open, this means another cell is already selected
         if (CellMenuOpen)
         {
-            /*if (fm.Cell == null)
-            {
-                CreateCell(fm);
-            }*/
             if (fm.State == FieldState.Grow)
             {
                 fm.State = FieldState.SuperSelected;
@@ -170,23 +166,7 @@ public class GUIManager : MonoBehaviour
                 fm.State = FieldState.SuperSelected;
                 CellMenuTarget.Cell.GetComponent<CellManager>().EventHandler(GUI_Event.Decompose, this);
             }
-            
-            /*/ Is this in the selection?
-            /if (fm.State == FieldState.Grow || fm.State == FieldState.Decompose)
-            {
-                // Tapped on a cell?
-                if (fm.GetCell() == null)
-                {
-                    // Nope
-                    CreateCell(fm);
-                }
-
-                // Connect
-                ModifyCellConnection(CellMenuTarget, fm);
-            }
-            */
             CloseCellMenu();
-            //ResetSelectedCells(GameObject.FindGameObjectWithTag("World"));
             ResetSelectedCells();
         }
         else
@@ -196,26 +176,44 @@ public class GUIManager : MonoBehaviour
             {
                 // Yes. Open Cell menu
                 OpenCellMenu(fm);
+                //set cell as the by the player selected one
                 fm.State = FieldState.Selected;
                 //and visualize connection to neighbours
                 for (int i = 0; i < fm.GetNeighbours().Length; i++)
                 {
                     if (fm.GetNeighbours()[i] != null)
                     {
-                        if (fm.GetNeighbours()[i].GetComponent<FieldManager>().Cell == null)
+                        if (fm.GetNeighbours()[i].GetComponent<FieldManager>().Material == null)
                         {
-                            fm.GetNeighbours()[i].GetComponent<FieldManager>().State = FieldState.Grow;
-                        }
-                        else
-                        {
-                            if (fm.Cell.GetComponent<CellManager>().connections[i] == null)
+                            if (fm.GetNeighbours()[i].GetComponent<FieldManager>().Cell == null)
                             {
                                 fm.GetNeighbours()[i].GetComponent<FieldManager>().State = FieldState.Grow;
                             }
                             else
                             {
-                                
-                                fm.GetNeighbours()[i].GetComponent<FieldManager>().State = FieldState.Decompose;
+                                if (fm.Cell.GetComponent<CellManager>().connections[i] == null)
+                                {
+                                    fm.GetNeighbours()[i].GetComponent<FieldManager>().State = FieldState.Grow;
+                                }
+                                else
+                                {
+
+                                    fm.GetNeighbours()[i].GetComponent<FieldManager>().State = FieldState.Decompose;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if (fm.Cell.GetComponent<WorkerCellSpec>() != null)
+                            {
+                                if (fm.Cell.GetComponent<WorkerCellSpec>().MaterialNeighbours[i] == null)
+                                {
+                                    fm.GetNeighbours()[i].GetComponent<FieldManager>().State = FieldState.Grow;
+                                }
+                                else
+                                {
+                                    fm.GetNeighbours()[i].GetComponent<FieldManager>().State = FieldState.Decompose;
+                                }
                             }
                         }
                     }
@@ -223,30 +221,6 @@ public class GUIManager : MonoBehaviour
             }
         }
     }
-    /*void ResetSelectedCells(GameObject world)
-    {
-        GameObject[][] fields = world.GetComponent<WorldGenerator>().GetFields();
-        for (int i = 0; i < fields.Length; i++)
-        {
-            for (int j = 0; j < fields[i].Length; j++)
-            {
-                if (fields[i][j].GetComponent<FieldManager>().State == FieldState.Decompose ||
-                    fields[i][j].GetComponent<FieldManager>().State == FieldState.Grow ||
-                    fields[i][j].GetComponent<FieldManager>().State == FieldState.Selected ||
-                    fields[i][j].GetComponent<FieldManager>().State == FieldState.SuperSelected)
-                {
-                    if (fields[i][j].GetComponent<FieldManager>().GetCell() == null)
-                    {
-                        fields[i][j].GetComponent<FieldManager>().State = FieldState.Visible;
-                    }
-                    else
-                    {
-                        fields[i][j].GetComponent<FieldManager>().State = FieldState.HasCell;
-                    }
-                }
-            }
-        }
-    }*/
     void ResetSelectedCells()
     {
         if (CellMenuTarget != null)

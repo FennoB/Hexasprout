@@ -56,7 +56,7 @@ public class StemCellSpec : MonoBehaviour {
                     if (Field.neighbours[i].Cell == null)
                     {
                         GameObject.Find("World").GetComponent<WorldGenerator>().CreateStemCell(Field.neighbours[i]);
-    }
+                    }
                     Field.Cell.GetComponent<CellManager>().ConnectWith(Field.neighbours[i].Cell.GetComponent<CellManager>(), i);
                     CellManager.BuildVisualConnection(i);
                 }
