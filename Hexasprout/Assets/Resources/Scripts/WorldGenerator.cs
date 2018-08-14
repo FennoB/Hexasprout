@@ -7,9 +7,16 @@ public class WorldGenerator : MonoBehaviour
     public int worldSizeX = 5;
     public int worldSizeY = 20;
     public GameObject[][] fields;
+    public int probResource = 5;
+    public int probRed = 10;
+    public int probBlue = 33;
+    public int probBlueCharged = 5;
+    public int probGreen = 10;
+    public int probYellow = 8;
+    public int probBlack = 34;
 
-	// Use this for initialization
-	void Start ()
+    // Use this for initialization
+    void Start ()
     {
         fields = new GameObject[worldSizeX][];
         for(int i = 0; i < worldSizeX; i++)
@@ -29,13 +36,43 @@ public class WorldGenerator : MonoBehaviour
                 newField.GetComponent<FieldManager>().warmth = Random.value;
                 fields[i][j] = newField;
 
-                //// Resource?
-                //if(Random.Range(0, 100) < 5)
-                //{
-                //    // Resource!
-                //    int resclass = Random.Range(0, 5);
-                //    if (resclass)
-                //}
+                // Resource?
+                if (Random.Range(0, 100) < 10)
+                {
+                    // Resource!
+                    int resclass = Random.Range(0, 100);
+                    int classBlack = probBlack;
+                    int classBlue = classBlack + probBlue;
+                    int classRed = classBlue + probRed;
+                    int classGreen = classRed + probGreen;
+                    int classYellow = classGreen + probYellow;
+                    int classBluecharged = classYellow + probBlueCharged;
+                    
+                    if(resclass < classBlack)
+                    {
+                        CreateMaterial(newField.GetComponent<FieldManager>(), "black");
+                    }
+                    else if (resclass < classBlue)
+                    {
+                        CreateMaterial(newField.GetComponent<FieldManager>(), "blue");
+                    }
+                    else if (resclass < classRed)
+                    {
+                        CreateMaterial(newField.GetComponent<FieldManager>(), "red");
+                    }
+                    else if (resclass < classGreen)
+                    {
+                        CreateMaterial(newField.GetComponent<FieldManager>(), "green");
+                    }
+                    else if (resclass < classYellow)
+                    {
+                        CreateMaterial(newField.GetComponent<FieldManager>(), "yellow");
+                    }
+                    else if (resclass < classBluecharged)
+                    {
+                        CreateMaterial(newField.GetComponent<FieldManager>(), "bluecharged");
+                    }
+                }
             }
         }
 
@@ -91,13 +128,11 @@ public class WorldGenerator : MonoBehaviour
         CreateStemCell(fields[2][2].GetComponent<FieldManager>());
         CreateWorkerCell(fields[2][1].GetComponent<FieldManager>());
         //Hard code Material
-        CreateRedMaterial(fields[2][3].GetComponent<FieldManager>(), "red");
+        CreateMaterial(fields[2][3].GetComponent<FieldManager>(), "red");
         
     }
 
-
-    
-    public void CreateRedMaterial(FieldManager fm, string type)
+    public void CreateMaterial(FieldManager fm, string type)
     {
         if (fm != null || fm.Cell == null)
         {
@@ -112,6 +147,7 @@ public class WorldGenerator : MonoBehaviour
             // throw Exception
         }
     }
+
 
     public void CreateWorkerCell(FieldManager fm)
     {

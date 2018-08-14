@@ -24,13 +24,6 @@ public class WorkerCellSpec : MonoBehaviour {
         materialNeighbours = new MaterialManager[6];
         CellManager = this.gameObject.GetComponentInParent<CellManager>();
         Juice = CellManager.juice;
-
-        CellManager.animConnectionUp = this.gameObject.transform.GetChild(2).GetChild(0).GetComponent<Animator>();
-        CellManager.animConnectionDown = this.gameObject.transform.GetChild(2).GetChild(1).GetComponent<Animator>();
-        CellManager.animConnectionLeftDown = this.gameObject.transform.GetChild(2).GetChild(2).GetChild(0).GetComponent<Animator>();
-        CellManager.animConnectionLeftUp = this.gameObject.transform.GetChild(2).GetChild(3).GetChild(0).GetComponent<Animator>();
-        CellManager.animConnectionRightDown = this.gameObject.transform.GetChild(2).GetChild(4).GetChild(0).GetComponent<Animator>();
-        CellManager.animConnectionRightUp = this.gameObject.transform.GetChild(2).GetChild(5).GetChild(0).GetComponent<Animator>();
     }
 
     private void Start()
@@ -55,32 +48,41 @@ public class WorkerCellSpec : MonoBehaviour {
         {
             if (materialNeighbours[i] != null)
             {
-                MaterialManager.Type type = materialNeighbours[i].type;   
-                if (!materialNeighbours[i].LoadEmptyAfterTake(GetRightMiningFactor(type)) && (1 - Juice.Sum > GetRightMiningFactor(type)))
+                MaterialManager.Type type = materialNeighbours[i].type;
+                float miningFactor = 0.0f;
+                Juice change = new Juice();
+
+                switch (materialNeighbours[i].type)
                 {
-                    switch (materialNeighbours[i].type)
-                    {
-                        case MaterialManager.Type.black:
-                            materialNeighbours[i].DecreaseLoad(miningFactorBlack);
-                            Juice.black += miningFactorBlack * Time.deltaTime;
-                            break;
-                        case MaterialManager.Type.blue:
-                            materialNeighbours[i].DecreaseLoad(miningFactorBlue);
-                            Juice.blue += miningFactorBlue * Time.deltaTime;
-                            break;
-                        case MaterialManager.Type.green:
-                            materialNeighbours[i].DecreaseLoad(miningFactorGreen);
-                            Juice.green += miningFactorGreen * Time.deltaTime;
-                            break;
-                        case MaterialManager.Type.red:
-                            materialNeighbours[i].DecreaseLoad(miningFactorRed);
-                            Juice.red += miningFactorRed * Time.deltaTime;
-                            break;
-                        case MaterialManager.Type.yellow:
-                            materialNeighbours[i].DecreaseLoad(miningFactorYellow);
-                            Juice.yellow += miningFactorYellow * Time.deltaTime;
-                            break;
-                    }
+                    case MaterialManager.Type.black:
+                        miningFactor = MiningFactorBlack;
+                        change.black = 1;
+                        break;
+                    case MaterialManager.Type.blue:
+                        miningFactor = MiningFactorBlue;
+                        change.blue = 1;
+                        break;
+                    case MaterialManager.Type.green:
+                        miningFactor = MiningFactorGreen;
+                        change.green = 1;
+                        break;
+                    case MaterialManager.Type.red:
+                        miningFactor = MiningFactorRed;
+                        change.red = 1;
+                        break;
+                    case MaterialManager.Type.yellow:
+                        miningFactor = MiningFactorYellow;
+                        change.yellow = 1;
+                        break;
+                    case MaterialManager.Type.bluecharged:
+                        miningFactor = miningFactorBlue;
+                        change.blueCharged = 1;
+                        break;
+                }
+
+                if (1 - Juice.Sum > miningFactor * Time.deltaTime)
+                {
+                    Juice += change * materialNeighbours[i].Take(miningFactor * Time.deltaTime);
                 }
             }
         }
@@ -129,24 +131,6 @@ public class WorkerCellSpec : MonoBehaviour {
         }
         StartFlag = true;
     }*/
-    public float GetRightMiningFactor(MaterialManager.Type type)
-    {
-        switch (type)
-        {
-            case MaterialManager.Type.black:
-                return MiningFactorBlack;
-            case MaterialManager.Type.blue:
-                return MiningFactorBlue;
-            case MaterialManager.Type.green:
-                return MiningFactorGreen;
-            case MaterialManager.Type.red:
-                return MiningFactorRed;
-            case MaterialManager.Type.yellow:
-                return MiningFactorYellow;
-        }
-        return 0f;
-    }
-
 
     void BuildWorkerConnection()
     {
@@ -161,7 +145,7 @@ public class WorkerCellSpec : MonoBehaviour {
                         if (Field.neighbours[i].HasMaterial())
                         {
                             MaterialNeighbours[i] = Field.neighbours[i].Material.GetComponent<MaterialManager>();
-                            CellManager.BuildVisualConnection(i);
+                            //CellManager.BuildVisualConnection(i);
                         }
                     }
                 }

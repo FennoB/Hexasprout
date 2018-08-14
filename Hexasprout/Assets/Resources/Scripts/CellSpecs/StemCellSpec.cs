@@ -6,19 +6,19 @@ public class StemCellSpec : MonoBehaviour {
 
     public FieldManager Field;
     public CellManager CellManager;
+
+    private Animator[] animator;
    
     private void Awake()
     {
         CellManager = this.gameObject.GetComponentInParent<CellManager>();
+        animator = new Animator[6];
 
-        CellManager.animConnectionUp = this.gameObject.transform.GetChild(2).GetChild(0).GetComponent<Animator>();
-        CellManager.animConnectionDown = this.gameObject.transform.GetChild(2).GetChild(1).GetComponent<Animator>();
-        CellManager.animConnectionLeftDown = this.gameObject.transform.GetChild(2).GetChild(2).GetChild(0).GetComponent<Animator>();
-        CellManager.animConnectionLeftUp = this.gameObject.transform.GetChild(2).GetChild(3).GetChild(0).GetComponent<Animator>();
-        CellManager.animConnectionRightDown = this.gameObject.transform.GetChild(2).GetChild(4).GetChild(0).GetComponent<Animator>();
-        CellManager.animConnectionRightUp = this.gameObject.transform.GetChild(2).GetChild(5).GetChild(0).GetComponent<Animator>();
-        
-    }
+        for (int i = 0; i < 6; i++)
+        {
+            animator[i] = transform.GetChild(2).GetChild(i).gameObject.GetComponent<Animator>();
+        }
+}
 
     private void Start()
     {
@@ -58,7 +58,7 @@ public class StemCellSpec : MonoBehaviour {
                         GameObject.Find("World").GetComponent<WorldGenerator>().CreateStemCell(Field.neighbours[i]);
     }
                     Field.Cell.GetComponent<CellManager>().ConnectWith(Field.neighbours[i].Cell.GetComponent<CellManager>(), i);
-                    CellManager.BuildVisualConnection(i);
+                    animator[i].SetTrigger("Start");
                 }
             }
         }

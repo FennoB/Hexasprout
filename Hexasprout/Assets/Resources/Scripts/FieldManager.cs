@@ -92,19 +92,31 @@ public class FieldManager : MonoBehaviour
         switch (State)
         {
             case FieldState.Invisible:
-                GetComponent<SpriteRenderer>().color = new Color(0f, 0f, 0f);
+                GetComponent<SpriteRenderer>().color = new Color(0.37f * warmth, 0.17f, 0.37f - 0.37f * warmth);
+                if (HasMaterial())
+                {
+                    material.GetComponent<SpriteRenderer>().color = new Color(0.4f, 0.4f, 0.4f);
+                }
                 break;
             case FieldState.Visible:
-                GetComponent<SpriteRenderer>().color = new Color(0.5f * warmth, 0.25f, 0.5f - 0.5f * warmth);
+                GetComponent<SpriteRenderer>().color = new Color(0.05f + 0.5f * warmth, 0.3f, 0.55f - 0.5f * warmth);
+                if (HasMaterial())
+                {
+                    material.GetComponent<SpriteRenderer>().color = new Color(0.7f, 0.7f, 0.7f);
+                }
                 break;
             case FieldState.HasCell:
-            GetComponent<SpriteRenderer>().color = new Color(warmth, 0.5f, 1.0f - warmth);
+                GetComponent<SpriteRenderer>().color = new Color(warmth, 0.5f, 1.0f - warmth);
+                if (HasMaterial())
+                {
+                    material.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f);
+                }
                 break;
             case FieldState.Selected:
                 GetComponent<SpriteRenderer>().color = new Color(0f, 0f, 1f);
                 break;
             case FieldState.Grow:
-            GetComponent<SpriteRenderer>().color = new Color(0f, 1f, 0f);
+                GetComponent<SpriteRenderer>().color = new Color(0f, 1f, 0f);
                 break;
             case FieldState.Decompose:
                 GetComponent<SpriteRenderer>().color = new Color(1f, 0f, 0f);

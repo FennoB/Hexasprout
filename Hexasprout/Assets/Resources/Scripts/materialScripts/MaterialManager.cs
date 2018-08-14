@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class MaterialManager : MonoBehaviour {
 
-    public enum Type {black, red, yellow, green, blue}
+    public enum Type {black, red, yellow, green, blue, bluecharged}
 
     public float load;
     public Type type;
@@ -17,19 +17,17 @@ public class MaterialManager : MonoBehaviour {
     {
         return load;
     }
-    public void DecreaseLoad(float take)
+    public float Take(float take)
     {
-        load = load - take * Time.deltaTime;
-    }
-    public bool LoadEmptyAfterTake(float take)
-    {
-        if (load - take < 0)
+        if(take > load)
         {
-            return true;
+            load = 0;
+            return load;
         }
         else
         {
-            return false;
+            load -= take;
+            return take;
         }
     }
     public void SetType(Type type)

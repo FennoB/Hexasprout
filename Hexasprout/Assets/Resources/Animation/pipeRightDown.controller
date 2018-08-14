@@ -8,7 +8,7 @@ AnimatorController:
   m_Name: pipeRightDown
   serializedVersion: 5
   m_AnimatorParameters:
-  - m_Name: BuildRightDown
+  - m_Name: Start
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
@@ -35,7 +35,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: BuildRightDown
+    m_ConditionEvent: Start
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 1102528904159249764}
