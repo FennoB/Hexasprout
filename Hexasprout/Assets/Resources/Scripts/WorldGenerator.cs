@@ -134,7 +134,7 @@ public class WorldGenerator : MonoBehaviour
 
     public void CreateMaterial(FieldManager fm, string type)
     {
-        if (fm != null || fm.Cell == null)
+        if (fm != null && fm.Cell == null && fm.material == null)
         {
             GameObject p = (GameObject)Resources.Load("Prefabs/Materials/" + type, typeof(GameObject));
             GameObject g = Instantiate(p);
@@ -147,7 +147,6 @@ public class WorldGenerator : MonoBehaviour
             // throw Exception
         }
     }
-
 
     public void CreateWorkerCell(FieldManager fm)
     {
@@ -165,14 +164,10 @@ public class WorldGenerator : MonoBehaviour
         }
     }
 
-
-
-
-
     public bool CreateStemCell(FieldManager fm)
     {
         // Fieldmanager valid?
-        if(fm == null || fm.Cell != null)
+        if(fm == null || fm.Cell != null || fm.Material != null)
         {
             // Nope
             return false;

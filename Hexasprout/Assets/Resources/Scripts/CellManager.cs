@@ -212,7 +212,7 @@ public class CellManager : MonoBehaviour
             blueCharged = 1.0f
         };  
     }
-    }
+     
 
     private void Start()
     {
@@ -257,16 +257,33 @@ public class CellManager : MonoBehaviour
         // Own stuff
         switch (e)
         {
+            // Core Events:
             case GUI_Event.OpenMenu:
-                OpenMenu();
+                OpenMenu(gm);
                 break;
             case GUI_Event.CloseMenu:
-                CloseMenu();
+                CloseMenu(gm);
                 break;
             case GUI_Event.Decompose:
                 DecomposeConnection();
                 break;
+
+            // Button Events:
+            case GUI_Event.BtnSpecialize:
+                OpenSpecializeMenu(gm);
+                break;
+
+            case GUI_Event.BtnDestroy:
+                OpenDestroyMenu(gm);
+                break;
+            
+            // Back to main
+            case GUI_Event.BtnNavMain:
+                gm.ResetSliderButtons();
+                OpenMenu(gm);
+                break;
         }
+
         // Cell specs
         switch (cellType)
         {
@@ -292,13 +309,33 @@ public class CellManager : MonoBehaviour
         }
     }
 
-    void OpenMenu()
+    // Adds buttons to the Slider menu
+    void OpenMenu(GUIManager gm)
     {
-        Debug.Log("Menü offen");
+        // Main menu: 
+        gm.AddSliderButton(GUI_Event.BtnDestroy);
+        gm.AddSliderButton(GUI_Event.BtnSpecialize);
     }
-    void CloseMenu()
+
+    // Does something when cellmenu closes (maybe later)
+    void CloseMenu(GUIManager gm)
     {
-        Debug.Log("Menü zu");
+        // Nothing! Wheee!
+    }
+
+    // Specialize slider menu
+    void OpenSpecializeMenu(GUIManager gm)
+    {
+        gm.ResetSliderButtons();
+        gm.AddSliderButton(GUI_Event.BtnEnergycap);
+        gm.AddSliderButton(GUI_Event.BtnEnergyuse);
+        gm.AddSliderButton(GUI_Event.BtnNavMain);
+    }
+
+    // Destroy Dialog
+    void OpenDestroyMenu(GUIManager gm)
+    {
+        // Nothing yet
     }
 
     // Absorb energy from blood
@@ -319,7 +356,7 @@ public class CellManager : MonoBehaviour
         energy += delta;
     }
 
-
+    // Decompose
     void DecomposeConnection()
     {
         for (int i = 0; i < Field.neighbours.Length; i++)
@@ -333,7 +370,6 @@ public class CellManager : MonoBehaviour
             }
         }
     }
-
 
     // Use energy for living
     void UseEnergy()
