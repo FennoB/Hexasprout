@@ -291,6 +291,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Resources\Scripts\BuildManager.cs" />
     <Compile Include="Assets\Resources\Scripts\ButtonScript.cs" />
     <Compile Include="Assets\Resources\Scripts\CellManager.cs" />
     <Compile Include="Assets\Resources\Scripts\CellSpecs\BreedCellSpec.cs" />

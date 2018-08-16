@@ -37,6 +37,7 @@ GameObject:
   - component: {fileID: 4730031323729840}
   - component: {fileID: 114959760435859854}
   - component: {fileID: 114212710785875986}
+  - component: {fileID: 114837477133705472}
   m_Layer: 0
   m_Name: leafCell
   m_TagString: Cell
@@ -113,6 +114,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   conversionMax: 0.7
+--- !u!114 &114837477133705472
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1500530943959288}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d56c2f6a7abf1948a20d543971684bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cellBuildCache:
+    red: 0
+    green: 0
+    blue: 0
+    blueCharged: 0
+    yellow: 0
+    black: 0
+  buildFlag: 0
+  progress: 0
+  cm: {fileID: 0}
 --- !u!114 &114959760435859854
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -131,6 +153,7 @@ MonoBehaviour:
   alive: 1
   diffusionFactor: 0.5
   cellType: 1
+  Field: {fileID: 0}
   juice:
     red: 0
     green: 0
@@ -146,12 +169,6 @@ MonoBehaviour:
     yellow: 0
     black: 0
   connections: []
-  animConnectionUp: {fileID: 0}
-  animConnectionDown: {fileID: 0}
-  animConnectionRightUp: {fileID: 0}
-  animConnectionRightDown: {fileID: 0}
-  animConnectionLeftUp: {fileID: 0}
-  animConnectionLeftDown: {fileID: 0}
   tempid: 0
 --- !u!212 &212094485156092258
 SpriteRenderer:
@@ -166,7 +183,6 @@ SpriteRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
-  m_RenderingLayerMask: 4294967295
   m_Materials:
   - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
@@ -211,7 +227,6 @@ SpriteRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
-  m_RenderingLayerMask: 4294967295
   m_Materials:
   - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
