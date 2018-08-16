@@ -18,7 +18,9 @@ public class StemCellSpec : MonoBehaviour {
         {
             animator[i] = transform.GetChild(2).GetChild(i).gameObject.GetComponent<Animator>();
         }
-}
+
+        CellManager.ConnectionMax = 6;
+    }
 
     private void Start()
     {
@@ -41,6 +43,31 @@ public class StemCellSpec : MonoBehaviour {
         {
             case GUI_Event.Grow:
                 BuildConnection();
+                break;
+            case GUI_Event.OpenMenu:
+                gm.AddSliderButton(GUI_Event.BtnTransmorph);
+                break;
+            case GUI_Event.BtnTransmorph:
+                gm.ResetSliderButtons();
+                if (CellManager.ConnectionCounter <= 2)
+                {
+                    gm.AddSliderButton(GUI_Event.BtnMorph2Heart);
+                }
+                if (CellManager.ConnectionCounter <= 1)
+                {
+                    gm.AddSliderButton(GUI_Event.BtnMorph2Leaf);
+                    gm.AddSliderButton(GUI_Event.BtnMorph2Worker);
+                }
+                gm.AddSliderButton(GUI_Event.BtnMorph2Storage);
+                gm.AddSliderButton(GUI_Event.BtnNavMain);
+                break;
+            case GUI_Event.BtnMorph2Heart:
+                break;
+            case GUI_Event.BtnMorph2Leaf:
+                break;
+            case GUI_Event.BtnMorph2Storage:
+                break;
+            case GUI_Event.BtnMorph2Worker:
                 break;
         }
     }

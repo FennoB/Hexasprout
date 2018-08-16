@@ -11,8 +11,9 @@ public class WorkerCellSpec : MonoBehaviour {
     private float miningFactorGreen = 0.01f;
     private float miningFactorRed = 0.01f;
 
-    private int maxWorkerConnections = 1; 
-    
+    public int maxWorkerConnections = 1;
+    public int counterWorkerConnections = 0;
+
     public MaterialManager[] materialNeighbours;
     public FieldManager Field;
     public CellManager CellManager;
@@ -24,11 +25,12 @@ public class WorkerCellSpec : MonoBehaviour {
         materialNeighbours = new MaterialManager[6];
         CellManager = this.gameObject.GetComponentInParent<CellManager>();
         Juice = CellManager.juice;
+        CellManager.ConnectionMax = 1;
     }
 
     private void Start()
     {
-        Field = this.gameObject.transform.parent.GetComponentInParent<FieldManager>();
+        Field = transform.parent.GetComponentInParent<FieldManager>();
     }
 
     // EventHandler
@@ -42,8 +44,28 @@ public class WorkerCellSpec : MonoBehaviour {
             case GUI_Event.Decompose:
                 DecomposeWorkerConnection();
                 break;
+            case GUI_Event.OpenMenu:
+                gm.AddSliderButton(GUI_Event.BtnDegenerate);
+                break;
+            case GUI_Event.BtnDegenerate:
+                break;
+            case GUI_Event.BtnSpecialize:
+                SpecializeMenu(gm);
+                break;
+
         }
     }
+
+    public void SpecializeMenu(GUIManager gm)
+    {
+        gm.AddSliderButton(GUI_Event.BtnWorkerCount);
+        gm.AddSliderButton(GUI_Event.BtnWorkerSpeedBlack);
+        gm.AddSliderButton(GUI_Event.BtnWorkerSpeedBlue);
+        gm.AddSliderButton(GUI_Event.BtnWorkerSpeedRed);
+        gm.AddSliderButton(GUI_Event.BtnWorkerSpeedGreen);
+        gm.AddSliderButton(GUI_Event.BtnWorkerSpeedYellow);
+    }
+
     public void OwnFixedUpdate()
     {
         Juice = CellManager.juice;
@@ -91,6 +113,11 @@ public class WorkerCellSpec : MonoBehaviour {
         }
     }
 
+    public bool ConMaxReached()
+    {
+        return counterWorkerConnections >= maxWorkerConnections;
+    }
+
     void DecomposeWorkerConnection()
     {
         for (int i = 0; i < Field.neighbours.Length; i++)
@@ -99,7 +126,8 @@ public class WorkerCellSpec : MonoBehaviour {
             {
                 if (Field.neighbours[i].State == FieldState.SuperSelected)
                 {
-                    MaterialNeighbours[i] = null;   
+                    counterWorkerConnections--;
+                    MaterialNeighbours[i] = null;
                 }
             }
         }
@@ -118,6 +146,7 @@ public class WorkerCellSpec : MonoBehaviour {
                         if (Field.neighbours[i].HasMaterial())
                         {
                             MaterialNeighbours[i] = Field.neighbours[i].Material.GetComponent<MaterialManager>();
+                            counterWorkerConnections++;
                             //CellManager.BuildVisualConnection(i);
                         }
                     }

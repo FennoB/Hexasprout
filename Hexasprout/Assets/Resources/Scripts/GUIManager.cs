@@ -56,10 +56,23 @@ public class GUIManager : MonoBehaviour
     // Slider Button List
     private GameObject[] SliderButtons;
     [Range(0.0f, 0.9999f)]
-    public float SliderPosition = 0.0f;     // 0.0f - 0.999f Slider goes in circles
+    public float sliderPosition = 0.0f;     // 0.0f - 0.999f Slider goes in circles
     private int SliderCounter = 0;          // Counts the active Buttons on the slider
     private Vector2 SliderTouch;            // Touch position when user starts sliding
     private bool Sliding = false;           // True when user is sliding
+
+    public float SliderPosition
+    {
+        get
+        {
+            return sliderPosition;
+        }
+
+        set
+        {
+            sliderPosition = value;
+        }
+    }
 
     // Start
     void Start()
@@ -145,7 +158,7 @@ public class GUIManager : MonoBehaviour
         }
 
         // Touch stops
-        if (state == 2 || (Input.GetMouseButtonUp(0) && state == -1) && !world_ui_blocked)
+        if ((state == 2 || (Input.GetMouseButtonUp(0) && state == -1)) && !world_ui_blocked)
         {
             // Add tap
             tapUpCounter++;
@@ -176,54 +189,79 @@ public class GUIManager : MonoBehaviour
                 CellMenuTarget.Cell.GetComponent<CellManager>().EventHandler(GUI_Event.Decompose, this);
             }
             CloseCellMenu();
-            ResetSelectedCells();
         }
         else
         {
             // Tapped on a cell?
-            if (fm.Cell != null)
+            if (fm.Cell != null && fm.Cell.GetComponent<CellManager>().alive)
             {
                 // Yes. Open Cell menu
                 OpenCellMenu(fm);
-                //set cell as the by the player selected one
-                fm.State = FieldState.Selected;
-                //and visualize connection to neighbours
-                for (int i = 0; i < fm.GetNeighbours().Length; i++)
-                {
-                    if (fm.GetNeighbours()[i] != null)
-                    {
-                        if (fm.GetNeighbours()[i].GetComponent<FieldManager>().Material == null)
-                        {
-                            if (fm.GetNeighbours()[i].GetComponent<FieldManager>().Cell == null)
-                            {
-                                fm.GetNeighbours()[i].GetComponent<FieldManager>().State = FieldState.Grow;
-                            }
-                            else
-                            {
-                                if (fm.Cell.GetComponent<CellManager>().connections[i] == null)
-                                {
-                                    fm.GetNeighbours()[i].GetComponent<FieldManager>().State = FieldState.Grow;
-                                }
-                                else
-                                {
+            }
+        }
+    }
 
-                                    fm.GetNeighbours()[i].GetComponent<FieldManager>().State = FieldState.Decompose;
-                                }
+    // Open selection menu
+    void OpenSelectionMenu(FieldManager fm)
+    {
+        fm.State = FieldState.Selected;
+        //and visualize connection to neighbours
+
+        CellManager cm = fm.Cell.GetComponent<CellManager>();
+
+        // Neighbour states
+        for (int i = 0; i < fm.GetNeighbours().Length; i++)
+        {
+            if (fm.GetNeighbours()[i] != null)
+            {
+                // Decompose?
+                if(cm.connections[i] != null)
+                {
+                    fm.GetNeighbours()[i].State = FieldState.Decompose;
+                }
+
+                // Material?
+                else if(fm.GetNeighbours()[i].Material == null)
+                {
+                    // Connection possible?
+                    
+                    //* Only stemcells and storagecells can build connections
+                    if(cm.cellType == CellType.Stemcell || cm.cellType == CellType.Storagecell)
+                    /*/
+                    //All cells can build connections if max not reached (later)
+                    if(!cm.ConMaxReached())
+                    //*/
+                    {
+                        // From this side: yes
+                        if 
+                        (
+                            fm.GetNeighbours()[i].Cell == null || !fm.GetNeighbours()[i].GetComponentInChildren<CellManager>().ConMaxReached()
+                        )
+                        {
+                            // From the other side: Yes. Grow then
+                            fm.GetNeighbours()[i].State = FieldState.Grow;
+                        }
+                    }
+                }
+                else
+                {
+                    // Yes. Workercell?
+                    if (cm.cellType == CellType.Workercell)
+                    {
+                        // Already connected?
+                        if (cm.GetComponent<WorkerCellSpec>().MaterialNeighbours[i] == null)
+                        {
+                            // No. Able to connect?
+                            if (!cm.GetComponent<WorkerCellSpec>().ConMaxReached())
+                            {
+                                // Yes
+                                fm.GetNeighbours()[i].State = FieldState.Grow;
                             }
                         }
                         else
                         {
-                            if (fm.Cell.GetComponent<WorkerCellSpec>() != null)
-                            {
-                                if (fm.Cell.GetComponent<WorkerCellSpec>().MaterialNeighbours[i] == null)
-                                {
-                                    fm.GetNeighbours()[i].GetComponent<FieldManager>().State = FieldState.Grow;
-                                }
-                                else
-                                {
-                                    fm.GetNeighbours()[i].GetComponent<FieldManager>().State = FieldState.Decompose;
-                                }
-                            }
+                            // Yes. Decompose then
+                            fm.GetNeighbours()[i].GetComponent<FieldManager>().State = FieldState.Decompose;
                         }
                     }
                 }
@@ -282,6 +320,10 @@ public class GUIManager : MonoBehaviour
         ResetSliderButtons();
         EventHandler(GUI_Event.OpenMenu);
         transform.GetChild(0).gameObject.SetActive(true);
+
+        //set cell as the by the player selected one
+        OpenSelectionMenu(target);
+
     }
 
     // Calles to close cell menus
@@ -292,7 +334,10 @@ public class GUIManager : MonoBehaviour
             // Close Slider menu
             ResetSliderButtons();
             EventHandler(GUI_Event.CloseMenu);
+            
             // Close Selection menu
+            ResetSelectedCells();
+            
             CellMenuOpen = false;
             transform.GetChild(0).gameObject.SetActive(false);
         }
@@ -470,13 +515,15 @@ public class GUIManager : MonoBehaviour
         if(counter > 5)
         {
             // Sliding
+            transform.GetChild(1).gameObject.SetActive(true);
+
             float pos = SliderPosition * counter;
             float stepextra = pos - (int)pos;
             for (int i = 0; i < counter; i++)
             {
                 float newposx = 0;
                 int index = (i - ((int)pos - 2) + counter) % counter;
-                newposx = (96f + 16f) * (-index + 2 + stepextra);
+                newposx = (128f + 16f) * (-index + 2 + stepextra);
                 
                 if(index == 0)
                 {
@@ -510,9 +557,11 @@ public class GUIManager : MonoBehaviour
         else
         {
             // No fading, Just show the buttons
-            for(int i = 0; i < counter; i++)
+            transform.GetChild(1).gameObject.SetActive(false);
+
+            for (int i = 0; i < counter; i++)
             {
-                float newposx = (96f + 16f) * (i - counter * 0.5f + 0.5f);
+                float newposx = (120f + 16f) * (i - counter * 0.5f + 0.5f);
                 list[i].GetComponent<RectTransform>().anchoredPosition = new Vector2(newposx, list[i].GetComponent<RectTransform>().anchoredPosition.y);
             }
         }
