@@ -21,7 +21,17 @@ public class Juice
         yellow = 0;
         black = 0;
     }
-    
+
+    public Juice(float red, float green, float blue, float blueCharged, float yellow, float black)
+    {
+        this.red = red;
+        this.green = green;
+        this.blue = blue;
+        this.blueCharged = blueCharged;
+        this.yellow = yellow;
+        this.black = black;
+    }
+
     public void SetAllTo(float value)
     {
         red = value;
@@ -59,6 +69,7 @@ public class Juice
         };
         return result;
     }
+    
 
     public static Juice operator*(float scale, Juice a)
     {
@@ -73,6 +84,28 @@ public class Juice
     public static Juice operator/(Juice a, float div)
     {
         return a * (1.0f / div);
+    }
+    public static bool operator >(Juice a, Juice b)
+    {
+        if (a.red > b.red && a.green > b.green && a.blue > b.blue && a.blueCharged > b.blueCharged && a.yellow > b.yellow && a.black > b.black)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    public static bool operator <(Juice a, Juice b)
+    {
+        if (a.red < b.red || a.green < b.green || a.blue < b.blue || a.blueCharged < b.blueCharged || a.yellow < b.yellow || a.black < b.black)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     public float Sum
@@ -212,7 +245,8 @@ public class CellManager : MonoBehaviour
 
         juice = new Juice
         {
-            blueCharged = 1.0f
+            blueCharged = 0.5f,
+            black = 0.5f
         };  
     }
 

@@ -212,6 +212,7 @@ public class WorldGenerator : MonoBehaviour
         {
             CellManager cm = c.GetComponent<CellManager>();
             cm.OwnFixedUpdate();
+            c.GetComponent<BuildManager>().OwnFixedUpdate();
         }
 
         foreach (GameObject c in cells)

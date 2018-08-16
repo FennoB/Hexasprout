@@ -5,8 +5,8 @@ using System;
 
 public enum GUI_Event
 {
-
-    Grow = -4,
+    BuildReady = -5,
+    Grow,
     Decompose,
     CloseMenu,
     OpenMenu,

@@ -7,10 +7,16 @@ public class StemCellSpec : MonoBehaviour {
     public FieldManager Field;
     public CellManager CellManager;
 
+    public FieldManager buildTarget;
+    public string buildName;
+    public int positionOfBuildTarget;
+    public BuildManager BuildManager;
+
     private Animator[] animator;
    
     private void Awake()
     {
+        BuildManager = this.gameObject.GetComponentInParent<BuildManager>();
         CellManager = this.gameObject.GetComponentInParent<CellManager>();
         animator = new Animator[6];
 
@@ -27,22 +33,16 @@ public class StemCellSpec : MonoBehaviour {
         Field = this.gameObject.transform.parent.GetComponentInParent<FieldManager>();
     }
 
-    public void ActivateOptionScript()
-    {
-        this.gameObject.transform.GetChild(3).GetComponent<Canvas>().enabled = true;
-    }
-    public void DeactivateOptionScript()
-    {
-        this.gameObject.transform.GetChild(3).GetComponent<Canvas>().enabled = false;
-    }
-
     // EventHandler
     public void EventHandler(GUI_Event e, GUIManager gm)
     {
         switch (e)
         {
             case GUI_Event.Grow:
-                BuildConnection();
+                StartBuild();
+                break;
+            case GUI_Event.BuildReady:
+                FinishBuild(buildName);
                 break;
             case GUI_Event.OpenMenu:
                 gm.AddSliderButton(GUI_Event.BtnTransmorph);
@@ -72,28 +72,92 @@ public class StemCellSpec : MonoBehaviour {
         }
     }
 
-    void BuildConnection()
+    void StartBuild()
     {
         for (int i = 0; i < Field.neighbours.Length; i++)
         {
             if (Field.neighbours[i] != null)
             {
                 if (Field.neighbours[i].State == FieldState.SuperSelected && !Field.neighbours[i].HasMaterial())
-                {                
+                {
+                    buildTarget = Field.neighbours[i];
+                    positionOfBuildTarget = i;
+
                     if (Field.neighbours[i].Cell == null)
-                    {
-                        GameObject.Find("World").GetComponent<WorldGenerator>().CreateStemCell(Field.neighbours[i]);
+                    {    
+                        OrderNewCell();
                     }
-                    Field.Cell.GetComponent<CellManager>().ConnectWith(Field.neighbours[i].Cell.GetComponent<CellManager>(), i);
-                    animator[i].SetTrigger("Start");
+                    else
+                    {
+                        OrderNewConnection();
+                    }
                 }
             }
         }
     }
-    
-    // Update is called once per frame
+
+    void FinishBuild(string type)
+    {
+        switch(type)
+        {
+            case "Build Connection":
+                MakeCell();
+                break;
+            case "Make Connection":
+                MakeConnection();
+                break;
+            case "Build Cell":
+                FinishCell();
+                break;
+        }
+    }
+    //Here are the buildmethods, for one build are always a order and a make method necessary
+
+    void OrderNewCell()
+    {
+        buildName = "Build Connection";
+        this.gameObject.GetComponent<BuildManager>().Build(10, new Juice(0f, 0f, 0f, 0f, 0f, 0.2f), buildName);
+    }
+
+    void OrderNewConnection()
+    {
+        buildName = "Make Connection";
+        this.gameObject.GetComponent<BuildManager>().Build(10, new Juice(0f, 0f, 0f, 0f, 0f, 0.2f), buildName);
+    }
+
+    void MakeCell()
+    {
+        buildName = "Build Cell";
+
+        //first parameter is time in seconds, second the required juice, third the Name of the Buildevent
+        this.gameObject.GetComponent<BuildManager>().Build(10, new Juice(0f, 0f, 0f, 0f, 0f, 1f), buildName);
+        MakeConnection();
+    }
+
+    void FinishCell()
+    {
+        GameObject.Find("World").GetComponent<WorldGenerator>().CreateStemCell(buildTarget);
+    }
+
+    void MakeConnection()
+    {
+        Field.Cell.GetComponent<CellManager>().ConnectWith(buildTarget.Cell.GetComponent<CellManager>(), positionOfBuildTarget);
+        animator[positionOfBuildTarget].SetTrigger("Start");
+
+        buildTarget = null;
+        positionOfBuildTarget = 0;
+    }
+
     public void OwnFixedUpdate()
     {
-
+        if (BuildManager.buildFlag)
+        {
+            //if (buildName == "Build Connection")
+            //{
+            //    // Animation of build process
+            //    Animator a = animator[positionOfBuildTarget];
+            //    a.Play("AnimationPipe" + positionOfBuildTarget)
+            //}
+        }
     }
 }
