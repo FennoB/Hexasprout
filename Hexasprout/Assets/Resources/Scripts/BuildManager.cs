@@ -10,7 +10,7 @@ public class BuildManager : MonoBehaviour {
     public CellManager cm;
 
     string buildName;
-    int seconds;
+    float seconds;
     Juice goalJuice;
 
     // Use this for initialization
@@ -25,7 +25,7 @@ public class BuildManager : MonoBehaviour {
      *then the event is triggered, that the 
      * BuildJob is completed
      */
-	public void Build(int seconds, Juice juice, string name)
+	public void Build(float seconds, Juice cost, string name)
     {
         //says that this Manager is already used
         buildFlag = true;
@@ -33,7 +33,7 @@ public class BuildManager : MonoBehaviour {
         //general necessary information
         buildName = name;
         this.seconds = seconds;
-        goalJuice = juice;
+        goalJuice = cost;
 
         //add juice so long, until the goal is reached
         //each component of the juice must be handled separately, because there is no way to iterate thorugh the juice
@@ -69,7 +69,7 @@ public class BuildManager : MonoBehaviour {
                 cm.juice.yellow = cm.juice.yellow - (cm.juice.yellow / seconds) * Time.deltaTime;
                 cellBuildCache.yellow = cellBuildCache.yellow + (cm.juice.yellow / seconds) * Time.deltaTime;
             }
-            progress = cellBuildCache.Sum / juice.Sum;
+            progress = cellBuildCache.Sum / goalJuice.Sum;
         }
         else
         {

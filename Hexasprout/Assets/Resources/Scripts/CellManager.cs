@@ -224,7 +224,7 @@ public class CellManager : MonoBehaviour
 
     public Juice juice;
     public Juice diffusionDelta;
-    public GameObject[] connections;
+    public CellManager[] connections;
 
     public int tempid;      // My ID in the most recently generated Heartmap
 
@@ -234,7 +234,7 @@ public class CellManager : MonoBehaviour
         // Reset Substance Deltas
         diffusionDelta = new Juice();
 
-        connections = new GameObject[6];
+        connections = new CellManager[6];
         for(int i = 0; i < 6; i++)
         {
             connections[i] = null;
@@ -316,6 +316,9 @@ public class CellManager : MonoBehaviour
                 gm.ResetSliderButtons();
                 OpenMenu(gm);
                 break;
+            case GUI_Event.BtnMorph2Heart:
+                Morph2Heart();
+                break;
         }
 
         // Cell specs
@@ -343,6 +346,11 @@ public class CellManager : MonoBehaviour
         }
     }
 
+    void Morph2Heart()
+    {
+        GameObject.Find("World").GetComponent<WorldGenerator>().Morph2Heart(this);
+
+    }
     // Adds buttons to the Slider menu
     void OpenMenu(GUIManager gm)
     {
@@ -424,7 +432,7 @@ public class CellManager : MonoBehaviour
         {
             //No. Connect!
             //I know you
-            connections[conID] = cm.gameObject;
+            connections[conID] = cm;
 
             //You know me
             cm.ConnectWith(this, (conID + 3) % 6);
