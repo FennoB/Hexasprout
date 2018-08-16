@@ -20,8 +20,8 @@ public enum GUI_Event
     BtnMorph2Storage,
     BtnMorph2Heart,
     BtnMorph2Worker,
-    BtnStorageSpeed,
-    BtnStore,
+    BtnNavMain,
+    BtnStoreMenu,
     BtnLeafSpeed,
     BtnWorkerCount,
     BtnWorkerSpeedRed,
@@ -29,9 +29,7 @@ public enum GUI_Event
     BtnWorkerSpeedGreen,
     BtnWorkerSpeedBlack,
     BtnWorkerSpeedYellow,
-    BtnHeartSpeed,
-    BtnHeartSwitch,
-    BtnHeartSwitchDir,
+    BtnHeartMenu,
     length
 }
 
@@ -41,7 +39,8 @@ public class GUIManager : MonoBehaviour
     private Vector3 hit_position = Vector3.zero;
     private Vector3 current_position = Vector3.zero;
     private Vector3 camera_position = Vector3.zero;
-    private bool view_drag_blocked;
+    private bool world_ui_blocked;
+    public GameObject world;
 
     // This is used for CellMenu
     private bool CellMenuOpen = false;
@@ -56,10 +55,16 @@ public class GUIManager : MonoBehaviour
 
     // Slider Button List
     private GameObject[] SliderButtons;
+    [Range(0.0f, 0.9999f)]
+    public float SliderPosition = 0.0f;     // 0.0f - 0.999f Slider goes in circles
+    private int SliderCounter = 0;          // Counts the active Buttons on the slider
+    private Vector2 SliderTouch;            // Touch position when user starts sliding
+    private bool Sliding = false;           // True when user is sliding
 
     // Start
     void Start()
     {
+        SliderTouch = new Vector2();
         SliderButtons = new GameObject[(int)GUI_Event.length];
 
         for(int i = 0; i < (int)GUI_Event.length; i++)
@@ -67,6 +72,8 @@ public class GUIManager : MonoBehaviour
             GameObject button = transform.GetChild(0).GetChild(i).gameObject;
             SliderButtons[(int)button.GetComponent<ButtonScript>().ButtonID] = button;
         }
+
+        ResetSliderButtons();
     }
 
     // Called every frame
@@ -74,6 +81,8 @@ public class GUIManager : MonoBehaviour
     {
         // Handle Touch stuff
         TouchHandling();
+        RegenerateSlider();
+        MoveSlider();
     }
 
     // Touch stuff
@@ -110,7 +119,7 @@ public class GUIManager : MonoBehaviour
         {
             state = -2;
             hit_position = Input.mousePosition;
-            camera_position = transform.position;
+            camera_position = world.transform.position;
             ApplyZoom();
         }
         
@@ -118,9 +127,9 @@ public class GUIManager : MonoBehaviour
         if (state == 0 || (Input.GetMouseButtonDown(0) && state == -1))
         {
             // For ViewDrag:
-            view_drag_blocked = false;
             hit_position = Input.mousePosition;
-            camera_position = transform.position;
+            camera_position = world.transform.position;
+            world_ui_blocked = false;
 
             // Single Click?
             tapUpCounter = 0;
@@ -136,7 +145,7 @@ public class GUIManager : MonoBehaviour
         }
 
         // Touch stops
-        if (state == 2 || (Input.GetMouseButtonUp(0) && state == -1))
+        if (state == 2 || (Input.GetMouseButtonUp(0) && state == -1) && !world_ui_blocked)
         {
             // Add tap
             tapUpCounter++;
@@ -221,6 +230,8 @@ public class GUIManager : MonoBehaviour
             }
         }
     }
+
+    // Cell Selection Menu Closing
     void ResetSelectedCells()
     {
         if (CellMenuTarget != null)
@@ -249,12 +260,14 @@ public class GUIManager : MonoBehaviour
         }
 
     }
+
     // Handles other button events
     public void EventHandler(GUI_Event e)
     {
         // Give event to menu cell
         if(CellMenuOpen)
         {
+            world_ui_blocked = true;
             CellMenuTarget.Cell.GetComponent<CellManager>().EventHandler(e, this);
         }
     }
@@ -263,28 +276,13 @@ public class GUIManager : MonoBehaviour
     public void OpenCellMenu(FieldManager target)
     {
         CloseCellMenu();
-
-        // Open Slider menu
-        //target.GetCell().GetComponent<StemCellSpec>().ActivateOptionScript();
-
-        // Set Field to Selection Mode
-        //target.State = FieldState.Selected;
-
-        /*// Set Neighbours to Selection Mode
-        for (int i = 0; i < 6; i++)
-        {
-            if (target.GetNeighbours()[i] != null)
-            {
-                //target.GetNeighbours()[i].GetComponent<FieldManager>().SetNeighbourSelected(true);
-            }
-        }*/
         
         CellMenuTarget = target;
         CellMenuOpen = true;
+        ResetSliderButtons();
         EventHandler(GUI_Event.OpenMenu);
+        transform.GetChild(0).gameObject.SetActive(true);
     }
-
-
 
     // Calles to close cell menus
     public void CloseCellMenu()
@@ -292,11 +290,11 @@ public class GUIManager : MonoBehaviour
         if (CellMenuOpen)
         {
             // Close Slider menu
-            //CellMenuTarget.GetCell().GetComponent<StemCellSpec>().DeactivateOptionScript();
+            ResetSliderButtons();
             EventHandler(GUI_Event.CloseMenu);
             // Close Selection menu
-            //ResetSelectStateOfCells(GameObject.Find("World").GetComponent<WorldGenerator>().GetFields());
             CellMenuOpen = false;
+            transform.GetChild(0).gameObject.SetActive(false);
         }
     }
 
@@ -345,110 +343,10 @@ public class GUIManager : MonoBehaviour
         GameObject.Find("World").GetComponent<WorldGenerator>().CreateStemCell(fm);
     }
 
-    // A cell connection is established and the animation starts
-    /*public void ModifyCellConnection(FieldManager first, FieldManager second)
-    {
-        //case connection to down left
-        //the neighbourfield has another id, if the selected field is in an uneven row than it has in a even one
-        if (first.GetIdy() % 2 == 0)
-        {   
-            if (first.GetIdx() - 1 == second.GetIdx() && first.GetIdy() - 1 == second.GetIdy())
-            {   
-                first.Cell.GetComponent<CellManager>().ConnectWith(second.Cell.GetComponent<CellManager>(), 0);
-                first.Cell.GetComponent<CellManager>().SetDownLeftAnimation();
-            }
-        }
-        if (first.GetIdy() % 2 == 1)
-        {
-            if (first.GetIdx() == second.GetIdx() && first.GetIdy() - 1 == second.GetIdy())
-            {
-                first.Cell.GetComponent<CellManager>().ConnectWith(second.Cell.GetComponent<CellManager>(), 0);
-                first.Cell.GetComponent<CellManager>().SetDownLeftAnimation();
-            }
-        }
-        //case connection down
-        if (first.GetIdx() == second.GetIdx() && first.GetIdy() - 2 == second.GetIdy())
-        {
-            first.Cell.GetComponent<CellManager>().ConnectWith(second.Cell.GetComponent<CellManager>(), 1);
-            first.Cell.GetComponent<CellManager>().SetDownAnimation();
-        }
-        //case connection down right
-        if (first.GetIdy() % 2 == 0)
-        {
-            if (first.GetIdx() == second.GetIdx() && first.GetIdy() - 1 == second.GetIdy())
-            {
-                first.Cell.GetComponent<CellManager>().ConnectWith(second.Cell.GetComponent<CellManager>(), 2);
-                first.Cell.GetComponent<CellManager>().SetDownRightAnimation();
-            }
-        }
-        if (first.GetIdy() % 2 == 1)
-        {
-            if (first.GetIdx() + 1 == second.GetIdx() && first.GetIdy() - 1 == second.GetIdy())
-            {
-                first.Cell.GetComponent<CellManager>().ConnectWith(second.Cell.GetComponent<CellManager>(), 2);
-                first.Cell.GetComponent<CellManager>().SetDownRightAnimation();
-            }
-        }
-
-        //case connection up right
-        if (first.GetIdy() % 2 == 0)
-        {
-            if (first.GetIdx() == second.GetIdx() && first.GetIdy() + 1 == second.GetIdy())
-            {
-                first.Cell.GetComponent<CellManager>().ConnectWith(second.Cell.GetComponent<CellManager>(), 3);
-                first.Cell.GetComponent<CellManager>().SetUpRightAnimation();
-            }
-        }
-        if (first.GetIdy() % 2 == 1)
-        {
-            if (first.GetIdx() + 1 == second.GetIdx() && first.GetIdy() + 1 == second.GetIdy())
-            {
-                first.Cell.GetComponent<CellManager>().ConnectWith(second.Cell.GetComponent<CellManager>(), 3);
-                first.Cell.GetComponent<CellManager>().SetUpRightAnimation();
-            }
-        }
-        //case connection up
-        if (first.GetIdx() == second.GetIdx() && first.GetIdy() + 2 == second.GetIdy())
-        {
-            first.Cell.GetComponent<CellManager>().ConnectWith(second.Cell.GetComponent<CellManager>(), 4);
-            first.Cell.GetComponent<CellManager>().SetUpAnimation();
-        }
-        //case connection up left
-        if (first.GetIdy() % 2 == 0)
-        {
-            if (first.GetIdx() - 1 == second.GetIdx() && first.GetIdy() + 1 == second.GetIdy())
-            {
-                first.Cell.GetComponent<CellManager>().ConnectWith(second.Cell.GetComponent<CellManager>(), 5);
-                first.Cell.GetComponent<CellManager>().SetUpLeftAnimation();
-            }
-        }
-        if (first.GetIdy() % 2 == 1)
-        {
-            if (first.GetIdx() == second.GetIdx() && first.GetIdy() + 1 == second.GetIdy())
-            {
-                first.Cell.GetComponent<CellManager>().ConnectWith(second.Cell.GetComponent<CellManager>(), 5);
-                first.Cell.GetComponent<CellManager>().SetUpLeftAnimation();
-            }
-        }
-    }*/
-
-    // Goes through all field an disables all selection modes
-    /*public void ResetSelectStateOfCells(GameObject[][] fields)
-    {
-        for (int i = 0; i < fields.Length; i++)
-        {
-            for (int j = 0; j < fields[i].Length; j++)
-            {
-                fields[i][j].GetComponent<FieldManager>().SetSelected(false);
-                fields[i][j].GetComponent<FieldManager>().SetNeighbourSelected(false);
-            }
-        }
-    }*/
-
     // Used to drag camera with moving finger on screen
     void LeftMouseDrag()
     {
-        if(view_drag_blocked)
+        if (world_ui_blocked)
         {
             return;
         }
@@ -466,7 +364,7 @@ public class GUIManager : MonoBehaviour
 
         Vector3 position = camera_position + direction;
 
-        transform.position = position;
+        world.transform.position = position;
     }
 
     // Zoom 
@@ -474,7 +372,7 @@ public class GUIManager : MonoBehaviour
     {
         if(Input.touchCount == 2)
         {
-            view_drag_blocked = true;
+            world_ui_blocked = true;
 
             if(Input.touches[1].phase == TouchPhase.Began)
             {
@@ -499,7 +397,7 @@ public class GUIManager : MonoBehaviour
                 // 1. Move world with new zoom pos
                 Vector2 newzoompos = (Input.touches[0].position + Input.touches[1].position) / 2.0f;
                 Vector2 worlddelta = Camera.main.ScreenToWorldPoint(newzoompos) - Camera.main.ScreenToWorldPoint(zoompos);
-                transform.position += new Vector3(worlddelta.x, worlddelta.y, 0);
+                world.transform.position += new Vector3(worlddelta.x, worlddelta.y, 0);
                 zoompos = (Input.touches[0].position + Input.touches[1].position) / 2.0f;
 
                 // 2. Calculate zoom factor
@@ -509,7 +407,7 @@ public class GUIManager : MonoBehaviour
                 Vector2 screencenter = Camera.main.transform.position;
                 Vector2 worldzoompos = Camera.main.ScreenToWorldPoint(newzoompos);
                 Vector2 zoomdelta = screencenter - worldzoompos;
-                transform.position += new Vector3(zoomdelta.x, zoomdelta.y, 0);
+                world.transform.position += new Vector3(zoomdelta.x, zoomdelta.y, 0);
 
                 // 4. Apply zoom
                 Camera.main.orthographicSize /= zoomfactor;
@@ -527,9 +425,134 @@ public class GUIManager : MonoBehaviour
                 // 5. Move transformed newzoompos with world to newzoompos from before
                 worldzoompos = Camera.main.ScreenToWorldPoint(newzoompos);
                 zoomdelta = screencenter - worldzoompos;
-                transform.position -= new Vector3(zoomdelta.x, zoomdelta.y, 0);
+                world.transform.position -= new Vector3(zoomdelta.x, zoomdelta.y, 0);
 
                 // Done!
+            }
+        }
+    }
+
+    // Prepare the Slider menu
+    public void ResetSliderButtons()
+    {
+        foreach(GameObject button in SliderButtons)
+        {
+            button.SetActive(false);
+        }
+    }
+
+    // Use this function to add Buttons to the slider menu
+    public void AddSliderButton(GUI_Event e)
+    {
+        if(e >= 0)
+        {
+            SliderButtons[(int)e].SetActive(true);
+        }
+    }
+
+    // Slider visual 
+    void RegenerateSlider()
+    {
+        int counter = 0;    // Counts the Buttons that are activated
+        List<GameObject> list = new List<GameObject>();
+        foreach (GameObject button in SliderButtons)
+        {
+            if (button.activeSelf)
+            {
+                counter++;
+                list.Add(button);
+            }
+        }
+
+        SliderCounter = counter;
+
+        // Determine Sliding
+        if(counter > 5)
+        {
+            // Sliding
+            float pos = SliderPosition * counter;
+            float stepextra = pos - (int)pos;
+            for (int i = 0; i < counter; i++)
+            {
+                float newposx = 0;
+                int index = (i - ((int)pos - 2) + counter) % counter;
+                newposx = (96f + 16f) * (-index + 2 + stepextra);
+                
+                if(index == 0)
+                {
+                    list[i].GetComponent<UnityEngine.UI.Image>().color = new Color(1f, 1f, 1f, 1f - stepextra);
+                }
+                else if(index == 5)
+                {
+                    list[i].GetComponent<UnityEngine.UI.Image>().color = new Color(1f, 1f, 1f, stepextra);
+                }
+                else if(index > 5)
+                {
+                    list[i].GetComponent<UnityEngine.UI.Image>().color = new Color(1f, 1f, 1f, 0f);
+                }
+                else
+                {
+                    list[i].GetComponent<UnityEngine.UI.Image>().color = new Color(1f, 1f, 1f, 1f);
+                }
+
+                if (list[i].GetComponent<UnityEngine.UI.Image>().color.a > 0.5f)
+                {
+                    list[i].GetComponent<UnityEngine.UI.Button>().interactable = true;
+                }
+                else
+                {
+                    list[i].GetComponent<UnityEngine.UI.Button>().interactable = false;
+                }
+
+                list[i].GetComponent<RectTransform>().anchoredPosition = new Vector2(newposx, list[i].GetComponent<RectTransform>().anchoredPosition.y);
+            }
+        }
+        else
+        {
+            // No fading, Just show the buttons
+            for(int i = 0; i < counter; i++)
+            {
+                float newposx = (96f + 16f) * (i - counter * 0.5f + 0.5f);
+                list[i].GetComponent<RectTransform>().anchoredPosition = new Vector2(newposx, list[i].GetComponent<RectTransform>().anchoredPosition.y);
+            }
+        }
+    }
+
+    // Slider move
+    void MoveSlider()
+    {
+        if (Input.touchCount == 1)
+        {
+            Touch t = Input.touches[0];
+            if (t.phase == TouchPhase.Began)
+            {
+                if(t.position.x > -255 && t.position.y < 255 && t.position.y > transform.GetChild(0).position.y - 32 && t.position.y < transform.GetChild(0).position.y + 32)
+                {
+                    world_ui_blocked = true;
+                    SliderTouch = t.position;
+                    Sliding = true;
+                }
+            }
+            if (t.phase == TouchPhase.Moved && Sliding && SliderCounter > 0)
+            {
+                Vector3 delta = t.position - SliderTouch;
+                float slideDelta = 3 * delta.x / 255f;
+                float slidePosDelta = slideDelta / SliderCounter;
+                SliderPosition += slidePosDelta;
+                SliderTouch = t.position;
+                while(SliderPosition < 0)
+                {
+                    SliderPosition += 1f;
+                }
+                while (SliderPosition >= 1)
+                {
+                    SliderPosition -= 1f;
+                }
+            }
+            if (t.phase == TouchPhase.Ended || t.phase == TouchPhase.Canceled)
+            {
+                world_ui_blocked = false;
+                Sliding = false;
             }
         }
     }
