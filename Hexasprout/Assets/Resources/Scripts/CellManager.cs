@@ -280,8 +280,8 @@ public class CellManager : MonoBehaviour
     public BuildManager BuildManager;
     public GUI_Event loadBarPicture;
 
-    public Juice juice;
-    public Juice diffusionDelta;
+    public Juice juice = new Juice();
+    public Juice diffusionDelta = new Juice();
     public int ConnectionCounter;
     public int ConnectionMax = 1;
     public CellManager[] connections;
@@ -291,20 +291,23 @@ public class CellManager : MonoBehaviour
 	// Use this for initialization
 	void Awake ()
     {
-        // Reset Substance Deltas
-        diffusionDelta = new Juice();
-
-        connections = new CellManager[6];
-        for(int i = 0; i < 6; i++)
+        if (connections.Length == 0)
         {
-            connections[i] = null;
+            connections = new CellManager[6];
+            for (int i = 0; i < 6; i++)
+            {
+                connections[i] = null;
+            }
         }
 
-        juice = new Juice
+        if (juice.Sum == 0)
         {
-            blueCharged = 0.5f,
-            black = 0.5f
-        };
+            juice = new Juice
+            {
+                blueCharged = 0.5f,
+                black = 0.5f
+            };
+        }
 
         BuildManager = this.gameObject.GetComponent<BuildManager>();
     }
@@ -349,6 +352,23 @@ public class CellManager : MonoBehaviour
                 FindObjectOfType<GUIManager>().SetLoadBar(BuildManager.progress);
             }
 
+        }
+
+        if (cellType == CellType.Heartcell && Field.state == FieldState.Grow && ConnectionCounter == 1)
+        {
+            int firstCon = 0;
+            for (int i = 0; i < 6; i++)
+            {
+                if (connections[i] != null)
+                {
+                    firstCon = i;
+                }
+            }
+
+            if (Field.neighbours[(firstCon + 3) % 6].GetComponent<FieldManager>().state != FieldState.Selected)
+            {
+                Field.state = FieldState.Invisible;
+            }
         }
     }
 

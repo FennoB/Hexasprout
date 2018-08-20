@@ -195,6 +195,8 @@ public class WorldGenerator : MonoBehaviour
 
         newCm.tempid = oldCm.tempid;
 
+        newCm.ConnectionCounter = oldCm.ConnectionCounter;
+
         for (int i = 0; i < newCm.connections.Length; i++)
         {
             if (newCm.connections[i] != null)

@@ -15,6 +15,8 @@ public class HeartCellSpec : MonoBehaviour {
     public int pumpdirection;
     public float resistanceUnit;
 
+    public CellManager CellManager;
+
     // Use this for initialization
     void Awake()
     {
@@ -24,6 +26,9 @@ public class HeartCellSpec : MonoBehaviour {
         heartspeed = 1.0f;
         pumpdirection = 0;
         resistanceUnit = 0.2f;
+        CellManager = GetComponent<CellManager>();
+        CellManager.ConnectionMax = 2;
+        CellManager.cellType = CellType.Heartcell;
         UpdateHeartmap();
     }
 
