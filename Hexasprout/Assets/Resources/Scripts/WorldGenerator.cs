@@ -147,6 +147,62 @@ public class WorldGenerator : MonoBehaviour
             // throw Exception
         }
     }
+    public void Morph2Heart(CellManager oldCm)
+    {
+        GameObject g = Instantiate((GameObject)Resources.Load("Prefabs/Cells/HeartCell", typeof(GameObject)));
+        g.GetComponent<Transform>().SetParent(oldCm.transform.parent);
+        g.GetComponent<Transform>().localPosition = new Vector3(0, 0, -0.14f);
+        CellManager newCm = g.GetComponent<CellManager>();
+
+        CopyCellmanager(oldCm, newCm);
+
+        GameObject.Destroy(oldCm.gameObject);
+        newCm.Field.Cell = g;
+
+        for (int i = 0; i < newCm.connections.Length; i++)
+        {
+            if (newCm.connections[i] != null)
+            {
+                if (i - 1 == -1)
+                {
+                    g.GetComponent<Transform>().Rotate(new Vector3(0, 0, -60));
+                }
+                else
+                {
+                    g.GetComponent<Transform>().Rotate(new Vector3(0, 0, (i - 1) * 60));
+                }
+                break;
+            }
+        }
+        GameObject.FindGameObjectWithTag("GUI").GetComponent<GUIManager>().CloseCellMenu();
+
+    }
+
+    void CopyCellmanager(CellManager oldCm, CellManager newCm)
+    {
+        newCm.energy = oldCm.energy;
+        newCm.energyMax = oldCm.energyMax;
+        newCm.energyUse = oldCm.energyUse;
+        newCm.energyConvert = oldCm.energyConvert;
+        newCm.alive = oldCm.alive;
+
+        newCm.diffusionFactor = oldCm.diffusionFactor;
+        newCm.Field = oldCm.Field;
+
+        newCm.juice = oldCm.juice;
+        newCm.diffusionDelta = oldCm.diffusionDelta;
+        newCm.connections = oldCm.connections;
+
+        newCm.tempid = oldCm.tempid;
+
+        for (int i = 0; i < newCm.connections.Length; i++)
+        {
+            if (newCm.connections[i] != null)
+            {
+                newCm.connections[i].GetComponent<CellManager>().connections[(i + 3) % 6] = newCm;
+            }
+        }
+    }
 
     public void CreateWorkerCell(FieldManager fm)
     {

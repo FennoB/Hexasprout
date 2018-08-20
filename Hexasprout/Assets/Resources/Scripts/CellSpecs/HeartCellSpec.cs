@@ -96,6 +96,7 @@ public class HeartCellSpec : MonoBehaviour {
     // Recreate the Heartmap
     void UpdateHeartmap()
     {
+        return;
         // Call this function when:
         // - Connections removed
         // - Connections added

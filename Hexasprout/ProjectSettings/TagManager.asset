@@ -8,6 +8,7 @@ TagManager:
   - Field
   - Slider
   - World
+  - GUI
   layers:
   - Default
   - TransparentFX
