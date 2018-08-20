@@ -7,7 +7,7 @@ public class StorageCellSpec : MonoBehaviour
     public Juice content;
     public Juice capacities;
     public Juice target;
-    public float maxSpeedPerSecond;
+    public float maxSpeedPerSecond = 0.1f;
     public FieldManager Field;
 
     public CellManager CellManager;
@@ -22,11 +22,6 @@ public class StorageCellSpec : MonoBehaviour
     // Use this for initialization
     void Awake ()
     {
-        content = new Juice();
-        capacities = new Juice();
-        target = new Juice();
-        capacities.SetAllTo(10.0f);
-
         BuildManager = this.gameObject.GetComponent<BuildManager>();
         CellManager = this.gameObject.GetComponent<CellManager>();
         animator = new Animator[6];
@@ -62,7 +57,7 @@ public class StorageCellSpec : MonoBehaviour
             }
         }
 
-
+        StorageHandling();
     }
 
     // Storage functions
@@ -97,6 +92,7 @@ public class StorageCellSpec : MonoBehaviour
         // Apply delta
         content += delta;
         juice -= delta;
+        GetComponent<CellManager>().juice = juice;
     }
 
     public void EventHandler(GUI_Event e, GUIManager gm)

@@ -300,15 +300,6 @@ public class CellManager : MonoBehaviour
             }
         }
 
-        if (juice.Sum == 0)
-        {
-            juice = new Juice
-            {
-                blueCharged = 0.5f,
-                black = 0.5f
-            };
-        }
-
         BuildManager = this.gameObject.GetComponent<BuildManager>();
     }
 
@@ -351,7 +342,6 @@ public class CellManager : MonoBehaviour
             {
                 FindObjectOfType<GUIManager>().SetLoadBar(BuildManager.progress);
             }
-
         }
 
         if (cellType == CellType.Heartcell && Field.state == FieldState.Grow && ConnectionCounter == 1)

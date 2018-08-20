@@ -48,6 +48,11 @@ public class StoreMenuManager : MonoBehaviour {
                             break;
                     }
 
+                    if(value > 0f && value < 0.001f || value < 0f && value > -0.001f)
+                    {
+                        value = 0f;
+                    }
+
                     // And now, with the child structure, we set the text to the value
                     transform.GetChild(j).GetChild(i).gameObject.GetComponent<UnityEngine.UI.Text>().text = value.ToString();
                 }
