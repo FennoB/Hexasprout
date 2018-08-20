@@ -80,10 +80,11 @@ public class GUIManager : MonoBehaviour
         SliderTouch = new Vector2();
         SliderButtons = new GameObject[(int)GUI_Event.length];
 
-        for(int i = 0; i < (int)GUI_Event.length; i++)
+        for (int i = 0; i < (int)GUI_Event.length; i++)
         {
             GameObject button = transform.GetChild(0).GetChild(i).gameObject;
             SliderButtons[(int)button.GetComponent<ButtonScript>().ButtonID] = button;
+            
         }
 
         ResetSliderButtons();
@@ -134,14 +135,14 @@ public class GUIManager : MonoBehaviour
                     break;
             }
         }
-        else if(Input.touchCount >= 2)
+        else if (Input.touchCount >= 2)
         {
             state = -2;
             hit_position = Input.mousePosition;
             camera_position = world.transform.position;
             ApplyZoom();
         }
-        
+
         // User just began touch
         if (state == 0 || (Input.GetMouseButtonDown(0) && state == -1))
         {
@@ -177,7 +178,7 @@ public class GUIManager : MonoBehaviour
             }
         }
     }
-    
+
     // Called when user tapped on a field
     void TappedOnField(FieldManager fm)
     {
@@ -226,25 +227,25 @@ public class GUIManager : MonoBehaviour
             if (fm.GetNeighbours()[i] != null)
             {
                 // Decompose?
-                if(cm.connections[i] != null)
+                if (cm.connections[i] != null)
                 {
                     fm.GetNeighbours()[i].State = FieldState.Decompose;
                 }
 
                 // Material?
-                else if(fm.GetNeighbours()[i].Material == null)
+                else if (fm.GetNeighbours()[i].Material == null)
                 {
                     // Connection possible?
-                    
+
                     //* Only stemcells and storagecells can build connections
-                    if(cm.cellType == CellType.Stemcell || cm.cellType == CellType.Storagecell)
+                    if (cm.cellType == CellType.Stemcell || cm.cellType == CellType.Storagecell)
                     /*/
                     //All cells can build connections if max not reached (later)
                     if(!cm.ConMaxReached())
                     //*/
                     {
                         // From this side: yes
-                        if 
+                        if
                         (
                             fm.GetNeighbours()[i].Cell == null || !fm.GetNeighbours()[i].GetComponentInChildren<CellManager>().ConMaxReached()
                         )
@@ -314,16 +315,16 @@ public class GUIManager : MonoBehaviour
     public void EventHandler(GUI_Event e)
     {
         // Blocking cause menus open?
-        if(transform.GetChild(3).gameObject.activeSelf)
+        if (transform.GetChild(3).gameObject.activeSelf)
         {
             return;
         }
 
         // Give event to menu cell
-        if(CellMenuOpen)
+        if (CellMenuOpen)
         {
             world_ui_blocked = true;
-            if(e == GUI_Event.BtnStoreMenu)
+            if (e == GUI_Event.BtnStoreMenu)
             {
                 transform.GetChild(3).gameObject.SetActive(true);
                 ResetSliderButtons();
@@ -337,7 +338,7 @@ public class GUIManager : MonoBehaviour
     public void OpenCellMenu(FieldManager target)
     {
         CloseCellMenu();
-        
+
         CellMenuTarget = target;
         CellMenuOpen = true;
         ResetSliderButtons();
@@ -350,7 +351,7 @@ public class GUIManager : MonoBehaviour
 
     // Calles to close cell menus
     public void CloseCellMenu()
-    { 
+    {
         // Close LoadBar
         transform.GetChild(3).gameObject.SetActive(false);
 
@@ -360,10 +361,10 @@ public class GUIManager : MonoBehaviour
             transform.GetChild(2).gameObject.SetActive(false);
             ResetSliderButtons();
             EventHandler(GUI_Event.CloseMenu);
-            
+
             // Close Selection menu
             ResetSelectedCells();
-            
+
             CellMenuOpen = false;
             transform.GetChild(0).gameObject.SetActive(false);
         }
@@ -415,16 +416,16 @@ public class GUIManager : MonoBehaviour
     }
 
     // Doubleclicked is in a Coroutine for handling the Clickevent over time
-    IEnumerator DoubleClicked ()
+    IEnumerator DoubleClicked()
     {
         yield return new WaitForSeconds(0.5f);
         if (tapCounter > 1)
         {
-        //    //the field hit by the user
-        //    Vector2 point = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        //    RaycastHit2D hit = Physics2D.Raycast(point, Vector2.zero);
+            //    //the field hit by the user
+            //    Vector2 point = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            //    RaycastHit2D hit = Physics2D.Raycast(point, Vector2.zero);
         }
-        tapCounter = 0; 
+        tapCounter = 0;
     }
 
     // Called to place a new stemcell on a certain field
@@ -461,11 +462,11 @@ public class GUIManager : MonoBehaviour
     // Zoom 
     void ApplyZoom()
     {
-        if(Input.touchCount == 2)
+        if (Input.touchCount == 2)
         {
             world_ui_blocked = true;
 
-            if(Input.touches[1].phase == TouchPhase.Began)
+            if (Input.touches[1].phase == TouchPhase.Began)
             {
                 // Calculate center
                 zoompos = (Input.touches[0].position + Input.touches[1].position) / 2.0f;
@@ -483,7 +484,7 @@ public class GUIManager : MonoBehaviour
             // the zoompoint has changed slightly. Now we can transform the world back
             // with this change beeing applied permanently.
 
-            if(Input.touches[1].phase == TouchPhase.Moved)
+            if (Input.touches[1].phase == TouchPhase.Moved)
             {
                 // 1. Move world with new zoom pos
                 Vector2 newzoompos = (Input.touches[0].position + Input.touches[1].position) / 2.0f;
@@ -506,7 +507,7 @@ public class GUIManager : MonoBehaviour
                 {
                     Camera.main.orthographicSize = 5;
                 }
-                else if(Camera.main.orthographicSize < 0.5f)
+                else if (Camera.main.orthographicSize < 0.5f)
                 {
                     Camera.main.orthographicSize = 0.5f;
                 }
@@ -526,7 +527,7 @@ public class GUIManager : MonoBehaviour
     // Prepare the Slider menu
     public void ResetSliderButtons()
     {
-        foreach(GameObject button in SliderButtons)
+        foreach (GameObject button in SliderButtons)
         {
             button.SetActive(false);
         }
@@ -535,7 +536,7 @@ public class GUIManager : MonoBehaviour
     // Use this function to add Buttons to the slider menu
     public void AddSliderButton(GUI_Event e)
     {
-        if(e >= 0)
+        if (e >= 0)
         {
             SliderButtons[(int)e].SetActive(true);
         }
@@ -558,7 +559,7 @@ public class GUIManager : MonoBehaviour
         SliderCounter = counter;
 
         // Determine Sliding
-        if(counter > 5)
+        if (counter > 5)
         {
             // Sliding
             transform.GetChild(1).gameObject.SetActive(true);
@@ -570,16 +571,16 @@ public class GUIManager : MonoBehaviour
                 float newposx = 0;
                 int index = (i - ((int)pos - 2) + counter) % counter;
                 newposx = (128f + 16f) * (-index + 2 + stepextra);
-                
-                if(index == 0)
+
+                if (index == 0)
                 {
                     list[i].GetComponent<UnityEngine.UI.Image>().color = new Color(1f, 1f, 1f, 1f - stepextra);
                 }
-                else if(index == 5)
+                else if (index == 5)
                 {
                     list[i].GetComponent<UnityEngine.UI.Image>().color = new Color(1f, 1f, 1f, stepextra);
                 }
-                else if(index > 5)
+                else if (index > 5)
                 {
                     list[i].GetComponent<UnityEngine.UI.Image>().color = new Color(1f, 1f, 1f, 0f);
                 }
@@ -621,7 +622,7 @@ public class GUIManager : MonoBehaviour
             Touch t = Input.touches[0];
             if (t.phase == TouchPhase.Began)
             {
-                if(t.position.x > -255 && t.position.y < 255 && t.position.y > transform.GetChild(0).position.y - 32 && t.position.y < transform.GetChild(0).position.y + 32)
+                if (t.position.x > -255 && t.position.y < 255 && t.position.y > transform.GetChild(0).position.y - 32 && t.position.y < transform.GetChild(0).position.y + 32)
                 {
                     world_ui_blocked = true;
                     SliderTouch = t.position;
@@ -635,7 +636,7 @@ public class GUIManager : MonoBehaviour
                 float slidePosDelta = slideDelta / SliderCounter;
                 SliderPosition += slidePosDelta;
                 SliderTouch = t.position;
-                while(SliderPosition < 0)
+                while (SliderPosition < 0)
                 {
                     SliderPosition += 1f;
                 }

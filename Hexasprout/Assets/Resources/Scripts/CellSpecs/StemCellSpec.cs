@@ -62,6 +62,7 @@ public class StemCellSpec : MonoBehaviour {
                 gm.AddSliderButton(GUI_Event.BtnNavMain);
                 break;
             case GUI_Event.BtnMorph2Heart:
+                Morph2Heart();
                 break;
             case GUI_Event.BtnMorph2Leaf:
                 break;
@@ -70,6 +71,11 @@ public class StemCellSpec : MonoBehaviour {
             case GUI_Event.BtnMorph2Worker:
                 break;
         }
+    }
+
+    void Morph2Heart()
+    {
+        GameObject.Find("World").GetComponent<WorldGenerator>().Morph2Heart(this.gameObject.GetComponent<CellManager>());
     }
 
     void StartBuild()
