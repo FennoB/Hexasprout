@@ -12,8 +12,6 @@ public class StemCellSpec : MonoBehaviour {
     public int positionOfBuildTarget;
     public BuildManager BuildManager;
 
-
-
     private Animator[] animator;
    
     private void Awake()
@@ -26,20 +24,13 @@ public class StemCellSpec : MonoBehaviour {
         {
             animator[i] = transform.GetChild(2).GetChild(i).gameObject.GetComponent<Animator>();
         }
-}
+
+        CellManager.ConnectionMax = 6;
+    }
 
     private void Start()
     {
         Field = this.gameObject.transform.parent.GetComponentInParent<FieldManager>();
-    }
-
-    public void ActivateOptionScript()
-    {
-        this.gameObject.transform.GetChild(3).GetComponent<Canvas>().enabled = true;
-    }
-    public void DeactivateOptionScript()
-    {
-        this.gameObject.transform.GetChild(3).GetComponent<Canvas>().enabled = false;
     }
 
     // EventHandler
@@ -52,6 +43,31 @@ public class StemCellSpec : MonoBehaviour {
                 break;
             case GUI_Event.BuildReady:
                 FinishBuild(buildName);
+                break;
+            case GUI_Event.OpenMenu:
+                gm.AddSliderButton(GUI_Event.BtnTransmorph);
+                break;
+            case GUI_Event.BtnTransmorph:
+                gm.ResetSliderButtons();
+                if (CellManager.ConnectionCounter <= 2)
+                {
+                    gm.AddSliderButton(GUI_Event.BtnMorph2Heart);
+                }
+                if (CellManager.ConnectionCounter <= 1)
+                {
+                    gm.AddSliderButton(GUI_Event.BtnMorph2Leaf);
+                    gm.AddSliderButton(GUI_Event.BtnMorph2Worker);
+                }
+                gm.AddSliderButton(GUI_Event.BtnMorph2Storage);
+                gm.AddSliderButton(GUI_Event.BtnNavMain);
+                break;
+            case GUI_Event.BtnMorph2Heart:
+                break;
+            case GUI_Event.BtnMorph2Leaf:
+                break;
+            case GUI_Event.BtnMorph2Storage:
+                break;
+            case GUI_Event.BtnMorph2Worker:
                 break;
         }
     }
@@ -84,11 +100,14 @@ public class StemCellSpec : MonoBehaviour {
     {
         switch(type)
         {
-            case "Build Cell":
+            case "Build Connection":
                 MakeCell();
                 break;
-            case "Build Connection":
+            case "Make Connection":
                 MakeConnection();
+                break;
+            case "Build Cell":
+                FinishCell();
                 break;
         }
     }
@@ -96,21 +115,28 @@ public class StemCellSpec : MonoBehaviour {
 
     void OrderNewCell()
     {
-        buildName = "Build Cell";
-        //first parameter is time in seconds, second the required juice, third the Name of the Buildevent
-        this.gameObject.GetComponent<BuildManager>().Build(10, new Juice(0f,0f,0f,0f,0f,1f), buildName);
+        buildName = "Build Connection";
+        this.gameObject.GetComponent<BuildManager>().Build(10, new Juice(0f, 0f, 0f, 0f, 0f, 0.2f), buildName);
     }
 
     void OrderNewConnection()
     {
-        buildName = "Build Connection";
+        buildName = "Make Connection";
         this.gameObject.GetComponent<BuildManager>().Build(10, new Juice(0f, 0f, 0f, 0f, 0f, 0.2f), buildName);
     }
 
     void MakeCell()
     {
-        GameObject.Find("World").GetComponent<WorldGenerator>().CreateStemCell(buildTarget);
+        buildName = "Build Cell";
+
+        //first parameter is time in seconds, second the required juice, third the Name of the Buildevent
+        this.gameObject.GetComponent<BuildManager>().Build(10, new Juice(0f, 0f, 0f, 0f, 0f, 1f), buildName);
         MakeConnection();
+    }
+
+    void FinishCell()
+    {
+        GameObject.Find("World").GetComponent<WorldGenerator>().CreateStemCell(buildTarget);
     }
 
     void MakeConnection()
@@ -121,5 +147,17 @@ public class StemCellSpec : MonoBehaviour {
         buildTarget = null;
         positionOfBuildTarget = 0;
     }
-    public void OwnFixedUpdate(){}
+
+    public void OwnFixedUpdate()
+    {
+        if (BuildManager.buildFlag)
+        {
+            //if (buildName == "Build Connection")
+            //{
+            //    // Animation of build process
+            //    Animator a = animator[positionOfBuildTarget];
+            //    a.Play("AnimationPipe" + positionOfBuildTarget)
+            //}
+        }
+    }
 }

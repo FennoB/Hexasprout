@@ -219,12 +219,15 @@ public class CellManager : MonoBehaviour
     public float energyConvert = 0.5f; // Convertion of chemical to cellenegy per minute (2 minutes to reload battery)
     public bool alive = true;
     public float diffusionFactor = 0.5f;    // Diffusion speed. Behaviour undefined when > 1.0f
+
     public CellType cellType = CellType.Stemcell;        // Celltypes: stem=0, leaf=1, worker=2, heart=3, storage=4, breed=5
     public FieldManager Field;
 
     public Juice juice;
     public Juice diffusionDelta;
-    public CellManager[] connections;
+    public int ConnectionCounter;
+    public int ConnectionMax = 1;
+    public GameObject[] connections;
 
     public int tempid;      // My ID in the most recently generated Heartmap
 
@@ -246,7 +249,6 @@ public class CellManager : MonoBehaviour
             black = 0.5f
         };  
     }
-     
 
     private void Start()
     {
@@ -288,6 +290,15 @@ public class CellManager : MonoBehaviour
     // Handle events
     public void EventHandler(GUI_Event e, GUIManager gm)
     {
+        if(!alive)
+        {
+            if (e != GUI_Event.CloseMenu)
+            {
+                gm.CloseCellMenu();
+            }
+            return;
+        }
+
         // Own stuff
         switch (e)
         {
@@ -314,7 +325,7 @@ public class CellManager : MonoBehaviour
             // Back to main
             case GUI_Event.BtnNavMain:
                 gm.ResetSliderButtons();
-                OpenMenu(gm);
+                EventHandler(GUI_Event.OpenMenu, gm);
                 break;
             case GUI_Event.BtnMorph2Heart:
                 Morph2Heart();
@@ -424,6 +435,12 @@ public class CellManager : MonoBehaviour
         }
     }
 
+    // Connections possible?
+    public bool ConMaxReached()
+    {
+        return ConnectionCounter >= ConnectionMax;
+    }
+
     // Connect
     public void ConnectWith(CellManager cm, int conID)
     {
@@ -436,6 +453,7 @@ public class CellManager : MonoBehaviour
 
             //You know me
             cm.ConnectWith(this, (conID + 3) % 6);
+            ConnectionCounter++;
         }
     }
 
@@ -445,22 +463,32 @@ public class CellManager : MonoBehaviour
         // is there a connection established?
         if (connections[conID] != null)
         {
-            //No. Connect!
-            //I know you
+            // Yes. Disconnect!
+            // Reset animation
+            if (cellType == CellType.Stemcell || cellType == CellType.Storagecell || cellType == CellType.Heartcell)
+            {
+                transform.GetChild(2).GetChild(conID).GetComponent<Animator>().SetTrigger("Decompose");
+            }
+            
+            // I know you
             connections[conID] = null;
 
-            //You know me
+            // You know me
             cm.DecomposeWith(this, (conID + 3) % 6);
+            ConnectionCounter--;
         }
     }
 
     // Death
     void Death()
     {
+        if (alive)
+        {
         energy = 0;
         alive = false;
         GameObject child = transform.GetChild(0).gameObject;
         child.GetComponent<SpriteRenderer>().color = new Color(0.2f, 0.2f, 0.2f, 1.0f);
+    }
     }
 
     // Juice Diffusion Calculation
