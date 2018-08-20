@@ -12,61 +12,6 @@ public class Juice
     public float yellow;
     public float black;
 
-    //[]-operator
-    public float this[int key]
-    {
-        get
-        {
-            float result = 0.0f;
-            switch(key)
-            {
-                case 0:
-                    result = red;
-                    break;
-                case 1:
-                    result = green;
-                    break;
-                case 2:
-                    result = blue;
-                    break;
-                case 3:
-                    result = blueCharged;
-                    break;
-                case 4:
-                    result = yellow;
-                    break;
-                case 5:
-                    result = black;
-                    break;
-            }
-            return result;
-        }
-        set
-        {
-            switch (key)
-            {
-                case 0:
-                    red = value;
-                    break;
-                case 1:
-                    green = value;
-                    break;
-                case 2:
-                    blue = value;
-                    break;
-                case 3:
-                    blueCharged = value;
-                    break;
-                case 4:
-                    yellow = value;
-                    break;
-                case 5:
-                    black = value;
-                    break;
-            }
-        }
-    }
-
     public Juice()
     {
         red = 0;
@@ -277,14 +222,12 @@ public class CellManager : MonoBehaviour
 
     public CellType cellType = CellType.Stemcell;        // Celltypes: stem=0, leaf=1, worker=2, heart=3, storage=4, breed=5
     public FieldManager Field;
-    public BuildManager BuildManager;
-    public GUI_Event loadBarPicture;
 
     public Juice juice;
     public Juice diffusionDelta;
     public int ConnectionCounter;
     public int ConnectionMax = 1;
-    public GameObject[] connections;
+    public CellManager[] connections;
 
     public int tempid;      // My ID in the most recently generated Heartmap
 
@@ -303,10 +246,8 @@ public class CellManager : MonoBehaviour
         juice = new Juice
         {
             blueCharged = 0.5f,
-            black = 0.5f
-        };
-
-        BuildManager = this.gameObject.GetComponent<BuildManager>();
+            black = 100.0f
+        };  
     }
 
     private void Start()
@@ -343,12 +284,6 @@ public class CellManager : MonoBehaviour
                     GetComponent<BreedCellSpec>().OwnFixedUpdate();
                     break;
             }
-
-            if(BuildManager.buildFlag)
-            {
-                FindObjectOfType<GUIManager>().SetLoadBar(BuildManager.progress);
-            }
-
         }
     }
 
@@ -392,30 +327,6 @@ public class CellManager : MonoBehaviour
                 gm.ResetSliderButtons();
                 EventHandler(GUI_Event.OpenMenu, gm);
                 break;
-
-            // Specialize
-            case GUI_Event.BtnEnergycap:
-                gm.CloseCellMenu();
-                loadBarPicture = GUI_Event.BtnEnergycap;
-                gm.OpenLoadBar(GUI_Event.BtnEnergycap);
-                energyMax += 0.5f;
-                BuildManager.Build(20, new Juice(0, 0, 0.2f, 0, 0, 0.5f), "Energy Cap");
-                break;
-
-            case GUI_Event.BtnEnergyuse:
-                gm.CloseCellMenu();
-                loadBarPicture = GUI_Event.BtnEnergyuse;
-                gm.OpenLoadBar(GUI_Event.BtnEnergyuse);
-                energyUse /= 1.1f;
-                BuildManager.Build(20, new Juice(0, 0, 0.2f, 0, 0, 0.5f), "Energy Use");
-                break;
-
-            case GUI_Event.BuildReady:
-                if (FindObjectOfType<GUIManager>().CellMenuTarget == GetComponentInParent<FieldManager>())
-                {
-                    FindObjectOfType<GUIManager>().CloseCellMenu();
-                }
-                break;
         }
 
         // Cell specs
@@ -443,26 +354,13 @@ public class CellManager : MonoBehaviour
         }
     }
 
-    void Morph2Heart()
-    {
-        GameObject.Find("World").GetComponent<WorldGenerator>().Morph2Heart(this);
-
-    }
+    
     // Adds buttons to the Slider menu
     void OpenMenu(GUIManager gm)
     {
-        if (BuildManager.buildFlag)
-        {
-            // No Menu today...
-            gm.CloseCellMenu();
-            gm.OpenLoadBar(loadBarPicture);
-        }
-        else
-        {
-            // Main menu: 
-            gm.AddSliderButton(GUI_Event.BtnDestroy);
-            gm.AddSliderButton(GUI_Event.BtnSpecialize);
-        }
+        // Main menu: 
+        gm.AddSliderButton(GUI_Event.BtnDestroy);
+        gm.AddSliderButton(GUI_Event.BtnSpecialize);
     }
 
     // Does something when cellmenu closes (maybe later)
