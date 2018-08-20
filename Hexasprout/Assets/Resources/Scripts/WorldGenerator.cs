@@ -125,7 +125,7 @@ public class WorldGenerator : MonoBehaviour
         }
 
         // Hard code dummy cell
-        CreateStemCell(fields[2][2].GetComponent<FieldManager>());
+        CreateStorageCell(fields[2][2].GetComponent<FieldManager>());
         CreateWorkerCell(fields[2][1].GetComponent<FieldManager>());
         //Hard code Material
         CreateMaterial(fields[2][3].GetComponent<FieldManager>(), "red");
@@ -202,6 +202,46 @@ public class WorldGenerator : MonoBehaviour
         fm.Cell = g;
         return true;
     }
+
+    public bool CreateStorageCell(FieldManager fm)
+    {
+        // Fieldmanager valid?
+        if (fm == null || fm.Cell != null || fm.Material != null)
+        {
+            // Nope
+            return false;
+        }
+
+        // Wheee
+        // Load Prefab
+        GameObject p = (GameObject)Resources.Load("Prefabs/Cells/StorageCell", typeof(GameObject));
+
+        // Prefab valid?
+        if (p == null)
+        {
+            // Nope
+            return false;
+        }
+
+        // Wheee
+        // Intantiate a Gameobject of this Prefab
+        GameObject g = Instantiate(p);
+
+        // Gameobject valid?
+        if (g == null)
+        {
+            // Nope
+            return false;
+        }
+
+        // Wheee
+        // Link with field
+        g.GetComponent<Transform>().SetParent(fm.gameObject.GetComponent<Transform>());
+        g.GetComponent<Transform>().localPosition = new Vector3(0, 0, -0.14f);
+        fm.Cell = g;
+        return true;
+    }
+
 
     // Fixed update is called at fixed timestep
     private void FixedUpdate()

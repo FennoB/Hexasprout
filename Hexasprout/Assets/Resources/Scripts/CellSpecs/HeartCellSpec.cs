@@ -385,7 +385,15 @@ public class HeartCellSpec : MonoBehaviour {
     // EventHandler
     public void EventHandler(GUI_Event e, GUIManager gm)
     {
-
+        switch (e)
+        {
+            case GUI_Event.OpenMenu:
+                gm.AddSliderButton(GUI_Event.BtnHeartMenu);
+                break;
+            case GUI_Event.BtnHeartMenu:
+                // Open heart menu
+                break;
+        }
     }
 
 }

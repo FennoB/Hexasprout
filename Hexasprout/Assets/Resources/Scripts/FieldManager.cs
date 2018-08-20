@@ -29,8 +29,7 @@ public class FieldManager : MonoBehaviour
     public GameObject material = null;
 
     public float warmth;
-
-    
+    public float baseBrightness = 0.0f;     // Minimum Brightness this field will have. 
 
 
     //public bool occupied = false;
@@ -112,6 +111,22 @@ public class FieldManager : MonoBehaviour
                     material.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f);
                 }
                 break;
+        }
+
+        if (baseBrightness > 0f)
+        {
+            if ((GetComponent<SpriteRenderer>().color.r + GetComponent<SpriteRenderer>().color.g + GetComponent<SpriteRenderer>().color.b) < baseBrightness * 1.5f)
+            {
+                GetComponent<SpriteRenderer>().color = new Color(warmth * baseBrightness, baseBrightness / 2f, baseBrightness - baseBrightness * warmth);
+                if (HasMaterial())
+                {
+                    material.GetComponent<SpriteRenderer>().color = new Color(baseBrightness, baseBrightness, baseBrightness);
+                }
+            }
+        }
+
+        switch (state)
+        {
             case FieldState.Selected:
                 GetComponent<SpriteRenderer>().color = new Color(0f, 0f, 1f);
                 break;
@@ -121,7 +136,6 @@ public class FieldManager : MonoBehaviour
             case FieldState.Decompose:
                 GetComponent<SpriteRenderer>().color = new Color(1f, 0f, 0f);
                 break;
-
         }
     }
 

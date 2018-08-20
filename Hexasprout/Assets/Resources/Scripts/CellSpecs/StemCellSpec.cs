@@ -16,8 +16,8 @@ public class StemCellSpec : MonoBehaviour {
    
     private void Awake()
     {
-        BuildManager = this.gameObject.GetComponentInParent<BuildManager>();
-        CellManager = this.gameObject.GetComponentInParent<CellManager>();
+        BuildManager = this.gameObject.GetComponent<BuildManager>();
+        CellManager = this.gameObject.GetComponent<CellManager>();
         animator = new Animator[6];
 
         for (int i = 0; i < 6; i++)
@@ -30,7 +30,7 @@ public class StemCellSpec : MonoBehaviour {
 
     private void Start()
     {
-        Field = this.gameObject.transform.parent.GetComponentInParent<FieldManager>();
+        Field = transform.parent.GetComponent<FieldManager>();
     }
 
     // EventHandler
@@ -100,7 +100,7 @@ public class StemCellSpec : MonoBehaviour {
     {
         switch(type)
         {
-            case "Build Connection":
+            case "Build Sprout":
                 MakeCell();
                 break;
             case "Make Connection":
@@ -113,16 +113,20 @@ public class StemCellSpec : MonoBehaviour {
     }
     //Here are the buildmethods, for one build are always a order and a make method necessary
 
+    // Builds a sprout and creates a new stemcell there
     void OrderNewCell()
     {
-        buildName = "Build Connection";
-        this.gameObject.GetComponent<BuildManager>().Build(10, new Juice(0f, 0f, 0f, 0f, 0f, 0.2f), buildName);
+        // Sprout
+        buildName = "Build Sprout";
+        this.gameObject.GetComponent<BuildManager>().Build(10, new Juice(0f, 0f, 0f, 0f, 0f, 0.02f), buildName);
+        CellManager.loadBarPicture = GUI_Event.BtnDegenerate;
     }
 
     void OrderNewConnection()
     {
         buildName = "Make Connection";
-        this.gameObject.GetComponent<BuildManager>().Build(10, new Juice(0f, 0f, 0f, 0f, 0f, 0.2f), buildName);
+        this.gameObject.GetComponent<BuildManager>().Build(10, new Juice(0f, 0f, 0f, 0f, 0f, 0.02f), buildName);
+        CellManager.loadBarPicture = GUI_Event.BtnDegenerate;
     }
 
     void MakeCell()
@@ -130,20 +134,30 @@ public class StemCellSpec : MonoBehaviour {
         buildName = "Build Cell";
 
         //first parameter is time in seconds, second the required juice, third the Name of the Buildevent
-        this.gameObject.GetComponent<BuildManager>().Build(10, new Juice(0f, 0f, 0f, 0f, 0f, 1f), buildName);
-        MakeConnection();
+        this.gameObject.GetComponent<BuildManager>().Build(10, new Juice(0f, 0f, 0f, 0f, 0f, 0.2f), buildName);
+        GameObject.Find("World").GetComponent<WorldGenerator>().CreateStemCell(buildTarget);
+
+        GameObject p = (GameObject)Resources.Load("Prefabs/Connections/buildegg", typeof(GameObject));
+        GameObject g = Instantiate(p);
+        g.transform.SetParent(buildTarget.transform);
+        g.transform.localPosition = new Vector3(0, 0, -0.2f);
+        buildTarget.Cell.GetComponent<CellManager>().alive = false;
+        buildTarget.Cell.transform.localScale = new Vector3(0, 0, 0);
     }
 
     void FinishCell()
     {
-        GameObject.Find("World").GetComponent<WorldGenerator>().CreateStemCell(buildTarget);
+        buildTarget.Cell.transform.localScale = new Vector3(1, 1, 1);
+        buildTarget.Cell.GetComponent<CellManager>().alive = true;
+        Destroy(buildTarget.transform.GetChild(1).gameObject);
+        buildName = "---";
+        MakeConnection();
     }
 
     void MakeConnection()
     {
         Field.Cell.GetComponent<CellManager>().ConnectWith(buildTarget.Cell.GetComponent<CellManager>(), positionOfBuildTarget);
-        animator[positionOfBuildTarget].SetTrigger("Start");
-
+        buildName = "---";
         buildTarget = null;
         positionOfBuildTarget = 0;
     }
@@ -152,12 +166,17 @@ public class StemCellSpec : MonoBehaviour {
     {
         if (BuildManager.buildFlag)
         {
-            //if (buildName == "Build Connection")
-            //{
-            //    // Animation of build process
-            //    Animator a = animator[positionOfBuildTarget];
-            //    a.Play("AnimationPipe" + positionOfBuildTarget)
-            //}
+            if (buildName == "Build Sprout" || buildName == "Make Connection")
+            {
+                // Animation of build process
+                Animator a = animator[positionOfBuildTarget];
+                a.Play("AnimationPipe" + positionOfBuildTarget, 0, BuildManager.progress / 1.4f);
+            }
+            else if(buildName == "Build Cell")
+            {
+                float p = 0.5f + ((int)(BuildManager.progress * 5.0f) / 5.0f) / 1.5f;
+                buildTarget.Cell.transform.localScale = new Vector3(p, p, p);
+            }
         }
     }
 }

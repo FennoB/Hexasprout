@@ -74,12 +74,11 @@ public class BuildManager : MonoBehaviour {
         else
         {
             //goal is reached, cell is allowed to build
-            cm.EventHandler(GUI_Event.BuildReady, null);
             cellBuildCache = new Juice();
             progress = 0f;
             buildFlag = false;
             name = null;
-            
+            cm.EventHandler(GUI_Event.BuildReady, null);
         }
     }
     public void OwnFixedUpdate()

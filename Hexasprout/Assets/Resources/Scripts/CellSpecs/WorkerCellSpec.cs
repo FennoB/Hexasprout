@@ -52,7 +52,53 @@ public class WorkerCellSpec : MonoBehaviour {
             case GUI_Event.BtnSpecialize:
                 SpecializeMenu(gm);
                 break;
+            case GUI_Event.BtnWorkerCount:
+                gm.CloseCellMenu();
+                CellManager.loadBarPicture = GUI_Event.BtnWorkerCount;
+                gm.OpenLoadBar(GUI_Event.BtnWorkerCount);
+                MaxWorkerConnections = 6;
+                CellManager.BuildManager.Build(20, new Juice(0, 0, 0.2f, 0, 0, 0.5f), "Worker Count");
+                break;
 
+            case GUI_Event.BtnWorkerSpeedBlack:
+                gm.CloseCellMenu();
+                CellManager.loadBarPicture = GUI_Event.BtnWorkerSpeedBlack;
+                gm.OpenLoadBar(GUI_Event.BtnWorkerSpeedBlack);
+                MiningFactorBlack *= 1.2f;
+                CellManager.BuildManager.Build(20, new Juice(0, 0, 0.2f, 0, 0, 0.5f), "Worker Speed Black");
+                break;
+
+            case GUI_Event.BtnWorkerSpeedBlue:
+                gm.CloseCellMenu();
+                CellManager.loadBarPicture = GUI_Event.BtnWorkerSpeedBlue;
+                gm.OpenLoadBar(GUI_Event.BtnWorkerSpeedBlue);
+                MiningFactorBlue *= 1.2f;
+                CellManager.BuildManager.Build(20, new Juice(0, 0, 0.2f, 0, 0, 0.5f), "Worker Speed Blue");
+                break;
+
+            case GUI_Event.BtnWorkerSpeedGreen:
+                gm.CloseCellMenu();
+                CellManager.loadBarPicture = GUI_Event.BtnWorkerSpeedGreen;
+                gm.OpenLoadBar(GUI_Event.BtnWorkerSpeedGreen);
+                MiningFactorGreen *= 1.2f;
+                CellManager.BuildManager.Build(20, new Juice(0, 0, 0.2f, 0, 0, 0.5f), "Worker Speed Green");
+                break;
+
+            case GUI_Event.BtnWorkerSpeedRed:
+                gm.CloseCellMenu();
+                CellManager.loadBarPicture = GUI_Event.BtnWorkerSpeedRed;
+                gm.OpenLoadBar(GUI_Event.BtnWorkerSpeedRed);
+                MiningFactorRed *= 1.2f;
+                CellManager.BuildManager.Build(20, new Juice(0, 0, 0.2f, 0, 0, 0.5f), "Worker Speed Red");
+                break;
+
+            case GUI_Event.BtnWorkerSpeedYellow:
+                gm.CloseCellMenu();
+                CellManager.loadBarPicture = GUI_Event.BtnWorkerSpeedYellow;
+                gm.OpenLoadBar(GUI_Event.BtnWorkerSpeedYellow);
+                MiningFactorYellow *= 1.2f;
+                CellManager.BuildManager.Build(20, new Juice(0, 0, 0.2f, 0, 0, 0.5f), "Worker Speed Yellow");
+                break;
         }
     }
 
@@ -77,7 +123,7 @@ public class WorkerCellSpec : MonoBehaviour {
                 float miningFactor = 0.0f;
                 Juice change = new Juice();
 
-                switch (materialNeighbours[i].type)
+                switch (type)
                 {
                     case MaterialManager.Type.black:
                         miningFactor = MiningFactorBlack;
@@ -109,6 +155,8 @@ public class WorkerCellSpec : MonoBehaviour {
                 {
                     Juice += change * materialNeighbours[i].Take(miningFactor * Time.deltaTime);
                 }
+
+                CellManager.juice = Juice;
             }
         }
     }
@@ -128,6 +176,9 @@ public class WorkerCellSpec : MonoBehaviour {
                 {
                     counterWorkerConnections--;
                     MaterialNeighbours[i] = null;
+                    Destroy(Field.neighbours[i].transform.GetChild(1).gameObject);
+                    transform.GetChild(2).GetChild(i).gameObject.SetActive(false);
+                    Field.neighbours[i].baseBrightness = 0f;
                 }
             }
         }
@@ -147,7 +198,12 @@ public class WorkerCellSpec : MonoBehaviour {
                         {
                             MaterialNeighbours[i] = Field.neighbours[i].Material.GetComponent<MaterialManager>();
                             counterWorkerConnections++;
-                            //CellManager.BuildVisualConnection(i);
+                            GameObject p = (GameObject)Resources.Load("Prefabs/Cells/workerhelper", typeof(GameObject));
+                            GameObject g = Instantiate(p);
+                            transform.GetChild(2).GetChild(i).gameObject.SetActive(true);
+                            g.transform.SetParent(Field.neighbours[i].transform);
+                            g.transform.localPosition = new Vector3(0, 0, -0.2f);
+                            Field.neighbours[i].baseBrightness = 1f;
                         }
                     }
                 }

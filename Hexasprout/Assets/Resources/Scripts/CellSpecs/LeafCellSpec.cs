@@ -5,12 +5,15 @@ using UnityEngine;
 public class LeafCellSpec : MonoBehaviour {
 
     public float conversionMax;
+    public CellManager CellManager;
+    public FieldManager Field;
 
 	// Use this for initialization
 	void Start ()
     {
-		
-	}
+        CellManager = GetComponent<CellManager>();
+        Field = GetComponent<Transform>().parent.GetComponent<FieldManager>();
+    }
 
     // Update is called fixed
     public void OwnFixedUpdate()
@@ -20,8 +23,8 @@ public class LeafCellSpec : MonoBehaviour {
 
     public void Absorb()
     {
-        FieldManager fm = GetComponent<Transform>().parent.GetComponent<FieldManager>();
-        CellManager cm = GetComponent<CellManager>();
+        FieldManager fm = Field;
+        CellManager cm = CellManager;
         float conv = cm.juice.blue;
 
         if(conv > conversionMax)
@@ -38,6 +41,18 @@ public class LeafCellSpec : MonoBehaviour {
     // EventHandler
     public void EventHandler(GUI_Event e, GUIManager gm)
     {
-
+        switch(e)
+        {
+            case GUI_Event.BtnSpecialize:
+                gm.AddSliderButton(GUI_Event.BtnLeafSpeed);
+                break;
+            case GUI_Event.BtnLeafSpeed:
+                gm.CloseCellMenu();
+                CellManager.loadBarPicture = GUI_Event.BtnLeafSpeed;
+                gm.OpenLoadBar(GUI_Event.BtnLeafSpeed);
+                conversionMax *= 1.2f;
+                CellManager.BuildManager.Build(20, new Juice(0, 0, 0.2f, 0, 0, 0.5f), "Leaf Speed");
+                break;
+        }
     }
 }

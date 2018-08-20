@@ -43,8 +43,8 @@ public class GUIManager : MonoBehaviour
     public GameObject world;
 
     // This is used for CellMenu
-    private bool CellMenuOpen = false;
-    private FieldManager CellMenuTarget;
+    public bool CellMenuOpen = false;
+    public FieldManager CellMenuTarget;
 
     // This is used for managing touch
     private Touch touch;
@@ -54,7 +54,7 @@ public class GUIManager : MonoBehaviour
     private Vector2 zoompos;            // Center of the touches when zooming
 
     // Slider Button List
-    private GameObject[] SliderButtons;
+    public GameObject[] SliderButtons;
     [Range(0.0f, 0.9999f)]
     public float sliderPosition = 0.0f;     // 0.0f - 0.999f Slider goes in circles
     private int SliderCounter = 0;          // Counts the active Buttons on the slider
@@ -92,6 +92,12 @@ public class GUIManager : MonoBehaviour
     // Called every frame
     void Update()
     {
+        // Blocking cause menus open?
+        if (transform.GetChild(3).gameObject.activeSelf)
+        {
+            return;
+        }
+
         // Handle Touch stuff
         TouchHandling();
         RegenerateSlider();
@@ -198,6 +204,11 @@ public class GUIManager : MonoBehaviour
                 // Yes. Open Cell menu
                 OpenCellMenu(fm);
             }
+            else
+            {
+                // Just to reset everything
+                CloseCellMenu();
+            }
         }
     }
 
@@ -302,10 +313,22 @@ public class GUIManager : MonoBehaviour
     // Handles other button events
     public void EventHandler(GUI_Event e)
     {
+        // Blocking cause menus open?
+        if(transform.GetChild(3).gameObject.activeSelf)
+        {
+            return;
+        }
+
         // Give event to menu cell
         if(CellMenuOpen)
         {
             world_ui_blocked = true;
+            if(e == GUI_Event.BtnStoreMenu)
+            {
+                transform.GetChild(3).gameObject.SetActive(true);
+                ResetSliderButtons();
+                ResetSelectedCells();
+            }
             CellMenuTarget.Cell.GetComponent<CellManager>().EventHandler(e, this);
         }
     }
@@ -318,20 +341,23 @@ public class GUIManager : MonoBehaviour
         CellMenuTarget = target;
         CellMenuOpen = true;
         ResetSliderButtons();
-        EventHandler(GUI_Event.OpenMenu);
         transform.GetChild(0).gameObject.SetActive(true);
 
         //set cell as the by the player selected one
         OpenSelectionMenu(target);
-
+        EventHandler(GUI_Event.OpenMenu);
     }
 
     // Calles to close cell menus
     public void CloseCellMenu()
-    {
+    { 
+        // Close LoadBar
+        transform.GetChild(3).gameObject.SetActive(false);
+
         if (CellMenuOpen)
         {
             // Close Slider menu
+            transform.GetChild(2).gameObject.SetActive(false);
             ResetSliderButtons();
             EventHandler(GUI_Event.CloseMenu);
             
@@ -341,6 +367,26 @@ public class GUIManager : MonoBehaviour
             CellMenuOpen = false;
             transform.GetChild(0).gameObject.SetActive(false);
         }
+    }
+
+    // LoadBar
+    public LoadBarManager OpenLoadBar(Sprite s)
+    {
+        CellMenuOpen = true;
+        GameObject loadbar = transform.GetChild(2).gameObject;
+        loadbar.SetActive(true);
+        loadbar.GetComponent<LoadBarManager>().SetPicture(s);
+        return loadbar.GetComponent<LoadBarManager>();
+    }
+    public LoadBarManager OpenLoadBar(GUI_Event buttonImg)
+    {
+        return OpenLoadBar(SliderButtons[(int)buttonImg].GetComponent<UnityEngine.UI.Image>().sprite);
+    }
+    public LoadBarManager SetLoadBar(float progress)
+    {
+        GameObject loadbar = transform.GetChild(2).gameObject;
+        loadbar.GetComponent<LoadBarManager>().progress = progress;
+        return loadbar.GetComponent<LoadBarManager>();
     }
 
     // Is called when Single tap ocurrs
