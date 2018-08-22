@@ -23,6 +23,12 @@ public class LeafCellSpec : MonoBehaviour {
 
     public void Absorb()
     {
+        if(CellManager == null)
+        {
+            CellManager = GetComponent<CellManager>();
+            Field = GetComponent<Transform>().parent.GetComponent<FieldManager>();
+        }
+
         FieldManager fm = Field;
         CellManager cm = CellManager;
         float conv = cm.juice.blue;
@@ -43,6 +49,9 @@ public class LeafCellSpec : MonoBehaviour {
     {
         switch(e)
         {
+            case GUI_Event.OpenMenu:
+                gm.AddSliderButton(GUI_Event.BtnDegenerate);
+                break;
             case GUI_Event.BtnSpecialize:
                 gm.AddSliderButton(GUI_Event.BtnLeafSpeed);
                 break;
@@ -53,6 +62,7 @@ public class LeafCellSpec : MonoBehaviour {
                 conversionMax *= 1.2f;
                 CellManager.BuildManager.Build(20, new Juice(0, 0, 0.2f, 0, 0, 0.5f), "Leaf Speed");
                 break;
+
         }
     }
 }

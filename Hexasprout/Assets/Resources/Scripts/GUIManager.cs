@@ -315,7 +315,7 @@ public class GUIManager : MonoBehaviour
     public void EventHandler(GUI_Event e)
     {
         // Blocking cause menus open?
-        if (transform.GetChild(3).gameObject.activeSelf)
+        if (transform.GetChild(3).gameObject.activeSelf || transform.GetChild(4).gameObject.activeSelf)
         {
             return;
         }
@@ -324,12 +324,21 @@ public class GUIManager : MonoBehaviour
         if (CellMenuOpen)
         {
             world_ui_blocked = true;
+
             if (e == GUI_Event.BtnStoreMenu)
             {
                 transform.GetChild(3).gameObject.SetActive(true);
                 ResetSliderButtons();
                 ResetSelectedCells();
             }
+
+            if (e == GUI_Event.BtnHeartMenu)
+            {
+                transform.GetChild(4).gameObject.SetActive(true);
+                ResetSliderButtons();
+                ResetSelectedCells();
+            }
+
             CellMenuTarget.Cell.GetComponent<CellManager>().EventHandler(e, this);
         }
     }
@@ -352,8 +361,9 @@ public class GUIManager : MonoBehaviour
     // Calles to close cell menus
     public void CloseCellMenu()
     {
-        // Close LoadBar
+        // Close Menus
         transform.GetChild(3).gameObject.SetActive(false);
+        transform.GetChild(4).gameObject.SetActive(false);
 
         if (CellMenuOpen)
         {

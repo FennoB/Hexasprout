@@ -170,7 +170,7 @@ public class WorkerCellSpec : MonoBehaviour {
     {
         for (int i = 0; i < Field.neighbours.Length; i++)
         {
-            if (Field.neighbours[i] != null)
+            if (Field.neighbours[i] != null && Field.neighbours[i].HasMaterial())
             {
                 if (Field.neighbours[i].State == FieldState.SuperSelected)
                 {

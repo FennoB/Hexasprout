@@ -65,10 +65,13 @@ public class StemCellSpec : MonoBehaviour {
                 Morph2Heart();
                 break;
             case GUI_Event.BtnMorph2Leaf:
+                Morph2Leaf();
                 break;
             case GUI_Event.BtnMorph2Storage:
+                Morph2Storage();
                 break;
             case GUI_Event.BtnMorph2Worker:
+                Morph2Worker();
                 break;
         }
     }
@@ -76,6 +79,21 @@ public class StemCellSpec : MonoBehaviour {
     void Morph2Heart()
     {
         GameObject.Find("World").GetComponent<WorldGenerator>().Morph2Heart(this.gameObject.GetComponent<CellManager>());
+    }
+
+    void Morph2Leaf()
+    {
+        GameObject.Find("World").GetComponent<WorldGenerator>().Morph2(this.gameObject.GetComponent<CellManager>(), "LeafCell");
+    }
+
+    void Morph2Storage()
+    {
+        GameObject.Find("World").GetComponent<WorldGenerator>().Morph2(this.gameObject.GetComponent<CellManager>(), "StorageCell");
+    }
+
+    void Morph2Worker()
+    {
+        GameObject.Find("World").GetComponent<WorldGenerator>().Morph2(this.gameObject.GetComponent<CellManager>(), "WorkerCell");
     }
 
     void StartBuild()
@@ -140,7 +158,7 @@ public class StemCellSpec : MonoBehaviour {
         buildName = "Build Cell";
 
         //first parameter is time in seconds, second the required juice, third the Name of the Buildevent
-        this.gameObject.GetComponent<BuildManager>().Build(10, new Juice(0f, 0f, 0f, 0f, 0f, 0.2f), buildName);
+        this.gameObject.GetComponent<BuildManager>().Build(10, new Juice(0f, 0f, 0f, 0f, 0f, 0.02f), buildName);
         GameObject.Find("World").GetComponent<WorldGenerator>().CreateStemCell(buildTarget);
 
         GameObject p = (GameObject)Resources.Load("Prefabs/Connections/buildegg", typeof(GameObject));
@@ -170,6 +188,17 @@ public class StemCellSpec : MonoBehaviour {
 
     public void OwnFixedUpdate()
     {
+        // Stemcell shows the connections
+        for (int i = 0; i < 6; i++)
+        {
+            if(CellManager.connections[i] != null && CellManager.connections[i].cellType != CellType.Stemcell && CellManager.connections[i].cellType != CellType.Storagecell)
+            {
+                // Show connection
+                Animator a = animator[positionOfBuildTarget];
+                a.Play("AnimationPipe" + i, 0, 1.0f);
+            }
+        }
+
         if (BuildManager.buildFlag)
         {
             if (buildName == "Build Sprout" || buildName == "Make Connection")

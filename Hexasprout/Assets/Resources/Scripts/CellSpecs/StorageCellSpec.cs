@@ -109,6 +109,7 @@ public class StorageCellSpec : MonoBehaviour
 
             case GUI_Event.OpenMenu:
                 gm.AddSliderButton(GUI_Event.BtnStoreMenu);
+                gm.AddSliderButton(GUI_Event.BtnDegenerate);
                 break;
         }
     }
@@ -171,7 +172,7 @@ public class StorageCellSpec : MonoBehaviour
         buildName = "Build Cell";
 
         //first parameter is time in seconds, second the required juice, third the Name of the Buildevent
-        this.gameObject.GetComponent<BuildManager>().Build(10, new Juice(0f, 0f, 0f, 0f, 0f, 0.2f), buildName);
+        this.gameObject.GetComponent<BuildManager>().Build(10, new Juice(0f, 0f, 0f, 0f, 0f, 0.02f), buildName);
         GameObject.Find("World").GetComponent<WorldGenerator>().CreateStemCell(buildTarget);
 
         GameObject p = (GameObject)Resources.Load("Prefabs/Connections/buildegg", typeof(GameObject));

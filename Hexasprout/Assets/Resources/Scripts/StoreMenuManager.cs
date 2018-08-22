@@ -27,7 +27,7 @@ public class StoreMenuManager : MonoBehaviour {
             for (int j = 0; j < 6; j++)
             {
                 // This is for every text we have to change for this mineral
-                for (int i = 0; i < 4; i++)
+                for (int i = 0; i < 5; i++)
                 {
                     float value = 0.0f;
 
@@ -41,10 +41,13 @@ public class StoreMenuManager : MonoBehaviour {
                             value = s.target[j];
                             break;
                         case 2:
-                            value = s.content[j];
+                            value = targetCell.GetComponent<CellManager>().juice[j];
                             break;
                         case 3:
-                            value = s.target[j] - s.content[j];
+                            value = s.content[j] - s.target[j];
+                            break;
+                        case 4:
+                            value = s.content[j];
                             break;
                     }
 

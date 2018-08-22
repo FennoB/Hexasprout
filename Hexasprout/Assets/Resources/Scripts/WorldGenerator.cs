@@ -127,6 +127,9 @@ public class WorldGenerator : MonoBehaviour
         // Hard code dummy cell
         CreateStorageCell(fields[2][2].GetComponent<FieldManager>());
         CreateWorkerCell(fields[2][1].GetComponent<FieldManager>());
+        CreateLeafCell(fields[2][4].GetComponent<FieldManager>());
+        CreateLeafCell(fields[2][5].GetComponent<FieldManager>());
+
         //Hard code Material
         CreateMaterial(fields[2][3].GetComponent<FieldManager>(), "red");
         
@@ -147,6 +150,7 @@ public class WorldGenerator : MonoBehaviour
             // throw Exception
         }
     }
+
     public void Morph2Heart(CellManager oldCm)
     {
         GameObject g = Instantiate((GameObject)Resources.Load("Prefabs/Cells/HeartCell", typeof(GameObject)));
@@ -156,28 +160,36 @@ public class WorldGenerator : MonoBehaviour
 
         CopyCellmanager(oldCm, newCm);
 
+        oldCm.gameObject.tag = "Untagged";
         GameObject.Destroy(oldCm.gameObject);
         newCm.Field.Cell = g;
 
-        for (int i = 0; i < newCm.connections.Length; i++)
-        {
-            if (newCm.connections[i] != null)
-            {
-                if (i - 1 == -1)
-                {
-                    g.GetComponent<Transform>().Rotate(new Vector3(0, 0, -60));
-                }
-                else
-                {
-                    g.GetComponent<Transform>().Rotate(new Vector3(0, 0, (i - 1) * 60));
-                }
-                break;
-            }
-        }
+        // Orientation code is in here
+        g.GetComponent<HeartCellSpec>().UpdatePumpDirection();
+
         GameObject.FindGameObjectWithTag("GUI").GetComponent<GUIManager>().CloseCellMenu();
 
+        UpdateHeatmaps();
     }
 
+    public void Morph2(CellManager oldCm, string cellname)
+    {
+        GameObject g = Instantiate((GameObject)Resources.Load("Prefabs/Cells/" + cellname, typeof(GameObject)));
+        g.GetComponent<Transform>().SetParent(oldCm.transform.parent);
+        g.GetComponent<Transform>().localPosition = new Vector3(0, 0, -0.14f);
+        CellManager newCm = g.GetComponent<CellManager>();
+
+        CopyCellmanager(oldCm, newCm);
+
+        oldCm.gameObject.tag = "Untagged";
+        GameObject.Destroy(oldCm.gameObject);
+        newCm.Field.Cell = g;
+        
+        GameObject.FindGameObjectWithTag("GUI").GetComponent<GUIManager>().CloseCellMenu();
+
+        UpdateHeatmaps();
+    }
+    
     void CopyCellmanager(CellManager oldCm, CellManager newCm)
     {
         newCm.energy = oldCm.energy;
@@ -211,6 +223,22 @@ public class WorldGenerator : MonoBehaviour
         if (fm != null || fm.Cell == null)
         {
             GameObject p = (GameObject)Resources.Load("Prefabs/Cells/WorkerCell", typeof(GameObject));
+            GameObject g = Instantiate(p);
+            g.GetComponent<Transform>().SetParent(fm.gameObject.GetComponent<Transform>());
+            g.GetComponent<Transform>().localPosition = new Vector3(0, 0, -0.14f);
+            fm.Cell = g;
+        }
+        else
+        {
+            // throw Exception
+        }
+    }
+
+    public void CreateLeafCell(FieldManager fm)
+    {
+        if (fm != null || fm.Cell == null)
+        {
+            GameObject p = (GameObject)Resources.Load("Prefabs/Cells/LeafCell", typeof(GameObject));
             GameObject g = Instantiate(p);
             g.GetComponent<Transform>().SetParent(fm.gameObject.GetComponent<Transform>());
             g.GetComponent<Transform>().localPosition = new Vector3(0, 0, -0.14f);
@@ -300,6 +328,15 @@ public class WorldGenerator : MonoBehaviour
         return true;
     }
 
+    public void UpdateHeatmaps()
+    {
+        HeartCellSpec[] hl = GetComponentsInChildren<HeartCellSpec>();
+        for(int i = 0; i < hl.Length; i++)
+        {
+            hl[i].UpdatePumpDirection();
+            hl[i].UpdateHeartmap();
+        }
+    }
 
     // Fixed update is called at fixed timestep
     private void FixedUpdate()

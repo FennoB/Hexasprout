@@ -396,7 +396,11 @@ public class CellManager : MonoBehaviour
             case GUI_Event.BtnDestroy:
                 OpenDestroyMenu(gm);
                 break;
-            
+
+            case GUI_Event.BtnDegenerate:
+                GameObject.Find("World").GetComponent<WorldGenerator>().Morph2(this, "StemCell");
+                break;
+
             // Back to main
             case GUI_Event.BtnNavMain:
                 gm.ResetSliderButtons();
@@ -554,6 +558,12 @@ public class CellManager : MonoBehaviour
             //You know me
             cm.ConnectWith(this, (conID + 3) % 6);
             ConnectionCounter++;
+
+            // Heartmaps
+            if(conID > 2)
+            {
+                GameObject.FindGameObjectWithTag("World").GetComponent<WorldGenerator>().UpdateHeatmaps();
+            }
         }
     }
 
@@ -576,6 +586,12 @@ public class CellManager : MonoBehaviour
             // You know me
             cm.DecomposeWith(this, (conID + 3) % 6);
             ConnectionCounter--;
+
+            // Heartmaps
+            if (conID > 2)
+            {
+                GameObject.FindGameObjectWithTag("World").GetComponent<WorldGenerator>().UpdateHeatmaps();
+            }
         }
     }
 
