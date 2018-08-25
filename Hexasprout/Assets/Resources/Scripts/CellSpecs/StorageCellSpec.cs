@@ -164,7 +164,7 @@ public class StorageCellSpec : MonoBehaviour
     void OrderNewConnection()
     {
         buildName = "Make Connection";
-        this.gameObject.GetComponent<BuildManager>().Build(10, new Juice(0f, 0f, 0f, 0f, 0f, 0.02f), buildName);
+        this.gameObject.GetComponent<BuildManager>().Build(100, new Juice(0f, 0f, 0f, 0f, 0f, 0.02f), buildName);
         CellManager.loadBarPicture = GUI_Event.BtnDegenerate;
     }
     void MakeCell()

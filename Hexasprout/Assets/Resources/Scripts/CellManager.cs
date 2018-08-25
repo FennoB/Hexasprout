@@ -74,8 +74,9 @@ public class Juice
         blue = 0;
         blueCharged = 0;
         yellow = 0;
-        black = 0;
+        black = 0f;
     }
+    
 
     public Juice(float red, float green, float blue, float blueCharged, float yellow, float black)
     {
@@ -301,6 +302,9 @@ public class CellManager : MonoBehaviour
         }
 
         BuildManager = this.gameObject.GetComponent<BuildManager>();
+
+        //has to be removed in Future
+        juice.black = 1f;
     }
 
     private void Start()

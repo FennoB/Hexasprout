@@ -142,14 +142,14 @@ public class StemCellSpec : MonoBehaviour {
     {
         // Sprout
         buildName = "Build Sprout";
-        this.gameObject.GetComponent<BuildManager>().Build(10, new Juice(0f, 0f, 0f, 0f, 0f, 0.02f), buildName);
+        this.gameObject.GetComponent<BuildManager>().Build(seconds: 2f, juice: new Juice(0f, 0f, 0f, 0f, 0f, 0.25f), name: buildName);
         CellManager.loadBarPicture = GUI_Event.BtnDegenerate;
     }
 
     void OrderNewConnection()
     {
         buildName = "Make Connection";
-        this.gameObject.GetComponent<BuildManager>().Build(10, new Juice(0f, 0f, 0f, 0f, 0f, 0.02f), buildName);
+        this.gameObject.GetComponent<BuildManager>().Build(2f, new Juice(0f, 0f, 0f, 0f, 0f, 0.2f), buildName);
         CellManager.loadBarPicture = GUI_Event.BtnDegenerate;
     }
 
@@ -158,7 +158,7 @@ public class StemCellSpec : MonoBehaviour {
         buildName = "Build Cell";
 
         //first parameter is time in seconds, second the required juice, third the Name of the Buildevent
-        this.gameObject.GetComponent<BuildManager>().Build(10, new Juice(0f, 0f, 0f, 0f, 0f, 0.02f), buildName);
+        this.gameObject.GetComponent<BuildManager>().Build(2, new Juice(0f, 0f, 0f, 0f, 0f, 0.2f), buildName);
         GameObject.Find("World").GetComponent<WorldGenerator>().CreateStemCell(buildTarget);
 
         GameObject p = (GameObject)Resources.Load("Prefabs/Connections/buildegg", typeof(GameObject));

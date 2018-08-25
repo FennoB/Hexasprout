@@ -125,7 +125,8 @@ public class WorldGenerator : MonoBehaviour
         }
 
         // Hard code dummy cell
-        CreateStorageCell(fields[2][2].GetComponent<FieldManager>());
+        CreateStemCell(fields[2][2].GetComponent<FieldManager>());
+        //fields[2][2].GetComponent<FieldManager>().Cell.GetComponent<CellManager>().juice.black = 1;
         CreateWorkerCell(fields[2][1].GetComponent<FieldManager>());
         CreateLeafCell(fields[2][4].GetComponent<FieldManager>());
         CreateLeafCell(fields[2][5].GetComponent<FieldManager>());

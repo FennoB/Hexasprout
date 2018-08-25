@@ -9,9 +9,12 @@ public class BuildManager : MonoBehaviour {
     public float progress = 0;
     public CellManager cm;
 
-    string buildName;
-    int seconds;
+    public string buildName;
+    public float seconds;
     Juice goalJuice;
+
+    //just for testing
+    //public float duration = 0;
 
     // Use this for initialization
     void Awake ()
@@ -25,12 +28,13 @@ public class BuildManager : MonoBehaviour {
      *then the event is triggered, that the 
      * BuildJob is completed
      */
-	public void Build(int seconds, Juice juice, string name)
+	public void Build(float seconds, Juice juice, string name)
     {
         //says that this Manager is already used
         buildFlag = true;
 
         //general necessary information
+       
         buildName = name;
         this.seconds = seconds;
         goalJuice = juice;
@@ -41,43 +45,51 @@ public class BuildManager : MonoBehaviour {
         {
             if (cellBuildCache.black < goalJuice.black)
             {
-                cm.juice.black = cm.juice.black - (cm.juice.black / seconds) * Time.deltaTime;
-                cellBuildCache.black = cellBuildCache.black + (cm.juice.black / seconds) * Time.deltaTime;
+                //through seconds is the maximum rate juice get transferred limited
+                cm.juice.black = cm.juice.black - (goalJuice.black / seconds) * Time.deltaTime;
+                cellBuildCache.black = cellBuildCache.black + (goalJuice.black  / seconds) * Time.deltaTime;
             }
             if (cellBuildCache.green < goalJuice.green)
             {
-                cm.juice.green = cm.juice.green - (cm.juice.green / seconds) * Time.deltaTime;
-                cellBuildCache.green = cellBuildCache.green + (cm.juice.green / seconds) * Time.deltaTime;
+                cm.juice.green = cm.juice.green - (goalJuice.green / seconds) * Time.deltaTime;
+                cellBuildCache.green = cellBuildCache.green + (goalJuice.green / seconds) * Time.deltaTime;
             }
             if (cellBuildCache.blue < goalJuice.blue)
             {
-                cm.juice.blue = cm.juice.blue - (cm.juice.blue / seconds) * Time.deltaTime;
-                cellBuildCache.blue = cellBuildCache.blue + (cm.juice.blue / seconds) * Time.deltaTime;
+                cm.juice.blue = cm.juice.blue - (goalJuice.blue / seconds) * Time.deltaTime;
+                cellBuildCache.blue = cellBuildCache.blue + (goalJuice.blue / seconds) * Time.deltaTime;
             }
             if (cellBuildCache.blueCharged < goalJuice.blueCharged)
             {
-                cm.juice.blueCharged = cm.juice.blueCharged - (cm.juice.blueCharged / seconds) * Time.deltaTime;
-                cellBuildCache.blueCharged = cellBuildCache.blueCharged + (cm.juice.blueCharged / seconds) * Time.deltaTime;
+                cm.juice.blueCharged = cm.juice.blueCharged - (goalJuice.blueCharged / seconds) * Time.deltaTime;
+                cellBuildCache.blueCharged = cellBuildCache.blueCharged + (goalJuice.blueCharged / seconds) * Time.deltaTime;
             }
             if (cellBuildCache.red < goalJuice.red)
             {
-                cm.juice.red = cm.juice.red - (cm.juice.red / seconds) * Time.deltaTime;
-                cellBuildCache.red = cellBuildCache.red + (cm.juice.red / seconds) * Time.deltaTime;
+                cm.juice.red = cm.juice.red - (goalJuice.red / seconds) * Time.deltaTime;
+                cellBuildCache.red = cellBuildCache.red + (goalJuice.red / seconds) * Time.deltaTime;
             }
             if (cellBuildCache.yellow < goalJuice.yellow)
             {
-                cm.juice.yellow = cm.juice.yellow - (cm.juice.yellow / seconds) * Time.deltaTime;
-                cellBuildCache.yellow = cellBuildCache.yellow + (cm.juice.yellow / seconds) * Time.deltaTime;
+                cm.juice.yellow = cm.juice.yellow - (goalJuice.yellow / seconds) * Time.deltaTime;
+                cellBuildCache.yellow = cellBuildCache.yellow + (goalJuice.yellow / seconds) * Time.deltaTime;
             }
             progress = cellBuildCache.Sum / juice.Sum;
+            //just for testing
+            //duration += Time.deltaTime;
         }
         else
         {
+            //just for testing
+            //Debug.Log(duration);
+            //duration = 0f;
+
             //goal is reached, cell is allowed to build
             cellBuildCache = new Juice();
             progress = 0f;
             buildFlag = false;
             name = null;
+            //send Event to build to that cell, which wanted to build
             cm.EventHandler(GUI_Event.BuildReady, null);
         }
     }
