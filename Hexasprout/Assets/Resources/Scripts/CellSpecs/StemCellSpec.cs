@@ -142,7 +142,7 @@ public class StemCellSpec : MonoBehaviour {
     {
         // Sprout
         buildName = "Build Sprout";
-        this.gameObject.GetComponent<BuildManager>().Build(seconds: 2f, juice: new Juice(0f, 0f, 0f, 0f, 0f, 0.25f), name: buildName);
+        this.gameObject.GetComponent<BuildManager>().Build(seconds: 1f, juice: new Juice(0f, 0f, 0f, 0f, 0f, 0.25f), name: buildName);
         CellManager.loadBarPicture = GUI_Event.BtnDegenerate;
     }
 

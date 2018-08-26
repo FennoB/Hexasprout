@@ -12,6 +12,8 @@ public class Juice
     public float yellow;
     public float black;
 
+    public int Length = 6;
+
     //[]-operator
     public float this[int key]
     {
@@ -66,6 +68,7 @@ public class Juice
             }
         }
     }
+    
 
     public Juice()
     {
@@ -303,7 +306,7 @@ public class CellManager : MonoBehaviour
 
         BuildManager = this.gameObject.GetComponent<BuildManager>();
 
-        //has to be removed in Future
+        //has to be removed in Future, just for building things fast
         juice.black = 1f;
     }
 
@@ -493,10 +496,16 @@ public class CellManager : MonoBehaviour
         gm.AddSliderButton(GUI_Event.BtnNavMain);
     }
 
-    // Destroy Dialog
+    // Destroy Dialog, at the moment just the destruction of the cell
     void OpenDestroyMenu(GUIManager gm)
     {
-        // Nothing yet
+        for (int i = 0; i < connections.Length; i++)
+        {
+            connections[i].GetComponent<CellManager>().connections[(i + 3) % 6] = null;
+        }
+        Destroy(gameObject);
+        gm.CloseCellMenu(); 
+
     }
 
     // Absorb energy from blood
