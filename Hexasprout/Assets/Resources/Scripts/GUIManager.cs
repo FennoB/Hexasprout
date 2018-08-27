@@ -5,7 +5,8 @@ using System;
 
 public enum GUI_Event
 {
-    BuildReady = -5,
+    DestroyCell = -6,
+    BuildReady,
     Grow,
     Decompose,
     CloseMenu,
@@ -338,8 +339,16 @@ public class GUIManager : MonoBehaviour
                 ResetSliderButtons();
                 ResetSelectedCells();
             }
-
-            CellMenuTarget.Cell.GetComponent<CellManager>().EventHandler(e, this);
+            if (e == GUI_Event.BtnDestroy)
+            {
+                transform.GetChild(5).gameObject.SetActive(true);
+                ResetSliderButtons();
+                ResetSelectedCells();
+            }
+            if (CellMenuTarget != null)
+            {
+                CellMenuTarget.Cell.GetComponent<CellManager>().EventHandler(e, this);
+            }
         }
     }
 
@@ -362,8 +371,10 @@ public class GUIManager : MonoBehaviour
     public void CloseCellMenu()
     {
         // Close Menus
+
         transform.GetChild(3).gameObject.SetActive(false);
         transform.GetChild(4).gameObject.SetActive(false);
+        transform.GetChild(5).gameObject.SetActive(false);
 
         if (CellMenuOpen)
         {

@@ -400,9 +400,9 @@ public class CellManager : MonoBehaviour
                 OpenSpecializeMenu(gm);
                 break;
 
-            case GUI_Event.BtnDestroy:
+            /*case GUI_Event.BtnDestroy:
                 OpenDestroyMenu(gm);
-                break;
+                break;*/
 
             case GUI_Event.BtnDegenerate:
                 GameObject.Find("World").GetComponent<WorldGenerator>().Morph2(this, "StemCell");
@@ -436,6 +436,10 @@ public class CellManager : MonoBehaviour
                 {
                     FindObjectOfType<GUIManager>().CloseCellMenu();
                 }
+                break;
+            case GUI_Event.DestroyCell:
+
+                DestroyCell(gm);
                 break;
         }
 
@@ -496,16 +500,20 @@ public class CellManager : MonoBehaviour
         gm.AddSliderButton(GUI_Event.BtnNavMain);
     }
 
-    // Destroy Dialog, at the moment just the destruction of the cell
-    void OpenDestroyMenu(GUIManager gm)
+    //the destruction of the cell
+    void DestroyCell(GUIManager gm)
     {
         for (int i = 0; i < connections.Length; i++)
         {
-            connections[i].GetComponent<CellManager>().connections[(i + 3) % 6] = null;
+            if (connections[i] != null)
+            {
+                connections[i].GetComponent<CellManager>().connections[(i + 3) % 6] = null;
+            }
         }
+        gm.CellMenuTarget = null;
+        gameObject.tag = "Untagged";
         Destroy(gameObject);
-        gm.CloseCellMenu(); 
-
+        gm.CloseCellMenu();
     }
 
     // Absorb energy from blood

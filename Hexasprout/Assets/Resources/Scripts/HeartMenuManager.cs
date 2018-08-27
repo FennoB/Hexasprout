@@ -14,7 +14,7 @@ public class HeartMenuManager : MonoBehaviour {
 	void Update ()
     {
         GUIManager gm = GetComponentInParent<GUIManager>();
-        if(gm.CellMenuTarget.Cell.GetComponent<CellManager>().cellType == CellType.Heartcell)
+        if(gm.CellMenuTarget != null && gm.CellMenuTarget.Cell.GetComponent<CellManager>().cellType == CellType.Heartcell)
         {
             HeartCellSpec hsp = gm.CellMenuTarget.Cell.GetComponent<HeartCellSpec>();
             

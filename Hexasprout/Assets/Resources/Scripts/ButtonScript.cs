@@ -12,16 +12,4 @@ public class ButtonScript : MonoBehaviour
     {
         gui.GetComponent<GUIManager>().EventHandler(ButtonID);
     }
-    
-    // Use this for initialization
-	void Start ()
-    {
-		
-	}
-	
-	// Update is called once per frame
-	void Update ()
-    {
-		
-	}
 }

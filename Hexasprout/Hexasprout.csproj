@@ -311,6 +311,7 @@
     <Compile Include="Assets\Resources\Scripts\CellSpecs\WorkerCellSpec.cs" />
     <Compile Include="Assets\Resources\Scripts\FieldManager.cs" />
     <Compile Include="Assets\Resources\Scripts\GUIManager.cs" />
+    <Compile Include="Assets\Resources\Scripts\HeartMenuManager.cs" />
     <Compile Include="Assets\Resources\Scripts\LoadBarManager.cs" />
     <Compile Include="Assets\Resources\Scripts\materialScripts\MaterialManager.cs" />
     <Compile Include="Assets\Resources\Scripts\StoreMenuManager.cs" />
