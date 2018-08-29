@@ -5,31 +5,61 @@ using System;
 
 public enum GUI_Event
 {
-    DestroyCell = -6,
+    // the actual events which get triggered, when a user wants to improve the stat of a cell
+    EnergyCap = -15,
+    EnergyUse,
+    LeafSpeed,
+    WorkerCount,
+    WorkerSpeedRed,
+    WorkerSpeedGreen,
+    WorkerSpeedYellow,
+    WorkerSpeedBlack,
+    WorkerSpeedBlue,
+
+    // Cell gets destroyed
+    DestroyCell,
+    // A Build, initiated by a cell is ready
     BuildReady,
+    // Grow to a superselected cell
     Grow,
+    // decompose connection to a superselected cell 
     Decompose,
+    // close menu of the selected cell
     CloseMenu,
+    // open the menu for the selected cell
     OpenMenu,
+    // Button that player want to destroy one cell got pressed
     BtnDestroy,
+    // player want to see possible Transformations, for exemple if the cell has more than 
     BtnTransmorph,
+    // the player wants to improve stats of the cell
     BtnSpecialize,
+    // degenerate back to stemcell
     BtnDegenerate,
+    //reduces the energy a cell uses 
     BtnEnergyuse,
+    // increases the amount of energy a cell can hold
     BtnEnergycap,
+    // different possibilitys to specialize to
     BtnMorph2Leaf,
     BtnMorph2Storage,
     BtnMorph2Heart,
     BtnMorph2Worker,
+    // go back in the menu
     BtnNavMain,
+    // the Menu for handling the storagecell functionality
     BtnStoreMenu,
+    // increasing speed the leaf converts energy
     BtnLeafSpeed,
+    // the number of possible working connections
     BtnWorkerCount,
+    // the speed a workercell can mine special material 
     BtnWorkerSpeedRed,
     BtnWorkerSpeedBlue,
     BtnWorkerSpeedGreen,
     BtnWorkerSpeedBlack,
     BtnWorkerSpeedYellow,
+    // the menu for the heartcell functionality
     BtnHeartMenu,
     length
 }
@@ -345,6 +375,18 @@ public class GUIManager : MonoBehaviour
                 ResetSliderButtons();
                 ResetSelectedCells();
             }
+            //Here are the Improvement Events handled, it seems to me that this position is a good place for this, because
+            //its pretty centralized, 
+            if (e == GUI_Event.BtnEnergycap)
+            {
+                GameObject ImprovePanel = transform.GetChild(6).gameObject;
+                ImprovePanel.SetActive(true);
+               
+                ImprovePanel.transform.GetChild(0).gameObject.GetComponent<UnityEngine.UI.Text>().text = CellMenuTarget.Cell.GetComponent<CellManager>().energyMax.ToString();
+                ImprovePanel.transform.GetChild(1).gameObject.GetComponent<UnityEngine.UI.Text>().text = (CellMenuTarget.Cell.GetComponent<CellManager>().energyMax * 1.1f).ToString();
+                ImprovePanel.transform.GetChild(2).gameObject.GetComponent<UnityEngine.UI.Text>().text = "Increase Capacity";
+            }
+            // this is necessary for the case, that the user destroys a cell, because then theres no reference anymore
             if (CellMenuTarget != null)
             {
                 CellMenuTarget.Cell.GetComponent<CellManager>().EventHandler(e, this);
@@ -375,6 +417,7 @@ public class GUIManager : MonoBehaviour
         transform.GetChild(3).gameObject.SetActive(false);
         transform.GetChild(4).gameObject.SetActive(false);
         transform.GetChild(5).gameObject.SetActive(false);
+        transform.GetChild(6).gameObject.SetActive(false);
 
         if (CellMenuOpen)
         {

@@ -416,11 +416,11 @@ public class CellManager : MonoBehaviour
 
             // Specialize
             case GUI_Event.BtnEnergycap:
-                gm.CloseCellMenu();
+                /*gm.CloseCellMenu();
                 loadBarPicture = GUI_Event.BtnEnergycap;
                 gm.OpenLoadBar(GUI_Event.BtnEnergycap);
                 energyMax += 0.5f;
-                BuildManager.Build(20, new Juice(0, 0, 0.2f, 0, 0, 0.5f), "Energy Cap");
+                BuildManager.Build(20, new Juice(0, 0, 0.2f, 0, 0, 0.5f), "Energy Cap");*/
                 break;
 
             case GUI_Event.BtnEnergyuse:
