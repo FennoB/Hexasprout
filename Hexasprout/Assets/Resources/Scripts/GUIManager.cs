@@ -377,41 +377,52 @@ public class GUIManager : MonoBehaviour
             }
             //Here are the Improvement Events handled, it seems to me that this position is a good place for this, because
             //its pretty centralized, and you can modify all the Guis at once without changing this code
+            //and the juice which you can see here is completely separated from the juice which is really used to build the improvement
+            // also you just can use two types of juice in the menu
             if (e == GUI_Event.BtnEnergycap)
             {
-                OpenCustomizedImprovePanel(CellMenuTarget.Cell.GetComponent<CellManager>().energyMax, 0.5f, "Increase EnergyMax", GUI_Event.EnergyCap);
+                OpenCustomizedImprovePanel(CellMenuTarget.Cell.GetComponent<CellManager>().energyMax, 0.5f, "Increase EnergyMax", 
+                                           GUI_Event.EnergyCap, new Juice(0,0,0.2f,0,0,0.5f));
             }
             if (e == GUI_Event.BtnEnergyuse)
             {
-                OpenCustomizedImprovePanel(CellMenuTarget.Cell.GetComponent<CellManager>().energyUse, -0.1f, "Reduce Energyuse", GUI_Event.EnergyUse);
+                OpenCustomizedImprovePanel(CellMenuTarget.Cell.GetComponent<CellManager>().energyUse, -0.1f, "Reduce Energyuse", 
+                                           GUI_Event.EnergyUse, new Juice(0, 0, 0.2f, 0, 0, 0.5f));
             }
             if (e == GUI_Event.BtnLeafSpeed)
             {
-                OpenCustomizedImprovePanel(CellMenuTarget.Cell.GetComponent<LeafCellSpec>().conversionMax, 0.5f, "Increase Conversion Rate", GUI_Event.LeafSpeed);
+                OpenCustomizedImprovePanel(CellMenuTarget.Cell.GetComponent<LeafCellSpec>().conversionMax, 0.5f, "Increase Conversion Rate", 
+                                           GUI_Event.LeafSpeed, new Juice(0, 0, 0.2f, 0, 0, 0.5f));
             }
             if (e == GUI_Event.BtnWorkerCount)
             {
-                OpenCustomizedImprovePanel(CellMenuTarget.Cell.GetComponent<WorkerCellSpec>().MaxWorkerConnections, 5f, "Unlock WorkerConnections", GUI_Event.WorkerCount);
+                OpenCustomizedImprovePanel(CellMenuTarget.Cell.GetComponent<WorkerCellSpec>().MaxWorkerConnections, 5f, "Unlock WorkerConnections",
+                                           GUI_Event.WorkerCount, new Juice(0, 0, 0.2f, 0, 0, 0.5f));
             }
             if (e == GUI_Event.BtnWorkerSpeedBlack)
             {
-                OpenCustomizedImprovePanel(CellMenuTarget.Cell.GetComponent<WorkerCellSpec>().MiningFactorBlack, 0.1f, "Mine Black faster", GUI_Event.WorkerSpeedBlack);
+                OpenCustomizedImprovePanel(CellMenuTarget.Cell.GetComponent<WorkerCellSpec>().MiningFactorBlack, 0.1f, "Mine Black faster",
+                                           GUI_Event.WorkerSpeedBlack, new Juice(0, 0, 0.2f, 0, 0, 0.5f));
             }
             if (e == GUI_Event.BtnWorkerSpeedBlue)
             {
-                OpenCustomizedImprovePanel(CellMenuTarget.Cell.GetComponent<WorkerCellSpec>().MiningFactorBlue, 0.1f, "Mine Blue faster", GUI_Event.WorkerSpeedBlue);
+                OpenCustomizedImprovePanel(CellMenuTarget.Cell.GetComponent<WorkerCellSpec>().MiningFactorBlue, 0.1f, "Mine Blue faster",
+                                           GUI_Event.WorkerSpeedBlue, new Juice(0, 0, 0.2f, 0, 0, 0.5f));
             }
             if (e == GUI_Event.BtnWorkerSpeedYellow)
             {
-                OpenCustomizedImprovePanel(CellMenuTarget.Cell.GetComponent<WorkerCellSpec>().MiningFactorYellow, 0.1f, "Mine Yellow faster", GUI_Event.WorkerSpeedYellow);
+                OpenCustomizedImprovePanel(CellMenuTarget.Cell.GetComponent<WorkerCellSpec>().MiningFactorYellow, 0.1f, "Mine Yellow faster",
+                                           GUI_Event.WorkerSpeedYellow, new Juice(0, 0, 0.2f, 0, 0, 0.5f));
             }
             if (e == GUI_Event.BtnWorkerSpeedRed)
             {
-                OpenCustomizedImprovePanel(CellMenuTarget.Cell.GetComponent<WorkerCellSpec>().MiningFactorRed, 0.1f, "Mine Red faster", GUI_Event.WorkerSpeedRed);
+                OpenCustomizedImprovePanel(CellMenuTarget.Cell.GetComponent<WorkerCellSpec>().MiningFactorRed, 0.1f,"Mine Red faster",
+                                           GUI_Event.WorkerSpeedRed, new Juice(0, 0, 0.2f, 0, 0, 0.5f));
             }
             if (e == GUI_Event.BtnWorkerSpeedGreen)
             {
-                OpenCustomizedImprovePanel(CellMenuTarget.Cell.GetComponent<WorkerCellSpec>().MiningFactorGreen, 0.1f, "Mine Green faster", GUI_Event.WorkerSpeedGreen);
+                OpenCustomizedImprovePanel(CellMenuTarget.Cell.GetComponent<WorkerCellSpec>().MiningFactorGreen, 0.1f, "Mine Green faster",
+                                           GUI_Event.WorkerSpeedGreen, new Juice(0, 0, 0.2f, 0, 0, 0.5f));
             }
             // this is necessary for the case, that the user destroys a cell, because then theres no reference anymore
             if (CellMenuTarget != null)
@@ -421,7 +432,7 @@ public class GUIManager : MonoBehaviour
         }
     }
 
-    void OpenCustomizedImprovePanel(float value, float dif, string title, GUI_Event e)
+    void OpenCustomizedImprovePanel(float value, float dif, string title, GUI_Event e, Juice juice)
     {
         GameObject ImprovePanel = transform.GetChild(6).gameObject;
         ImprovePanel.SetActive(true);
@@ -431,6 +442,39 @@ public class GUIManager : MonoBehaviour
         ImprovePanel.transform.GetChild(2).gameObject.GetComponent<UnityEngine.UI.Text>().text = title;
         ImprovePanel.transform.GetChild(3).gameObject.GetComponent<ButtonScript>().ButtonID = e;
 
+
+        bool firstSlotUsed = false;
+        bool secondSlotUsed = false;
+
+        for (int i = 0; i < juice.Length; i++)
+        {
+            if (juice[i] != 0)
+            {
+                if (!firstSlotUsed)
+                {
+                    firstSlotUsed = true;
+                    ImprovePanel.transform.GetChild(4).GetComponent<UnityEngine.UI.Image>().sprite = ImprovePanel.transform.GetChild(4).GetComponent<ImageSelector>().Sprites[i];
+                    ImprovePanel.transform.GetChild(5).GetComponent<UnityEngine.UI.Text>().text = juice[i].ToString();
+
+                }
+                else
+                {
+                    secondSlotUsed = true;
+                    ImprovePanel.transform.GetChild(6).GetComponent<UnityEngine.UI.Image>().sprite = ImprovePanel.transform.GetChild(6).GetComponent<ImageSelector>().Sprites[i];
+                    ImprovePanel.transform.GetChild(7).GetComponent<UnityEngine.UI.Text>().text = juice[i].ToString();
+                }
+            }
+        }
+        if (!firstSlotUsed)
+        {
+            ImprovePanel.transform.GetChild(4).gameObject.SetActive(false);
+            ImprovePanel.transform.GetChild(5).gameObject.SetActive(false);
+        }
+        if (!secondSlotUsed)
+        {
+            ImprovePanel.transform.GetChild(6).gameObject.SetActive(false);
+            ImprovePanel.transform.GetChild(7).gameObject.SetActive(false);
+        }
         ResetSliderButtons();
         ResetSelectedCells();
     }
