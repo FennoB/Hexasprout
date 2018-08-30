@@ -52,54 +52,57 @@ public class WorkerCellSpec : MonoBehaviour {
             case GUI_Event.BtnSpecialize:
                 SpecializeMenu(gm);
                 break;
-            case GUI_Event.BtnWorkerCount:
-                gm.CloseCellMenu();
-                CellManager.loadBarPicture = GUI_Event.BtnWorkerCount;
-                gm.OpenLoadBar(GUI_Event.BtnWorkerCount);
-                MaxWorkerConnections = 6;
-                CellManager.BuildManager.Build(20, new Juice(0, 0, 0.2f, 0, 0, 0.5f), "Worker Count");
+            case GUI_Event.WorkerCount:
+                UnlockWorkerConnections(gm);
                 break;
-
-            case GUI_Event.BtnWorkerSpeedBlack:
+            case GUI_Event.WorkerSpeedBlack:
                 gm.CloseCellMenu();
                 CellManager.loadBarPicture = GUI_Event.BtnWorkerSpeedBlack;
                 gm.OpenLoadBar(GUI_Event.BtnWorkerSpeedBlack);
-                MiningFactorBlack *= 1.2f;
+                MiningFactorBlack += 0.1f;
                 CellManager.BuildManager.Build(20, new Juice(0, 0, 0.2f, 0, 0, 0.5f), "Worker Speed Black");
                 break;
 
-            case GUI_Event.BtnWorkerSpeedBlue:
+            case GUI_Event.WorkerSpeedBlue:
                 gm.CloseCellMenu();
                 CellManager.loadBarPicture = GUI_Event.BtnWorkerSpeedBlue;
                 gm.OpenLoadBar(GUI_Event.BtnWorkerSpeedBlue);
-                MiningFactorBlue *= 1.2f;
+                MiningFactorBlue += 0.1f;
                 CellManager.BuildManager.Build(20, new Juice(0, 0, 0.2f, 0, 0, 0.5f), "Worker Speed Blue");
                 break;
 
-            case GUI_Event.BtnWorkerSpeedGreen:
+            case GUI_Event.WorkerSpeedGreen:
                 gm.CloseCellMenu();
                 CellManager.loadBarPicture = GUI_Event.BtnWorkerSpeedGreen;
                 gm.OpenLoadBar(GUI_Event.BtnWorkerSpeedGreen);
-                MiningFactorGreen *= 1.2f;
+                MiningFactorGreen += 0.1f;
                 CellManager.BuildManager.Build(20, new Juice(0, 0, 0.2f, 0, 0, 0.5f), "Worker Speed Green");
                 break;
 
-            case GUI_Event.BtnWorkerSpeedRed:
+            case GUI_Event.WorkerSpeedRed:
                 gm.CloseCellMenu();
                 CellManager.loadBarPicture = GUI_Event.BtnWorkerSpeedRed;
                 gm.OpenLoadBar(GUI_Event.BtnWorkerSpeedRed);
-                MiningFactorRed *= 1.2f;
+                MiningFactorRed += 0.1f;
                 CellManager.BuildManager.Build(20, new Juice(0, 0, 0.2f, 0, 0, 0.5f), "Worker Speed Red");
                 break;
 
-            case GUI_Event.BtnWorkerSpeedYellow:
+            case GUI_Event.WorkerSpeedYellow:
                 gm.CloseCellMenu();
                 CellManager.loadBarPicture = GUI_Event.BtnWorkerSpeedYellow;
                 gm.OpenLoadBar(GUI_Event.BtnWorkerSpeedYellow);
-                MiningFactorYellow *= 1.2f;
+                MiningFactorYellow += 0.1f;
                 CellManager.BuildManager.Build(20, new Juice(0, 0, 0.2f, 0, 0, 0.5f), "Worker Speed Yellow");
                 break;
         }
+    }
+    void UnlockWorkerConnections(GUIManager gm)
+    {
+        gm.CloseCellMenu();
+        CellManager.loadBarPicture = GUI_Event.BtnWorkerCount;
+        gm.OpenLoadBar(GUI_Event.BtnWorkerCount);
+        MaxWorkerConnections = 5;
+        CellManager.BuildManager.Build(20, new Juice(0, 0, 0.2f, 0, 0, 0.5f), "Worker Count");
     }
 
     public void SpecializeMenu(GUIManager gm)

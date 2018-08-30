@@ -376,15 +376,42 @@ public class GUIManager : MonoBehaviour
                 ResetSelectedCells();
             }
             //Here are the Improvement Events handled, it seems to me that this position is a good place for this, because
-            //its pretty centralized, 
+            //its pretty centralized, and you can modify all the Guis at once without changing this code
             if (e == GUI_Event.BtnEnergycap)
             {
-                GameObject ImprovePanel = transform.GetChild(6).gameObject;
-                ImprovePanel.SetActive(true);
-               
-                ImprovePanel.transform.GetChild(0).gameObject.GetComponent<UnityEngine.UI.Text>().text = CellMenuTarget.Cell.GetComponent<CellManager>().energyMax.ToString();
-                ImprovePanel.transform.GetChild(1).gameObject.GetComponent<UnityEngine.UI.Text>().text = (CellMenuTarget.Cell.GetComponent<CellManager>().energyMax * 1.1f).ToString();
-                ImprovePanel.transform.GetChild(2).gameObject.GetComponent<UnityEngine.UI.Text>().text = "Increase Capacity";
+                OpenCustomizedImprovePanel(CellMenuTarget.Cell.GetComponent<CellManager>().energyMax, 0.5f, "Increase EnergyMax", GUI_Event.EnergyCap);
+            }
+            if (e == GUI_Event.BtnEnergyuse)
+            {
+                OpenCustomizedImprovePanel(CellMenuTarget.Cell.GetComponent<CellManager>().energyUse, -0.1f, "Reduce Energyuse", GUI_Event.EnergyUse);
+            }
+            if (e == GUI_Event.BtnLeafSpeed)
+            {
+                OpenCustomizedImprovePanel(CellMenuTarget.Cell.GetComponent<LeafCellSpec>().conversionMax, 0.5f, "Increase Conversion Rate", GUI_Event.LeafSpeed);
+            }
+            if (e == GUI_Event.BtnWorkerCount)
+            {
+                OpenCustomizedImprovePanel(CellMenuTarget.Cell.GetComponent<WorkerCellSpec>().MaxWorkerConnections, 5f, "Unlock WorkerConnections", GUI_Event.WorkerCount);
+            }
+            if (e == GUI_Event.BtnWorkerSpeedBlack)
+            {
+                OpenCustomizedImprovePanel(CellMenuTarget.Cell.GetComponent<WorkerCellSpec>().MiningFactorBlack, 0.1f, "Mine Black faster", GUI_Event.WorkerSpeedBlack);
+            }
+            if (e == GUI_Event.BtnWorkerSpeedBlue)
+            {
+                OpenCustomizedImprovePanel(CellMenuTarget.Cell.GetComponent<WorkerCellSpec>().MiningFactorBlue, 0.1f, "Mine Blue faster", GUI_Event.WorkerSpeedBlue);
+            }
+            if (e == GUI_Event.BtnWorkerSpeedYellow)
+            {
+                OpenCustomizedImprovePanel(CellMenuTarget.Cell.GetComponent<WorkerCellSpec>().MiningFactorYellow, 0.1f, "Mine Yellow faster", GUI_Event.WorkerSpeedYellow);
+            }
+            if (e == GUI_Event.BtnWorkerSpeedRed)
+            {
+                OpenCustomizedImprovePanel(CellMenuTarget.Cell.GetComponent<WorkerCellSpec>().MiningFactorRed, 0.1f, "Mine Red faster", GUI_Event.WorkerSpeedRed);
+            }
+            if (e == GUI_Event.BtnWorkerSpeedGreen)
+            {
+                OpenCustomizedImprovePanel(CellMenuTarget.Cell.GetComponent<WorkerCellSpec>().MiningFactorGreen, 0.1f, "Mine Green faster", GUI_Event.WorkerSpeedGreen);
             }
             // this is necessary for the case, that the user destroys a cell, because then theres no reference anymore
             if (CellMenuTarget != null)
@@ -392,6 +419,20 @@ public class GUIManager : MonoBehaviour
                 CellMenuTarget.Cell.GetComponent<CellManager>().EventHandler(e, this);
             }
         }
+    }
+
+    void OpenCustomizedImprovePanel(float value, float dif, string title, GUI_Event e)
+    {
+        GameObject ImprovePanel = transform.GetChild(6).gameObject;
+        ImprovePanel.SetActive(true);
+
+        ImprovePanel.transform.GetChild(0).gameObject.GetComponent<UnityEngine.UI.Text>().text = value.ToString();
+        ImprovePanel.transform.GetChild(1).gameObject.GetComponent<UnityEngine.UI.Text>().text = (value + dif).ToString();
+        ImprovePanel.transform.GetChild(2).gameObject.GetComponent<UnityEngine.UI.Text>().text = title;
+        ImprovePanel.transform.GetChild(3).gameObject.GetComponent<ButtonScript>().ButtonID = e;
+
+        ResetSliderButtons();
+        ResetSelectedCells();
     }
 
     // Called to open cell menus
@@ -413,7 +454,8 @@ public class GUIManager : MonoBehaviour
     public void CloseCellMenu()
     {
         // Close Menus
-
+        ResetSliderButtons();
+        ResetSelectedCells();
         transform.GetChild(3).gameObject.SetActive(false);
         transform.GetChild(4).gameObject.SetActive(false);
         transform.GetChild(5).gameObject.SetActive(false);

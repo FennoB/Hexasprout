@@ -248,6 +248,66 @@ Prefab:
       propertyPath: gui
       value: 
       objectReference: {fileID: 1418954148}
+    - target: {fileID: 224863477032243618, guid: 749877248c3395b41b375e5c8f037f90,
+        type: 2}
+      propertyPath: m_RootOrder
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 224525124254187224, guid: 749877248c3395b41b375e5c8f037f90,
+        type: 2}
+      propertyPath: m_RootOrder
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 224252222416383702, guid: 749877248c3395b41b375e5c8f037f90,
+        type: 2}
+      propertyPath: m_AnchoredPosition.y
+      value: 145
+      objectReference: {fileID: 0}
+    - target: {fileID: 224525124254187224, guid: 749877248c3395b41b375e5c8f037f90,
+        type: 2}
+      propertyPath: m_AnchoredPosition.x
+      value: 0.000011444
+      objectReference: {fileID: 0}
+    - target: {fileID: 224525124254187224, guid: 749877248c3395b41b375e5c8f037f90,
+        type: 2}
+      propertyPath: m_SizeDelta.x
+      value: 207.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 224045221780348418, guid: 749877248c3395b41b375e5c8f037f90,
+        type: 2}
+      propertyPath: m_AnchoredPosition.x
+      value: 238
+      objectReference: {fileID: 0}
+    - target: {fileID: 224242728348912194, guid: 749877248c3395b41b375e5c8f037f90,
+        type: 2}
+      propertyPath: m_AnchoredPosition.x
+      value: -117
+      objectReference: {fileID: 0}
+    - target: {fileID: 224242728348912194, guid: 749877248c3395b41b375e5c8f037f90,
+        type: 2}
+      propertyPath: m_AnchoredPosition.y
+      value: -29
+      objectReference: {fileID: 0}
+    - target: {fileID: 224045221780348418, guid: 749877248c3395b41b375e5c8f037f90,
+        type: 2}
+      propertyPath: m_AnchoredPosition.y
+      value: -29
+      objectReference: {fileID: 0}
+    - target: {fileID: 224525124254187224, guid: 749877248c3395b41b375e5c8f037f90,
+        type: 2}
+      propertyPath: m_AnchoredPosition.y
+      value: -29
+      objectReference: {fileID: 0}
+    - target: {fileID: 114409223523784486, guid: 749877248c3395b41b375e5c8f037f90,
+        type: 2}
+      propertyPath: m_FontData.m_HorizontalOverflow
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114409223523784486, guid: 749877248c3395b41b375e5c8f037f90,
+        type: 2}
+      propertyPath: m_FontData.m_VerticalOverflow
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 749877248c3395b41b375e5c8f037f90, type: 2}
   m_IsPrefabAsset: 0

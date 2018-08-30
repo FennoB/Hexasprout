@@ -55,14 +55,17 @@ public class LeafCellSpec : MonoBehaviour {
             case GUI_Event.BtnSpecialize:
                 gm.AddSliderButton(GUI_Event.BtnLeafSpeed);
                 break;
-            case GUI_Event.BtnLeafSpeed:
-                gm.CloseCellMenu();
-                CellManager.loadBarPicture = GUI_Event.BtnLeafSpeed;
-                gm.OpenLoadBar(GUI_Event.BtnLeafSpeed);
-                conversionMax *= 1.2f;
-                CellManager.BuildManager.Build(20, new Juice(0, 0, 0.2f, 0, 0, 0.5f), "Leaf Speed");
+            case GUI_Event.LeafSpeed:
+                IncreaseLeafSpeed(gm);
                 break;
-
         }
+    }
+    public void IncreaseLeafSpeed(GUIManager gm)
+    {
+        gm.CloseCellMenu();
+        CellManager.loadBarPicture = GUI_Event.BtnLeafSpeed;
+        gm.OpenLoadBar(GUI_Event.BtnLeafSpeed);
+        conversionMax += 0.5f;
+        CellManager.BuildManager.Build(20, new Juice(0, 0, 0.2f, 0, 0, 0.5f), "Leaf Speed");
     }
 }

@@ -395,15 +395,19 @@ public class CellManager : MonoBehaviour
                 DecomposeConnection();
                 break;
 
+            // specializeEvents
+            case GUI_Event.EnergyCap:
+                IncreaseEnergy(gm);
+                break;
+            case GUI_Event.EnergyUse:
+                LowerEnergyUse(gm);
+                break;
+
             // Button Events:
             case GUI_Event.BtnSpecialize:
                 OpenSpecializeMenu(gm);
                 break;
-
-            /*case GUI_Event.BtnDestroy:
-                OpenDestroyMenu(gm);
-                break;*/
-
+                
             case GUI_Event.BtnDegenerate:
                 GameObject.Find("World").GetComponent<WorldGenerator>().Morph2(this, "StemCell");
                 break;
@@ -412,23 +416,6 @@ public class CellManager : MonoBehaviour
             case GUI_Event.BtnNavMain:
                 gm.ResetSliderButtons();
                 EventHandler(GUI_Event.OpenMenu, gm);
-                break;
-
-            // Specialize
-            case GUI_Event.BtnEnergycap:
-                /*gm.CloseCellMenu();
-                loadBarPicture = GUI_Event.BtnEnergycap;
-                gm.OpenLoadBar(GUI_Event.BtnEnergycap);
-                energyMax += 0.5f;
-                BuildManager.Build(20, new Juice(0, 0, 0.2f, 0, 0, 0.5f), "Energy Cap");*/
-                break;
-
-            case GUI_Event.BtnEnergyuse:
-                gm.CloseCellMenu();
-                loadBarPicture = GUI_Event.BtnEnergyuse;
-                gm.OpenLoadBar(GUI_Event.BtnEnergyuse);
-                energyUse /= 1.1f;
-                BuildManager.Build(20, new Juice(0, 0, 0.2f, 0, 0, 0.5f), "Energy Use");
                 break;
 
             case GUI_Event.BuildReady:
@@ -468,6 +455,8 @@ public class CellManager : MonoBehaviour
         }
     }
 
+
+
     // Adds buttons to the Slider menu
     void OpenMenu(GUIManager gm)
     {
@@ -489,6 +478,24 @@ public class CellManager : MonoBehaviour
     void CloseMenu(GUIManager gm)
     {
         // Nothing! Wheee!
+    }
+
+    //Methods for handling the ImprovementEvents of the cells
+    void IncreaseEnergy(GUIManager gm)
+    {
+        gm.CloseCellMenu();
+        loadBarPicture = GUI_Event.BtnEnergycap;
+        gm.OpenLoadBar(GUI_Event.BtnEnergycap);
+        energyMax += 0.5f;
+        BuildManager.Build(20, new Juice(0, 0, 0.2f, 0, 0, 0.5f), "Energy Cap");
+    }
+    void LowerEnergyUse(GUIManager gm)
+    {
+        gm.CloseCellMenu();
+        loadBarPicture = GUI_Event.BtnEnergyuse;
+        gm.OpenLoadBar(GUI_Event.BtnEnergyuse);
+        energyUse -= 0.1f;
+        BuildManager.Build(20, new Juice(0, 0, 0.2f, 0, 0, 0.5f), "Energy Use");
     }
 
     // Specialize slider menu
