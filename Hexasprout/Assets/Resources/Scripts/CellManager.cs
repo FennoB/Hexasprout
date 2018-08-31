@@ -486,16 +486,22 @@ public class CellManager : MonoBehaviour
         gm.CloseCellMenu();
         loadBarPicture = GUI_Event.BtnEnergycap;
         gm.OpenLoadBar(GUI_Event.BtnEnergycap);
-        energyMax += 0.5f;
-        BuildManager.Build(20, new Juice(0, 0, 0.2f, 0, 0, 0.5f), "Energy Cap");
+
+        JobCache jobCache = gm.transform.GetChild(6).gameObject.GetComponent<JobCache>();
+
+        energyMax += jobCache.dif;
+        BuildManager.Build(jobCache.seconds, jobCache.juice, jobCache.title);
     }
     void LowerEnergyUse(GUIManager gm)
     {
         gm.CloseCellMenu();
         loadBarPicture = GUI_Event.BtnEnergyuse;
         gm.OpenLoadBar(GUI_Event.BtnEnergyuse);
-        energyUse -= 0.1f;
-        BuildManager.Build(20, new Juice(0, 0, 0.2f, 0, 0, 0.5f), "Energy Use");
+
+        JobCache jobCache = gm.transform.GetChild(6).gameObject.GetComponent<JobCache>();
+
+        energyUse += jobCache.dif;
+        BuildManager.Build(jobCache.seconds, jobCache.juice, jobCache.title);
     }
 
     // Specialize slider menu

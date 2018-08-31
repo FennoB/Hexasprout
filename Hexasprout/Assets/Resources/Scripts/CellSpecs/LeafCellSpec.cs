@@ -65,7 +65,9 @@ public class LeafCellSpec : MonoBehaviour {
         gm.CloseCellMenu();
         CellManager.loadBarPicture = GUI_Event.BtnLeafSpeed;
         gm.OpenLoadBar(GUI_Event.BtnLeafSpeed);
-        conversionMax += 0.5f;
-        CellManager.BuildManager.Build(20, new Juice(0, 0, 0.2f, 0, 0, 0.5f), "Leaf Speed");
+
+        JobCache jobCache = gm.transform.GetChild(6).gameObject.GetComponent<JobCache>();
+        conversionMax += jobCache.dif;
+        CellManager.BuildManager.Build(jobCache.seconds, jobCache.juice, jobCache.title);
     }
 }

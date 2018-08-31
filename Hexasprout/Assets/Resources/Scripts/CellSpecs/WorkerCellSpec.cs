@@ -59,40 +59,49 @@ public class WorkerCellSpec : MonoBehaviour {
                 gm.CloseCellMenu();
                 CellManager.loadBarPicture = GUI_Event.BtnWorkerSpeedBlack;
                 gm.OpenLoadBar(GUI_Event.BtnWorkerSpeedBlack);
-                MiningFactorBlack += 0.1f;
-                CellManager.BuildManager.Build(20, new Juice(0, 0, 0.2f, 0, 0, 0.5f), "Worker Speed Black");
+
+                JobCache jobCache = gm.transform.GetChild(6).gameObject.GetComponent<JobCache>();
+                MiningFactorBlack += jobCache.dif;
+                CellManager.BuildManager.Build(jobCache.seconds, jobCache.juice, jobCache.title);
                 break;
 
             case GUI_Event.WorkerSpeedBlue:
                 gm.CloseCellMenu();
                 CellManager.loadBarPicture = GUI_Event.BtnWorkerSpeedBlue;
                 gm.OpenLoadBar(GUI_Event.BtnWorkerSpeedBlue);
-                MiningFactorBlue += 0.1f;
-                CellManager.BuildManager.Build(20, new Juice(0, 0, 0.2f, 0, 0, 0.5f), "Worker Speed Blue");
+                jobCache = gm.transform.GetChild(6).gameObject.GetComponent<JobCache>();
+                MiningFactorBlue += jobCache.dif;
+                CellManager.BuildManager.Build(jobCache.seconds, jobCache.juice, jobCache.title);
                 break;
 
             case GUI_Event.WorkerSpeedGreen:
                 gm.CloseCellMenu();
                 CellManager.loadBarPicture = GUI_Event.BtnWorkerSpeedGreen;
                 gm.OpenLoadBar(GUI_Event.BtnWorkerSpeedGreen);
-                MiningFactorGreen += 0.1f;
-                CellManager.BuildManager.Build(20, new Juice(0, 0, 0.2f, 0, 0, 0.5f), "Worker Speed Green");
+
+                jobCache = gm.transform.GetChild(6).gameObject.GetComponent<JobCache>();
+                MiningFactorGreen += jobCache.dif;
+                CellManager.BuildManager.Build(jobCache.seconds, jobCache.juice, jobCache.title);
                 break;
 
             case GUI_Event.WorkerSpeedRed:
                 gm.CloseCellMenu();
                 CellManager.loadBarPicture = GUI_Event.BtnWorkerSpeedRed;
                 gm.OpenLoadBar(GUI_Event.BtnWorkerSpeedRed);
-                MiningFactorRed += 0.1f;
-                CellManager.BuildManager.Build(20, new Juice(0, 0, 0.2f, 0, 0, 0.5f), "Worker Speed Red");
+
+                jobCache = gm.transform.GetChild(6).gameObject.GetComponent<JobCache>();
+                MiningFactorRed += jobCache.dif;
+                CellManager.BuildManager.Build(jobCache.seconds, jobCache.juice, jobCache.title);
                 break;
 
             case GUI_Event.WorkerSpeedYellow:
                 gm.CloseCellMenu();
                 CellManager.loadBarPicture = GUI_Event.BtnWorkerSpeedYellow;
                 gm.OpenLoadBar(GUI_Event.BtnWorkerSpeedYellow);
-                MiningFactorYellow += 0.1f;
-                CellManager.BuildManager.Build(20, new Juice(0, 0, 0.2f, 0, 0, 0.5f), "Worker Speed Yellow");
+
+                jobCache = gm.transform.GetChild(6).gameObject.GetComponent<JobCache>();
+                MiningFactorYellow += jobCache.dif;
+                CellManager.BuildManager.Build(jobCache.seconds, jobCache.juice, jobCache.title);
                 break;
         }
     }
@@ -101,8 +110,10 @@ public class WorkerCellSpec : MonoBehaviour {
         gm.CloseCellMenu();
         CellManager.loadBarPicture = GUI_Event.BtnWorkerCount;
         gm.OpenLoadBar(GUI_Event.BtnWorkerCount);
-        MaxWorkerConnections = 5;
-        CellManager.BuildManager.Build(20, new Juice(0, 0, 0.2f, 0, 0, 0.5f), "Worker Count");
+
+        JobCache jobCache = gm.transform.GetChild(6).gameObject.GetComponent<JobCache>();
+        MaxWorkerConnections = (int)jobCache.dif;
+        CellManager.BuildManager.Build(jobCache.seconds, jobCache.juice, jobCache.title);
     }
 
     public void SpecializeMenu(GUIManager gm)
