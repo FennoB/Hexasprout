@@ -5,11 +5,11 @@ using UnityEngine;
 
 public class WorkerCellSpec : MonoBehaviour {
 
-    private float miningFactorBlue = 0.01f;
-    private float miningFactorYellow = 0.01f;
-    private float miningFactorBlack = 0.01f;
-    private float miningFactorGreen = 0.01f;
-    private float miningFactorRed = 0.01f;
+    public float miningFactorBlue = 0.01f;
+    public float miningFactorYellow = 0.01f;
+    public float miningFactorBlack = 0.01f;
+    public float miningFactorGreen = 0.01f;
+    public float miningFactorRed = 0.01f;
 
     public int maxWorkerConnections = 1;
     public int counterWorkerConnections = 0;
@@ -61,7 +61,7 @@ public class WorkerCellSpec : MonoBehaviour {
                 gm.OpenLoadBar(GUI_Event.BtnWorkerSpeedBlack);
 
                 JobCache jobCache = gm.transform.GetChild(6).gameObject.GetComponent<JobCache>();
-                MiningFactorBlack += jobCache.dif;
+                //MiningFactorBlack += jobCache.dif;
                 CellManager.BuildManager.Build(jobCache.seconds, jobCache.juice, jobCache.title);
                 break;
 
@@ -70,7 +70,7 @@ public class WorkerCellSpec : MonoBehaviour {
                 CellManager.loadBarPicture = GUI_Event.BtnWorkerSpeedBlue;
                 gm.OpenLoadBar(GUI_Event.BtnWorkerSpeedBlue);
                 jobCache = gm.transform.GetChild(6).gameObject.GetComponent<JobCache>();
-                MiningFactorBlue += jobCache.dif;
+                //MiningFactorBlue += jobCache.dif;
                 CellManager.BuildManager.Build(jobCache.seconds, jobCache.juice, jobCache.title);
                 break;
 
@@ -80,7 +80,7 @@ public class WorkerCellSpec : MonoBehaviour {
                 gm.OpenLoadBar(GUI_Event.BtnWorkerSpeedGreen);
 
                 jobCache = gm.transform.GetChild(6).gameObject.GetComponent<JobCache>();
-                MiningFactorGreen += jobCache.dif;
+                //MiningFactorGreen += jobCache.dif;
                 CellManager.BuildManager.Build(jobCache.seconds, jobCache.juice, jobCache.title);
                 break;
 
@@ -90,7 +90,7 @@ public class WorkerCellSpec : MonoBehaviour {
                 gm.OpenLoadBar(GUI_Event.BtnWorkerSpeedRed);
 
                 jobCache = gm.transform.GetChild(6).gameObject.GetComponent<JobCache>();
-                MiningFactorRed += jobCache.dif;
+                //MiningFactorRed += jobCache.dif;
                 CellManager.BuildManager.Build(jobCache.seconds, jobCache.juice, jobCache.title);
                 break;
 
@@ -100,11 +100,41 @@ public class WorkerCellSpec : MonoBehaviour {
                 gm.OpenLoadBar(GUI_Event.BtnWorkerSpeedYellow);
 
                 jobCache = gm.transform.GetChild(6).gameObject.GetComponent<JobCache>();
-                MiningFactorYellow += jobCache.dif;
+                //MiningFactorYellow += jobCache.dif;
                 CellManager.BuildManager.Build(jobCache.seconds, jobCache.juice, jobCache.title);
+                break;
+            case GUI_Event.BuildReady:
+                FinishBuild(CellManager.BuildManager.buildName);
                 break;
         }
     }
+
+    void FinishBuild(string buildName)
+    {
+        float dif = GameObject.FindGameObjectWithTag("GUI").transform.GetChild(6).gameObject.GetComponent<JobCache>().dif;
+        switch (buildName)
+        {
+            case "Unlock WorkerConnections":
+                maxWorkerConnections = 6;
+                break;
+            case "Mine Blue faster":
+                miningFactorBlue += dif;
+                break;
+            case "Mine Green faster":
+                miningFactorGreen += dif;
+                break;
+            case "Mine Yellow faster":
+                miningFactorYellow += dif;
+                break;
+            case "Mine Black faster":
+                miningFactorBlack += dif;
+                break;
+            case "Mine Red faster":
+                miningFactorRed += dif;
+                break;
+        }
+    }
+
     void UnlockWorkerConnections(GUIManager gm)
     {
         gm.CloseCellMenu();

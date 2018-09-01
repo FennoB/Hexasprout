@@ -62,16 +62,24 @@ public class StemCellSpec : MonoBehaviour {
                 gm.AddSliderButton(GUI_Event.BtnNavMain);
                 break;
             case GUI_Event.BtnMorph2Heart:
-                Morph2Heart();
+                gm.CloseCellMenu();
+                gm.OpenLoadBar(GUI_Event.BtnMorph2Heart);
+                OrderHeartMorph();
                 break;
             case GUI_Event.BtnMorph2Leaf:
-                Morph2Leaf();
+                gm.CloseCellMenu();
+                gm.OpenLoadBar(GUI_Event.BtnMorph2Leaf);
+                OrderLeafMorph();
                 break;
             case GUI_Event.BtnMorph2Storage:
-                Morph2Storage();
+                gm.CloseCellMenu();
+                gm.OpenLoadBar(GUI_Event.BtnMorph2Storage);
+                OrderStorageMorph();
                 break;
             case GUI_Event.BtnMorph2Worker:
-                Morph2Worker();
+                gm.CloseCellMenu();
+                gm.OpenLoadBar(GUI_Event.BtnMorph2Worker);
+                OrderWorkerMorph();
                 break;
         }
     }
@@ -133,9 +141,46 @@ public class StemCellSpec : MonoBehaviour {
             case "Build Cell":
                 FinishCell();
                 break;
+            case "Morph2Heart":
+                Morph2Heart();
+                break;
+            case "Morph2Leaf":
+                Morph2Leaf();
+                break;
+            case "Morph2Storage":
+                Morph2Storage();
+                break;
+            case "Morph2Worker":
+                Morph2Worker();
+                break;
         }
     }
     //Here are the buildmethods, for one build are always a order and a make method necessary
+
+    void OrderHeartMorph()
+    {
+        buildName = "Morph2Heart";
+        this.gameObject.GetComponent<BuildManager>().Build(seconds: 5f, juice: new Juice(0f, 0f, 0f, 0f, 0f, 0.25f), name: buildName);
+        CellManager.loadBarPicture = GUI_Event.BtnMorph2Heart;
+    }
+    void OrderLeafMorph()
+    {
+        buildName = "Morph2Leaf";
+        this.gameObject.GetComponent<BuildManager>().Build(seconds: 5f, juice: new Juice(0f, 0f, 0f, 0f, 0f, 0.25f), name: buildName);
+        CellManager.loadBarPicture = GUI_Event.BtnMorph2Leaf;
+    }
+    void OrderStorageMorph()
+    {
+        buildName = "Morph2Storage";
+        this.gameObject.GetComponent<BuildManager>().Build(seconds: 5f, juice: new Juice(0f, 0f, 0f, 0f, 0f, 0.25f), name: buildName);
+        CellManager.loadBarPicture = GUI_Event.BtnMorph2Storage;
+    }
+    void OrderWorkerMorph()
+    {
+        buildName = "Morph2Worker";
+        this.gameObject.GetComponent<BuildManager>().Build(seconds: 5f, juice: new Juice(0f, 0f, 0f, 0f, 0f, 0.25f), name: buildName);
+        CellManager.loadBarPicture = GUI_Event.BtnMorph2Worker;
+    }
 
     // Builds a sprout and creates a new stemcell there
     void OrderNewCell()

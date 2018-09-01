@@ -58,6 +58,19 @@ public class LeafCellSpec : MonoBehaviour {
             case GUI_Event.LeafSpeed:
                 IncreaseLeafSpeed(gm);
                 break;
+            case GUI_Event.BuildReady:
+                FinishBuild(CellManager.BuildManager.buildName);
+                break;
+        }
+    }
+    void FinishBuild(string buildName)
+    {
+        float dif = GameObject.FindGameObjectWithTag("GUI").transform.GetChild(6).gameObject.GetComponent<JobCache>().dif;
+        switch (buildName)
+        {
+            case "Increase Conversion Rate":
+                conversionMax += dif;
+                break;
         }
     }
     public void IncreaseLeafSpeed(GUIManager gm)
@@ -67,7 +80,6 @@ public class LeafCellSpec : MonoBehaviour {
         gm.OpenLoadBar(GUI_Event.BtnLeafSpeed);
 
         JobCache jobCache = gm.transform.GetChild(6).gameObject.GetComponent<JobCache>();
-        conversionMax += jobCache.dif;
         CellManager.BuildManager.Build(jobCache.seconds, jobCache.juice, jobCache.title);
     }
 }

@@ -423,6 +423,7 @@ public class CellManager : MonoBehaviour
                 {
                     FindObjectOfType<GUIManager>().CloseCellMenu();
                 }
+                FinishBuild(gameObject.GetComponent<BuildManager>().buildName);
                 break;
             case GUI_Event.DestroyCell:
 
@@ -480,6 +481,21 @@ public class CellManager : MonoBehaviour
         // Nothing! Wheee!
     }
 
+    void FinishBuild(string buildName)
+    {
+        float dif = GameObject.FindGameObjectWithTag("GUI").transform.GetChild(6).gameObject.GetComponent<JobCache>().dif;
+        switch (buildName)
+        {
+            case "Increase EnergyMax":
+                energyMax += dif;
+                break;
+            case "Reduce Energyuse":
+                energyUse += dif;
+                break;
+        }
+    }
+
+
     //Methods for handling the ImprovementEvents of the cells
     void IncreaseEnergy(GUIManager gm)
     {
@@ -489,7 +505,7 @@ public class CellManager : MonoBehaviour
 
         JobCache jobCache = gm.transform.GetChild(6).gameObject.GetComponent<JobCache>();
 
-        energyMax += jobCache.dif;
+        //energyMax += jobCache.dif;
         BuildManager.Build(jobCache.seconds, jobCache.juice, jobCache.title);
     }
     void LowerEnergyUse(GUIManager gm)
@@ -500,7 +516,7 @@ public class CellManager : MonoBehaviour
 
         JobCache jobCache = gm.transform.GetChild(6).gameObject.GetComponent<JobCache>();
 
-        energyUse += jobCache.dif;
+        //energyUse += jobCache.dif;
         BuildManager.Build(jobCache.seconds, jobCache.juice, jobCache.title);
     }
 

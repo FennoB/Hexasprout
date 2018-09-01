@@ -313,7 +313,7 @@ public class GUIManager : MonoBehaviour
     }
 
     // Cell Selection Menu Closing
-    void ResetSelectedCells()
+    public void ResetSelectedCells()
     {
         if (CellMenuTarget != null)
         {
@@ -419,7 +419,7 @@ public class GUIManager : MonoBehaviour
             {
                 if (CellMenuTarget.Cell.GetComponent<WorkerCellSpec>().MaxWorkerConnections < 5)
                 {
-                    OpenCustomizedImprovePanel(CellMenuTarget.Cell.GetComponent<WorkerCellSpec>().MaxWorkerConnections, 5f, "Unlock WorkerConnections",
+                    OpenCustomizedImprovePanel(CellMenuTarget.Cell.GetComponent<WorkerCellSpec>().MaxWorkerConnections, 6f, "Unlock WorkerConnections",
                                                GUI_Event.WorkerCount, new Juice(0, 0, 0.2f, 0, 0, 0.5f), 20f);
                 }
                 else
@@ -429,7 +429,7 @@ public class GUIManager : MonoBehaviour
             }
             if (e == GUI_Event.BtnWorkerSpeedBlack)
             {
-                if (CellMenuTarget.Cell.GetComponent<WorkerCellSpec>().MiningFactorBlack < 0.05f)
+                if (CellMenuTarget.Cell.GetComponent<WorkerCellSpec>().MiningFactorBlack < 0.049f)
                 {
                     OpenCustomizedImprovePanel(CellMenuTarget.Cell.GetComponent<WorkerCellSpec>().MiningFactorBlack, 0.01f, "Mine Black faster",
                                                GUI_Event.WorkerSpeedBlack, new Juice(0, 0, 0.2f, 0, 0, 0.5f), 20f);
@@ -441,7 +441,7 @@ public class GUIManager : MonoBehaviour
             }
             if (e == GUI_Event.BtnWorkerSpeedBlue)
             {
-                if (CellMenuTarget.Cell.GetComponent<WorkerCellSpec>().MiningFactorBlue < 0.05f)
+                if (CellMenuTarget.Cell.GetComponent<WorkerCellSpec>().MiningFactorBlue < 0.049f)
                 {
                     OpenCustomizedImprovePanel(CellMenuTarget.Cell.GetComponent<WorkerCellSpec>().MiningFactorBlue, 0.01f, "Mine Blue faster",
                                            GUI_Event.WorkerSpeedBlue, new Juice(0, 0, 0.2f, 0, 0, 0.5f), 20f);
@@ -453,7 +453,7 @@ public class GUIManager : MonoBehaviour
             }
             if (e == GUI_Event.BtnWorkerSpeedYellow)
             {
-                if (CellMenuTarget.Cell.GetComponent<WorkerCellSpec>().MiningFactorYellow < 0.05f)
+                if (CellMenuTarget.Cell.GetComponent<WorkerCellSpec>().MiningFactorYellow < 0.049f)
                 {
                     OpenCustomizedImprovePanel(CellMenuTarget.Cell.GetComponent<WorkerCellSpec>().MiningFactorYellow, 0.01f, "Mine Yellow faster",
                                            GUI_Event.WorkerSpeedYellow, new Juice(0, 0, 0.2f, 0, 0, 0.5f), 20f);
@@ -465,7 +465,7 @@ public class GUIManager : MonoBehaviour
             }
             if (e == GUI_Event.BtnWorkerSpeedRed)
             {
-                if (CellMenuTarget.Cell.GetComponent<WorkerCellSpec>().MiningFactorRed < 0.05f)
+                if (CellMenuTarget.Cell.GetComponent<WorkerCellSpec>().MiningFactorRed < 0.049f)
                 {
                     OpenCustomizedImprovePanel(CellMenuTarget.Cell.GetComponent<WorkerCellSpec>().MiningFactorRed, 0.01f, "Mine Red faster",
                                            GUI_Event.WorkerSpeedRed, new Juice(0, 0, 0.2f, 0, 0, 0.5f), 20f);
@@ -477,7 +477,7 @@ public class GUIManager : MonoBehaviour
             }
             if (e == GUI_Event.BtnWorkerSpeedGreen)
             {
-                if (CellMenuTarget.Cell.GetComponent<WorkerCellSpec>().MiningFactorGreen < 0.05f)
+                if (CellMenuTarget.Cell.GetComponent<WorkerCellSpec>().MiningFactorGreen < 0.049f)
                 {
                     OpenCustomizedImprovePanel(CellMenuTarget.Cell.GetComponent<WorkerCellSpec>().MiningFactorGreen, 0.01f, "Mine Green faster",
                                            GUI_Event.WorkerSpeedGreen, new Juice(0, 0, 0.2f, 0, 0, 0.5f), 20f);
