@@ -5,8 +5,14 @@ using System;
 
 public enum GUI_Event
 {
+    // the different morph events of the cells
+    Morph2Leaf = -19,
+    Morph2Storage,
+    Morph2Heart,
+    Morph2Worker,
+
     // the actual events which get triggered, when a user wants to improve the stat of a cell
-    EnergyCap = -15,
+    EnergyCap,
     EnergyUse,
     LeafSpeed,
     WorkerCount,
@@ -487,6 +493,26 @@ public class GUIManager : MonoBehaviour
                     this.gameObject.transform.GetChild(7).gameObject.SetActive(true);
                 }
             }
+            if (e == GUI_Event.BtnMorph2Heart)
+            {
+                OpenCustomizedImprovePanelMorph("Morph to Heartcell",
+                                           GUI_Event.Morph2Heart, new Juice(0, 0, 0.2f, 0, 0, 0.1f), 5f);
+            }
+            if (e == GUI_Event.BtnMorph2Leaf)
+            {
+                OpenCustomizedImprovePanelMorph("Morph to Leafcell",
+                                           GUI_Event.Morph2Leaf, new Juice(0, 0, 0.2f, 0, 0, 0.1f), 5f);
+            }
+            if (e == GUI_Event.BtnMorph2Storage)
+            {
+                OpenCustomizedImprovePanelMorph("Morph to Storagecell",
+                                           GUI_Event.Morph2Storage, new Juice(0, 0, 0.2f, 0, 0, 0.1f), 5f);
+            }
+            if (e == GUI_Event.BtnMorph2Worker)
+            {
+                OpenCustomizedImprovePanelMorph("Morph to Workercell",
+                                           GUI_Event.Morph2Worker, new Juice(0, 0, 0.2f, 0, 0, 0.1f), 5f);
+            }
             // this is necessary for the case, that the user destroys a cell, because then theres no reference anymore
             if (CellMenuTarget != null)
             {
@@ -513,6 +539,51 @@ public class GUIManager : MonoBehaviour
         ImprovePanel.transform.GetChild(3).gameObject.GetComponent<ButtonScript>().ButtonID = e;
         ImprovePanel.transform.GetChild(8).gameObject.GetComponent<UnityEngine.UI.Text>().text = seconds.ToString();
 
+        SetNecessaryMaterials(ImprovePanel, juice);
+        
+        ResetSliderButtons();
+        ResetSelectedCells();
+    }
+    void OpenCustomizedImprovePanelMorph(string title, GUI_Event e, Juice juice, float seconds)
+    {
+        GameObject ImprovePanel = transform.GetChild(8).gameObject;
+        ImprovePanel.SetActive(true);
+
+        //getting things in the Cache
+        ImprovePanel.GetComponent<JobCache>().juice = juice;
+        ImprovePanel.GetComponent<JobCache>().title = title;
+        ImprovePanel.GetComponent<JobCache>().seconds = seconds;
+
+        //showing things right on the panel
+        ImprovePanel.transform.GetChild(2).gameObject.GetComponent<UnityEngine.UI.Text>().text = title;
+        ImprovePanel.transform.GetChild(3).gameObject.GetComponent<ButtonScript>().ButtonID = e;
+        ImprovePanel.transform.GetChild(8).gameObject.GetComponent<UnityEngine.UI.Text>().text = seconds.ToString();
+
+        UnityEngine.UI.Image newCell = ImprovePanel.transform.GetChild(1).gameObject.GetComponent<UnityEngine.UI.Image>();
+        switch (e)
+        {
+            case GUI_Event.Morph2Heart:
+                newCell.sprite = ImprovePanel.GetComponent<ImageSelectorImprovementMenu>().images[0];
+                break;
+            case GUI_Event.Morph2Leaf:
+                newCell.sprite = ImprovePanel.GetComponent<ImageSelectorImprovementMenu>().images[1];
+                break;
+            case GUI_Event.Morph2Storage:
+                newCell.sprite = ImprovePanel.GetComponent<ImageSelectorImprovementMenu>().images[2];
+                break;
+            case GUI_Event.Morph2Worker:
+                newCell.sprite = ImprovePanel.GetComponent<ImageSelectorImprovementMenu>().images[3];
+                break;
+        }
+
+        SetNecessaryMaterials(ImprovePanel, juice);
+
+        ResetSliderButtons();
+        ResetSelectedCells();
+    }
+
+    void SetNecessaryMaterials(GameObject ImprovePanel, Juice juice)
+    {
         bool firstSlotUsed = false;
         bool secondSlotUsed = false;
 
@@ -545,10 +616,7 @@ public class GUIManager : MonoBehaviour
             ImprovePanel.transform.GetChild(6).gameObject.SetActive(false);
             ImprovePanel.transform.GetChild(7).gameObject.SetActive(false);
         }
-        ResetSliderButtons();
-        ResetSelectedCells();
     }
-
     // Called to open cell menus
     public void OpenCellMenu(FieldManager target)
     {
@@ -575,6 +643,7 @@ public class GUIManager : MonoBehaviour
         transform.GetChild(5).gameObject.SetActive(false);
         transform.GetChild(6).gameObject.SetActive(false);
         transform.GetChild(7).gameObject.SetActive(false);
+        transform.GetChild(8).gameObject.SetActive(false);
 
         if (CellMenuOpen)
         {

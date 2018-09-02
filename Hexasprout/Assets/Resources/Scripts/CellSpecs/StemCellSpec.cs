@@ -61,25 +61,25 @@ public class StemCellSpec : MonoBehaviour {
                 gm.AddSliderButton(GUI_Event.BtnMorph2Storage);
                 gm.AddSliderButton(GUI_Event.BtnNavMain);
                 break;
-            case GUI_Event.BtnMorph2Heart:
+            case GUI_Event.Morph2Heart:
                 gm.CloseCellMenu();
                 gm.OpenLoadBar(GUI_Event.BtnMorph2Heart);
-                OrderHeartMorph();
+                OrderHeartMorph(gm);
                 break;
-            case GUI_Event.BtnMorph2Leaf:
+            case GUI_Event.Morph2Leaf:
                 gm.CloseCellMenu();
                 gm.OpenLoadBar(GUI_Event.BtnMorph2Leaf);
-                OrderLeafMorph();
+                OrderLeafMorph(gm);
                 break;
-            case GUI_Event.BtnMorph2Storage:
+            case GUI_Event.Morph2Storage:
                 gm.CloseCellMenu();
                 gm.OpenLoadBar(GUI_Event.BtnMorph2Storage);
-                OrderStorageMorph();
+                OrderStorageMorph(gm);
                 break;
-            case GUI_Event.BtnMorph2Worker:
+            case GUI_Event.Morph2Worker:
                 gm.CloseCellMenu();
                 gm.OpenLoadBar(GUI_Event.BtnMorph2Worker);
-                OrderWorkerMorph();
+                OrderWorkerMorph(gm);
                 break;
         }
     }
@@ -141,45 +141,49 @@ public class StemCellSpec : MonoBehaviour {
             case "Build Cell":
                 FinishCell();
                 break;
-            case "Morph2Heart":
+            case "Morph to Heartcell":
                 Morph2Heart();
                 break;
-            case "Morph2Leaf":
+            case "Morph to Leafcell":
                 Morph2Leaf();
                 break;
-            case "Morph2Storage":
+            case "Morph to Storagecell":
                 Morph2Storage();
                 break;
-            case "Morph2Worker":
+            case "Morph to Workercell":
                 Morph2Worker();
                 break;
         }
     }
     //Here are the buildmethods, for one build are always a order and a make method necessary
 
-    void OrderHeartMorph()
+    void OrderHeartMorph(GUIManager gm)
     {
-        buildName = "Morph2Heart";
-        this.gameObject.GetComponent<BuildManager>().Build(seconds: 5f, juice: new Juice(0f, 0f, 0f, 0f, 0f, 0.25f), name: buildName);
         CellManager.loadBarPicture = GUI_Event.BtnMorph2Heart;
+        JobCache jobCache = gm.transform.GetChild(8).gameObject.GetComponent<JobCache>();
+        buildName = jobCache.title;
+        BuildManager.Build(jobCache.seconds, jobCache.juice, jobCache.title);
     }
-    void OrderLeafMorph()
+    void OrderLeafMorph(GUIManager gm)
     {
-        buildName = "Morph2Leaf";
-        this.gameObject.GetComponent<BuildManager>().Build(seconds: 5f, juice: new Juice(0f, 0f, 0f, 0f, 0f, 0.25f), name: buildName);
         CellManager.loadBarPicture = GUI_Event.BtnMorph2Leaf;
+        JobCache jobCache = gm.transform.GetChild(8).gameObject.GetComponent<JobCache>();
+        buildName = jobCache.title;
+        BuildManager.Build(jobCache.seconds, jobCache.juice, jobCache.title);
     }
-    void OrderStorageMorph()
+    void OrderStorageMorph(GUIManager gm)
     {
-        buildName = "Morph2Storage";
-        this.gameObject.GetComponent<BuildManager>().Build(seconds: 5f, juice: new Juice(0f, 0f, 0f, 0f, 0f, 0.25f), name: buildName);
         CellManager.loadBarPicture = GUI_Event.BtnMorph2Storage;
+        JobCache jobCache = gm.transform.GetChild(8).gameObject.GetComponent<JobCache>();
+        buildName = jobCache.title;
+        BuildManager.Build(jobCache.seconds, jobCache.juice, jobCache.title);
     }
-    void OrderWorkerMorph()
+    void OrderWorkerMorph(GUIManager gm)
     {
-        buildName = "Morph2Worker";
-        this.gameObject.GetComponent<BuildManager>().Build(seconds: 5f, juice: new Juice(0f, 0f, 0f, 0f, 0f, 0.25f), name: buildName);
         CellManager.loadBarPicture = GUI_Event.BtnMorph2Worker;
+        JobCache jobCache = gm.transform.GetChild(8).gameObject.GetComponent<JobCache>();
+        buildName = jobCache.title;
+        BuildManager.Build(jobCache.seconds, jobCache.juice, jobCache.title);
     }
 
     // Builds a sprout and creates a new stemcell there

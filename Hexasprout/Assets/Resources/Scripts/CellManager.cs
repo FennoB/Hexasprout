@@ -515,8 +515,6 @@ public class CellManager : MonoBehaviour
         gm.OpenLoadBar(GUI_Event.BtnEnergyuse);
 
         JobCache jobCache = gm.transform.GetChild(6).gameObject.GetComponent<JobCache>();
-
-        //energyUse += jobCache.dif;
         BuildManager.Build(jobCache.seconds, jobCache.juice, jobCache.title);
     }
 
