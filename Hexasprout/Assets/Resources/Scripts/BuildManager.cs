@@ -11,7 +11,7 @@ public class BuildManager : MonoBehaviour {
 
     public string buildName;
     public float seconds;
-    Juice goalJuice;
+    public Juice goalJuice;
 
     //just for testing
     public float duration = 0;
@@ -60,6 +60,7 @@ public class BuildManager : MonoBehaviour {
             //just for testing
             Debug.Log("Dauer des Builds : " + duration);
             duration = 0f;
+
 
             //goal is reached, cell is allowed to build
             cellBuildCache = new Juice();

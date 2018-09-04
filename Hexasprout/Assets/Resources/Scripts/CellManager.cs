@@ -458,14 +458,18 @@ public class CellManager : MonoBehaviour
 
 
 
-    // Adds buttons to the Slider menu
+    // Adds buttons to the Slider menu or opens the BuildManagerMenu
     void OpenMenu(GUIManager gm)
     {
         if (BuildManager.buildFlag)
         {
-            // No Menu today...
+           
             gm.CloseCellMenu();
-            gm.OpenLoadBar(loadBarPicture);
+            //gm.OpenLoadBar(loadBarPicture);
+
+            //this is the Buildmanager Menu
+            gm.transform.GetChild(9).GetComponent<BuildMenuManager>().SetMenuUp(BuildManager.goalJuice, BuildManager.buildName);
+            gm.transform.GetChild(9).gameObject.SetActive(true);
         }
         else
         {

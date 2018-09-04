@@ -347,7 +347,7 @@ public class GUIManager : MonoBehaviour
         }
 
     }
-
+    
     // Handles other button events
     public void EventHandler(GUI_Event e)
     {
@@ -627,6 +627,7 @@ public class GUIManager : MonoBehaviour
         ResetSliderButtons();
         transform.GetChild(0).gameObject.SetActive(true);
 
+
         //set cell as the by the player selected one
         OpenSelectionMenu(target);
         EventHandler(GUI_Event.OpenMenu);
@@ -644,6 +645,7 @@ public class GUIManager : MonoBehaviour
         transform.GetChild(6).gameObject.SetActive(false);
         transform.GetChild(7).gameObject.SetActive(false);
         transform.GetChild(8).gameObject.SetActive(false);
+        transform.GetChild(9).gameObject.SetActive(false);
 
         if (CellMenuOpen)
         {
@@ -658,6 +660,11 @@ public class GUIManager : MonoBehaviour
             CellMenuOpen = false;
             transform.GetChild(0).gameObject.SetActive(false);
         }
+    }
+
+    public Sprite GetImageToEvent(GUI_Event e)
+    {
+        return SliderButtons[(int)e].GetComponent<UnityEngine.UI.Image>().sprite;
     }
 
     // LoadBar
