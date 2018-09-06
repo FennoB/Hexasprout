@@ -86,7 +86,6 @@ public class GUIManager : MonoBehaviour
     // This is used for managing touch
     private Touch touch;
     private int tapUpCounter = 0;       // For single Click
-    private int tapCounter = 0;         // For double Click
     private float zoomstartdis = 0.0f;  // Distance of the touches when zoom starts
     private Vector2 zoompos;            // Center of the touches when zooming
 
@@ -206,13 +205,6 @@ public class GUIManager : MonoBehaviour
         {
             // Add tap
             tapUpCounter++;
-            tapCounter++;
-
-            // Ready for Double Click?
-            if (tapCounter == 1)
-            {
-                StartCoroutine("DoubleClicked");
-            }
         }
     }
 
@@ -389,8 +381,8 @@ public class GUIManager : MonoBehaviour
             {
                 if (CellMenuTarget.Cell.GetComponent<CellManager>().energyMax < 1.3)
                 {
-                    OpenCustomizedImprovePanel(CellMenuTarget.Cell.GetComponent<CellManager>().energyMax, 0.1f, "Increase EnergyMax",
-                                               GUI_Event.EnergyCap, new Juice(0, 0, 0.2f, 0, 0, 0.5f), 20f);
+                    transform.GetChild(6).gameObject.GetComponent<ImprovementMenuManager>().OpenCustomizedImprovePanel(CellMenuTarget.Cell.GetComponent<CellManager>().energyMax, 0.1f, "Increase EnergyMax",
+                                               GUI_Event.EnergyCap, new Juice(0, 0, 0.2f, 0, 0, 0.5f), 20f, this);
                 }
                 else
                 {
@@ -401,8 +393,8 @@ public class GUIManager : MonoBehaviour
             {
                 if (CellMenuTarget.Cell.GetComponent<CellManager>().energyUse >= 0.11f)
                 {
-                    OpenCustomizedImprovePanel(CellMenuTarget.Cell.GetComponent<CellManager>().energyUse, -0.05f, "Reduce Energyuse",
-                                               GUI_Event.EnergyUse, new Juice(0, 0, 0.2f, 0, 0, 0.5f), 20f);
+                    transform.GetChild(6).gameObject.GetComponent<ImprovementMenuManager>().OpenCustomizedImprovePanel(CellMenuTarget.Cell.GetComponent<CellManager>().energyUse, -0.05f, "Reduce Energyuse",
+                                               GUI_Event.EnergyUse, new Juice(0, 0, 0.2f, 0, 0, 0.5f), 20f, this);
                 }
                 else
                 {
@@ -413,8 +405,8 @@ public class GUIManager : MonoBehaviour
             {
                 if (CellMenuTarget.Cell.GetComponent<LeafCellSpec>().conversionMax < 1.5)
                 {
-                    OpenCustomizedImprovePanel(CellMenuTarget.Cell.GetComponent<LeafCellSpec>().conversionMax, 0.2f, "Increase Conversion Rate",
-                                               GUI_Event.LeafSpeed, new Juice(0, 0, 0.2f, 0, 0, 0.5f), 20f);
+                    transform.GetChild(6).gameObject.GetComponent<ImprovementMenuManager>().OpenCustomizedImprovePanel(CellMenuTarget.Cell.GetComponent<LeafCellSpec>().conversionMax, 0.2f, "Increase Conversion Rate",
+                                               GUI_Event.LeafSpeed, new Juice(0, 0, 0.2f, 0, 0, 0.5f), 20f, this);
                 }
                 else
                 {
@@ -425,8 +417,8 @@ public class GUIManager : MonoBehaviour
             {
                 if (CellMenuTarget.Cell.GetComponent<WorkerCellSpec>().MaxWorkerConnections < 5)
                 {
-                    OpenCustomizedImprovePanel(CellMenuTarget.Cell.GetComponent<WorkerCellSpec>().MaxWorkerConnections, 6f, "Unlock WorkerConnections",
-                                               GUI_Event.WorkerCount, new Juice(0, 0, 0.2f, 0, 0, 0.5f), 20f);
+                    transform.GetChild(6).gameObject.GetComponent<ImprovementMenuManager>().OpenCustomizedImprovePanel(0f, 6f, "Unlock WorkerConnections",
+                                               GUI_Event.WorkerCount, new Juice(0, 0, 0.2f, 0, 0, 0.5f), 20f, this);
                 }
                 else
                 {
@@ -437,8 +429,8 @@ public class GUIManager : MonoBehaviour
             {
                 if (CellMenuTarget.Cell.GetComponent<WorkerCellSpec>().MiningFactorBlack < 0.049f)
                 {
-                    OpenCustomizedImprovePanel(CellMenuTarget.Cell.GetComponent<WorkerCellSpec>().MiningFactorBlack, 0.01f, "Mine Black faster",
-                                               GUI_Event.WorkerSpeedBlack, new Juice(0, 0, 0.2f, 0, 0, 0.5f), 20f);
+                    transform.GetChild(6).gameObject.GetComponent<ImprovementMenuManager>().OpenCustomizedImprovePanel(CellMenuTarget.Cell.GetComponent<WorkerCellSpec>().MiningFactorBlack, 0.01f, "Mine Black faster",
+                                               GUI_Event.WorkerSpeedBlack, new Juice(0, 0, 0.2f, 0, 0, 0.5f), 20f, this);
                 }
                 else
                 {
@@ -449,8 +441,8 @@ public class GUIManager : MonoBehaviour
             {
                 if (CellMenuTarget.Cell.GetComponent<WorkerCellSpec>().MiningFactorBlue < 0.049f)
                 {
-                    OpenCustomizedImprovePanel(CellMenuTarget.Cell.GetComponent<WorkerCellSpec>().MiningFactorBlue, 0.01f, "Mine Blue faster",
-                                           GUI_Event.WorkerSpeedBlue, new Juice(0, 0, 0.2f, 0, 0, 0.5f), 20f);
+                    transform.GetChild(6).gameObject.GetComponent<ImprovementMenuManager>().OpenCustomizedImprovePanel(CellMenuTarget.Cell.GetComponent<WorkerCellSpec>().MiningFactorBlue, 0.01f, "Mine Blue faster",
+                                           GUI_Event.WorkerSpeedBlue, new Juice(0, 0, 0.2f, 0, 0, 0.5f), 20f, this);
                 }
                 else
                 {
@@ -461,8 +453,8 @@ public class GUIManager : MonoBehaviour
             {
                 if (CellMenuTarget.Cell.GetComponent<WorkerCellSpec>().MiningFactorYellow < 0.049f)
                 {
-                    OpenCustomizedImprovePanel(CellMenuTarget.Cell.GetComponent<WorkerCellSpec>().MiningFactorYellow, 0.01f, "Mine Yellow faster",
-                                           GUI_Event.WorkerSpeedYellow, new Juice(0, 0, 0.2f, 0, 0, 0.5f), 20f);
+                    transform.GetChild(6).gameObject.GetComponent<ImprovementMenuManager>().OpenCustomizedImprovePanel(CellMenuTarget.Cell.GetComponent<WorkerCellSpec>().MiningFactorYellow, 0.01f, "Mine Yellow faster",
+                                           GUI_Event.WorkerSpeedYellow, new Juice(0, 0, 0.2f, 0, 0, 0.5f), 20f, this);
                 }
                 else
                 {
@@ -473,8 +465,8 @@ public class GUIManager : MonoBehaviour
             {
                 if (CellMenuTarget.Cell.GetComponent<WorkerCellSpec>().MiningFactorRed < 0.049f)
                 {
-                    OpenCustomizedImprovePanel(CellMenuTarget.Cell.GetComponent<WorkerCellSpec>().MiningFactorRed, 0.01f, "Mine Red faster",
-                                           GUI_Event.WorkerSpeedRed, new Juice(0, 0, 0.2f, 0, 0, 0.5f), 20f);
+                    transform.GetChild(6).gameObject.GetComponent<ImprovementMenuManager>().OpenCustomizedImprovePanel(CellMenuTarget.Cell.GetComponent<WorkerCellSpec>().MiningFactorRed, 0.01f, "Mine Red faster",
+                                           GUI_Event.WorkerSpeedRed, new Juice(0, 0, 0.2f, 0, 0, 0.5f), 20f, this);
                 }
                 else
                 {
@@ -485,8 +477,8 @@ public class GUIManager : MonoBehaviour
             {
                 if (CellMenuTarget.Cell.GetComponent<WorkerCellSpec>().MiningFactorGreen < 0.049f)
                 {
-                    OpenCustomizedImprovePanel(CellMenuTarget.Cell.GetComponent<WorkerCellSpec>().MiningFactorGreen, 0.01f, "Mine Green faster",
-                                           GUI_Event.WorkerSpeedGreen, new Juice(0, 0, 0.2f, 0, 0, 0.5f), 20f);
+                    transform.GetChild(6).gameObject.GetComponent<ImprovementMenuManager>().OpenCustomizedImprovePanel(CellMenuTarget.Cell.GetComponent<WorkerCellSpec>().MiningFactorGreen, 0.01f, "Mine Green faster",
+                                           GUI_Event.WorkerSpeedGreen, new Juice(0, 0, 0.2f, 0, 0, 0.5f), 20f, this);
                 }
                 else
                 {
@@ -495,126 +487,29 @@ public class GUIManager : MonoBehaviour
             }
             if (e == GUI_Event.BtnMorph2Heart)
             {
-                OpenCustomizedImprovePanelMorph("Morph to Heartcell",
-                                           GUI_Event.Morph2Heart, new Juice(0, 0, 0.2f, 0, 0, 0.1f), 5f);
+                transform.GetChild(8).gameObject.GetComponent<MorphMenuManager>().OpenCustomizedImprovePanel("Morph to Heartcell",
+                                           GUI_Event.Morph2Heart, new Juice(0, 0, 0.2f, 0, 0, 0.1f), 5f, this);
             }
             if (e == GUI_Event.BtnMorph2Leaf)
             {
-                OpenCustomizedImprovePanelMorph("Morph to Leafcell",
-                                           GUI_Event.Morph2Leaf, new Juice(0, 0, 0.2f, 0, 0, 0.1f), 5f);
+                transform.GetChild(8).gameObject.GetComponent<MorphMenuManager>().OpenCustomizedImprovePanel("Morph to Leafcell",
+                                           GUI_Event.Morph2Leaf, new Juice(0, 0, 0.2f, 0, 0, 0.1f), 5f, this);
             }
             if (e == GUI_Event.BtnMorph2Storage)
             {
-                OpenCustomizedImprovePanelMorph("Morph to Storagecell",
-                                           GUI_Event.Morph2Storage, new Juice(0, 0, 0.2f, 0, 0, 0.1f), 5f);
+                transform.GetChild(8).gameObject.GetComponent<MorphMenuManager>().OpenCustomizedImprovePanel("Morph to Storagecell",
+                                           GUI_Event.Morph2Storage, new Juice(0, 0, 0.2f, 0, 0, 0.1f), 5f, this);
             }
             if (e == GUI_Event.BtnMorph2Worker)
             {
-                OpenCustomizedImprovePanelMorph("Morph to Workercell",
-                                           GUI_Event.Morph2Worker, new Juice(0, 0, 0.2f, 0, 0, 0.1f), 5f);
+                transform.GetChild(8).gameObject.GetComponent<MorphMenuManager>().OpenCustomizedImprovePanel("Morph to Workercell",
+                                           GUI_Event.Morph2Worker, new Juice(0, 0, 0.2f, 0, 0, 0.1f), 5f, this);
             }
             // this is necessary for the case, that the user destroys a cell, because then theres no reference anymore
             if (CellMenuTarget != null)
             {
                 CellMenuTarget.Cell.GetComponent<CellManager>().EventHandler(e, this);
             }
-        }
-    }
-
-    void OpenCustomizedImprovePanel(float value, float dif, string title, GUI_Event e, Juice juice, float seconds)
-    {
-        GameObject ImprovePanel = transform.GetChild(6).gameObject;
-        ImprovePanel.SetActive(true);
-
-        //getting things in the Cache
-        ImprovePanel.GetComponent<JobCache>().juice = juice;
-        ImprovePanel.GetComponent<JobCache>().dif = dif;
-        ImprovePanel.GetComponent<JobCache>().title = title;
-        ImprovePanel.GetComponent<JobCache>().seconds = seconds;
-
-        //showing things right on the panel
-        ImprovePanel.transform.GetChild(0).gameObject.GetComponent<UnityEngine.UI.Text>().text = value.ToString();
-        ImprovePanel.transform.GetChild(1).gameObject.GetComponent<UnityEngine.UI.Text>().text = (value + dif).ToString();
-        ImprovePanel.transform.GetChild(2).gameObject.GetComponent<UnityEngine.UI.Text>().text = title;
-        ImprovePanel.transform.GetChild(3).gameObject.GetComponent<ButtonScript>().ButtonID = e;
-        ImprovePanel.transform.GetChild(8).gameObject.GetComponent<UnityEngine.UI.Text>().text = seconds.ToString();
-
-        SetNecessaryMaterials(ImprovePanel, juice);
-        
-        ResetSliderButtons();
-        ResetSelectedCells();
-    }
-    void OpenCustomizedImprovePanelMorph(string title, GUI_Event e, Juice juice, float seconds)
-    {
-        GameObject ImprovePanel = transform.GetChild(8).gameObject;
-        ImprovePanel.SetActive(true);
-
-        //getting things in the Cache
-        ImprovePanel.GetComponent<JobCache>().juice = juice;
-        ImprovePanel.GetComponent<JobCache>().title = title;
-        ImprovePanel.GetComponent<JobCache>().seconds = seconds;
-
-        //showing things right on the panel
-        ImprovePanel.transform.GetChild(2).gameObject.GetComponent<UnityEngine.UI.Text>().text = title;
-        ImprovePanel.transform.GetChild(3).gameObject.GetComponent<ButtonScript>().ButtonID = e;
-        ImprovePanel.transform.GetChild(8).gameObject.GetComponent<UnityEngine.UI.Text>().text = seconds.ToString();
-
-        UnityEngine.UI.Image newCell = ImprovePanel.transform.GetChild(1).gameObject.GetComponent<UnityEngine.UI.Image>();
-        switch (e)
-        {
-            case GUI_Event.Morph2Heart:
-                newCell.sprite = ImprovePanel.GetComponent<ImageSelectorImprovementMenu>().images[0];
-                break;
-            case GUI_Event.Morph2Leaf:
-                newCell.sprite = ImprovePanel.GetComponent<ImageSelectorImprovementMenu>().images[1];
-                break;
-            case GUI_Event.Morph2Storage:
-                newCell.sprite = ImprovePanel.GetComponent<ImageSelectorImprovementMenu>().images[2];
-                break;
-            case GUI_Event.Morph2Worker:
-                newCell.sprite = ImprovePanel.GetComponent<ImageSelectorImprovementMenu>().images[3];
-                break;
-        }
-
-        SetNecessaryMaterials(ImprovePanel, juice);
-
-        ResetSliderButtons();
-        ResetSelectedCells();
-    }
-
-    void SetNecessaryMaterials(GameObject ImprovePanel, Juice juice)
-    {
-        bool firstSlotUsed = false;
-        bool secondSlotUsed = false;
-
-        for (int i = 0; i < juice.Length; i++)
-        {
-            if (juice[i] != 0)
-            {
-                if (!firstSlotUsed)
-                {
-                    firstSlotUsed = true;
-                    ImprovePanel.transform.GetChild(4).GetComponent<UnityEngine.UI.Image>().sprite = ImprovePanel.transform.GetChild(4).GetComponent<ImageSelector>().Sprites[i];
-                    ImprovePanel.transform.GetChild(5).GetComponent<UnityEngine.UI.Text>().text = juice[i].ToString();
-
-                }
-                else
-                {
-                    secondSlotUsed = true;
-                    ImprovePanel.transform.GetChild(6).GetComponent<UnityEngine.UI.Image>().sprite = ImprovePanel.transform.GetChild(6).GetComponent<ImageSelector>().Sprites[i];
-                    ImprovePanel.transform.GetChild(7).GetComponent<UnityEngine.UI.Text>().text = juice[i].ToString();
-                }
-            }
-        }
-        if (!firstSlotUsed)
-        {
-            ImprovePanel.transform.GetChild(4).gameObject.SetActive(false);
-            ImprovePanel.transform.GetChild(5).gameObject.SetActive(false);
-        }
-        if (!secondSlotUsed)
-        {
-            ImprovePanel.transform.GetChild(6).gameObject.SetActive(false);
-            ImprovePanel.transform.GetChild(7).gameObject.SetActive(false);
         }
     }
     // Called to open cell menus
@@ -710,19 +605,6 @@ public class GUIManager : MonoBehaviour
                 TappedOnField(fm);
             }
         }
-    }
-
-    // Doubleclicked is in a Coroutine for handling the Clickevent over time
-    IEnumerator DoubleClicked()
-    {
-        yield return new WaitForSeconds(0.5f);
-        if (tapCounter > 1)
-        {
-            //    //the field hit by the user
-            //    Vector2 point = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            //    RaycastHit2D hit = Physics2D.Raycast(point, Vector2.zero);
-        }
-        tapCounter = 0;
     }
 
     // Called to place a new stemcell on a certain field
