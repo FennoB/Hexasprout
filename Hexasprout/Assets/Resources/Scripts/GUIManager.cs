@@ -382,7 +382,7 @@ public class GUIManager : MonoBehaviour
                 if (CellMenuTarget.Cell.GetComponent<CellManager>().energyMax < 1.3)
                 {
                     transform.GetChild(6).gameObject.GetComponent<ImprovementMenuManager>().OpenCustomizedImprovePanel(CellMenuTarget.Cell.GetComponent<CellManager>().energyMax, 0.1f, "Increase EnergyMax",
-                                               GUI_Event.EnergyCap, new Juice(0, 0, 0.2f, 0, 0, 0.5f), 20f, this);
+                                               GUI_Event.EnergyCap, new Juice(0.1f, 0, 0.2f, 0, 0, 0.5f), 20f, this);
                 }
                 else
                 {
@@ -488,7 +488,7 @@ public class GUIManager : MonoBehaviour
             if (e == GUI_Event.BtnMorph2Heart)
             {
                 transform.GetChild(8).gameObject.GetComponent<MorphMenuManager>().OpenCustomizedImprovePanel("Morph to Heartcell",
-                                           GUI_Event.Morph2Heart, new Juice(0, 0, 0.2f, 0, 0, 0.1f), 5f, this);
+                                           GUI_Event.Morph2Heart, new Juice(0.1f, 0, 0.2f, 0, 0, 0.1f), 5f, this);
             }
             if (e == GUI_Event.BtnMorph2Leaf)
             {
@@ -498,7 +498,7 @@ public class GUIManager : MonoBehaviour
             if (e == GUI_Event.BtnMorph2Storage)
             {
                 transform.GetChild(8).gameObject.GetComponent<MorphMenuManager>().OpenCustomizedImprovePanel("Morph to Storagecell",
-                                           GUI_Event.Morph2Storage, new Juice(0, 0, 0.2f, 0, 0, 0.1f), 5f, this);
+                                           GUI_Event.Morph2Storage, new Juice(0, 0.1f, 0.2f, 0, 0, 0.1f), 5f, this);
             }
             if (e == GUI_Event.BtnMorph2Worker)
             {

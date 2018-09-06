@@ -16,7 +16,7 @@ public class MorphMenuManager : MonoBehaviour
         //showing things right on the panel
         transform.GetChild(2).gameObject.GetComponent<UnityEngine.UI.Text>().text = title;
         transform.GetChild(3).gameObject.GetComponent<ButtonScript>().ButtonID = e;
-        transform.GetChild(8).gameObject.GetComponent<UnityEngine.UI.Text>().text = seconds.ToString();
+        transform.GetChild(10).gameObject.GetComponent<UnityEngine.UI.Text>().text = seconds.ToString();
 
         UnityEngine.UI.Image newCell = transform.GetChild(1).gameObject.GetComponent<UnityEngine.UI.Image>();
         switch (e)
@@ -45,23 +45,30 @@ public class MorphMenuManager : MonoBehaviour
     {
         bool firstSlotUsed = false;
         bool secondSlotUsed = false;
+        bool thirdSlotUsed = false;
 
         for (int i = 0; i < juice.Length; i++)
         {
             if (juice[i] != 0)
             {
-                if (!firstSlotUsed)
+                if (secondSlotUsed && !thirdSlotUsed)
                 {
-                    firstSlotUsed = true;
-                    transform.GetChild(4).GetComponent<UnityEngine.UI.Image>().sprite = transform.GetChild(4).GetComponent<ImageSelector>().Sprites[i];
-                    transform.GetChild(5).GetComponent<UnityEngine.UI.Text>().text = juice[i].ToString();
+                    thirdSlotUsed = true;
+                    transform.GetChild(8).GetComponent<UnityEngine.UI.Image>().sprite = transform.GetChild(4).GetComponent<ImageSelector>().Sprites[i];
+                    transform.GetChild(9).GetComponent<UnityEngine.UI.Text>().text = juice[i].ToString();
 
                 }
-                else
+                if (firstSlotUsed && !secondSlotUsed)
                 {
                     secondSlotUsed = true;
                     transform.GetChild(6).GetComponent<UnityEngine.UI.Image>().sprite = transform.GetChild(6).GetComponent<ImageSelector>().Sprites[i];
                     transform.GetChild(7).GetComponent<UnityEngine.UI.Text>().text = juice[i].ToString();
+                }
+                if (!firstSlotUsed)
+                {
+                    firstSlotUsed = true;
+                    transform.GetChild(4).GetComponent<UnityEngine.UI.Image>().sprite = transform.GetChild(6).GetComponent<ImageSelector>().Sprites[i];
+                    transform.GetChild(5).GetComponent<UnityEngine.UI.Text>().text = juice[i].ToString();
                 }
             }
         }
@@ -74,6 +81,11 @@ public class MorphMenuManager : MonoBehaviour
         {
             transform.GetChild(6).gameObject.SetActive(false);
             transform.GetChild(7).gameObject.SetActive(false);
+        }
+        if (!thirdSlotUsed)
+        {
+            transform.GetChild(8).gameObject.SetActive(false);
+            transform.GetChild(9).gameObject.SetActive(false);
         }
     }
 }
