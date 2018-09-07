@@ -68,15 +68,30 @@ public class ImprovementMenuManager : MonoBehaviour
             transform.GetChild(4).gameObject.SetActive(false);
             transform.GetChild(5).gameObject.SetActive(false);
         }
+        else
+        {
+            transform.GetChild(4).gameObject.SetActive(true);
+            transform.GetChild(5).gameObject.SetActive(true);
+        }
         if (!secondSlotUsed)
         {
             transform.GetChild(6).gameObject.SetActive(false);
             transform.GetChild(7).gameObject.SetActive(false);
         }
+        else
+        {
+            transform.GetChild(6).gameObject.SetActive(true);
+            transform.GetChild(7).gameObject.SetActive(true);
+        }
         if (!thirdSlotUsed)
         {
             transform.GetChild(8).gameObject.SetActive(false);
             transform.GetChild(9).gameObject.SetActive(false);
+        }
+        else
+        {
+            transform.GetChild(8).gameObject.SetActive(true);
+            transform.GetChild(9).gameObject.SetActive(true);
         }
     }
 }

@@ -63,22 +63,22 @@ public class StemCellSpec : MonoBehaviour {
                 break;
             case GUI_Event.Morph2Heart:
                 gm.CloseCellMenu();
-                gm.OpenLoadBar(GUI_Event.BtnMorph2Heart);
+                //gm.OpenLoadBar(GUI_Event.BtnMorph2Heart);
                 OrderHeartMorph(gm);
                 break;
             case GUI_Event.Morph2Leaf:
                 gm.CloseCellMenu();
-                gm.OpenLoadBar(GUI_Event.BtnMorph2Leaf);
+                //gm.OpenLoadBar(GUI_Event.BtnMorph2Leaf);
                 OrderLeafMorph(gm);
                 break;
             case GUI_Event.Morph2Storage:
                 gm.CloseCellMenu();
-                gm.OpenLoadBar(GUI_Event.BtnMorph2Storage);
+                //gm.OpenLoadBar(GUI_Event.BtnMorph2Storage);
                 OrderStorageMorph(gm);
                 break;
             case GUI_Event.Morph2Worker:
                 gm.CloseCellMenu();
-                gm.OpenLoadBar(GUI_Event.BtnMorph2Worker);
+                //gm.OpenLoadBar(GUI_Event.BtnMorph2Worker);
                 OrderWorkerMorph(gm);
                 break;
         }
@@ -162,28 +162,28 @@ public class StemCellSpec : MonoBehaviour {
         CellManager.loadBarPicture = GUI_Event.BtnMorph2Heart;
         JobCache jobCache = gm.transform.GetChild(8).gameObject.GetComponent<JobCache>();
         buildName = jobCache.title;
-        BuildManager.Build(jobCache.seconds, jobCache.juice, jobCache.title);
+        BuildManager.Build(jobCache.seconds, jobCache.juice, jobCache.title, jobCache.dif);
     }
     void OrderLeafMorph(GUIManager gm)
     {
         CellManager.loadBarPicture = GUI_Event.BtnMorph2Leaf;
         JobCache jobCache = gm.transform.GetChild(8).gameObject.GetComponent<JobCache>();
         buildName = jobCache.title;
-        BuildManager.Build(jobCache.seconds, jobCache.juice, jobCache.title);
+        BuildManager.Build(jobCache.seconds, jobCache.juice, jobCache.title, jobCache.dif);
     }
     void OrderStorageMorph(GUIManager gm)
     {
         CellManager.loadBarPicture = GUI_Event.BtnMorph2Storage;
         JobCache jobCache = gm.transform.GetChild(8).gameObject.GetComponent<JobCache>();
         buildName = jobCache.title;
-        BuildManager.Build(jobCache.seconds, jobCache.juice, jobCache.title);
+        BuildManager.Build(jobCache.seconds, jobCache.juice, jobCache.title, jobCache.dif);
     }
     void OrderWorkerMorph(GUIManager gm)
     {
         CellManager.loadBarPicture = GUI_Event.BtnMorph2Worker;
         JobCache jobCache = gm.transform.GetChild(8).gameObject.GetComponent<JobCache>();
         buildName = jobCache.title;
-        BuildManager.Build(jobCache.seconds, jobCache.juice, jobCache.title);
+        BuildManager.Build(jobCache.seconds, jobCache.juice, jobCache.title, jobCache.dif);
     }
 
     // Builds a sprout and creates a new stemcell there
@@ -191,14 +191,14 @@ public class StemCellSpec : MonoBehaviour {
     {
         // Sprout
         buildName = "Build Sprout";
-        this.gameObject.GetComponent<BuildManager>().Build(seconds: 1f, juice: new Juice(0f, 0f, 0f, 0f, 0f, 0.25f), name: buildName);
+        this.gameObject.GetComponent<BuildManager>().Build(seconds: 1f, juice: new Juice(0f, 0f, 0f, 0f, 0f, 0.25f), name: buildName, dif: 0);
         CellManager.loadBarPicture = GUI_Event.BtnDegenerate;
     }
 
     void OrderNewConnection()
     {
         buildName = "Make Connection";
-        this.gameObject.GetComponent<BuildManager>().Build(2f, new Juice(0f, 0f, 0f, 0f, 0f, 0.2f), buildName);
+        this.gameObject.GetComponent<BuildManager>().Build(2f, new Juice(0f, 0f, 0f, 0f, 0f, 0.2f), buildName, dif: 0);
         CellManager.loadBarPicture = GUI_Event.BtnDegenerate;
     }
 
@@ -207,7 +207,7 @@ public class StemCellSpec : MonoBehaviour {
         buildName = "Build Cell";
 
         //first parameter is time in seconds, second the required juice, third the Name of the Buildevent
-        this.gameObject.GetComponent<BuildManager>().Build(2, new Juice(0f, 0f, 0f, 0f, 0f, 0.2f), buildName);
+        this.gameObject.GetComponent<BuildManager>().Build(2, new Juice(0f, 0f, 0f, 0f, 0f, 0.2f), buildName, dif: 0);
         GameObject.Find("World").GetComponent<WorldGenerator>().CreateStemCell(buildTarget);
 
         GameObject p = (GameObject)Resources.Load("Prefabs/Connections/buildegg", typeof(GameObject));

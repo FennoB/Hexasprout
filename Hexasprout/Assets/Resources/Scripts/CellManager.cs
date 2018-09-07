@@ -308,6 +308,9 @@ public class CellManager : MonoBehaviour
 
         //has to be removed in Future, just for building things fast
         juice.black = 1f;
+        juice.red = 1f;
+        juice.blue = 1f;
+        juice.blueCharged = 1f;
     }
 
     private void Start()
@@ -347,7 +350,8 @@ public class CellManager : MonoBehaviour
 
             if(BuildManager.buildFlag)
             {
-                FindObjectOfType<GUIManager>().SetLoadBar(BuildManager.progress);
+                //FindObjectOfType<GUIManager>().SetLoadBar(BuildManager.progress);
+                //GameObject.FindGameObjectWithTag("GUI").transform.GetChild(9).gameObject.SetActive(true);
             }
         }
 
@@ -487,7 +491,7 @@ public class CellManager : MonoBehaviour
 
     void FinishBuild(string buildName)
     {
-        float dif = GameObject.FindGameObjectWithTag("GUI").transform.GetChild(6).gameObject.GetComponent<JobCache>().dif;
+        float dif = GetComponent<BuildManager>().dif;
         switch (buildName)
         {
             case "Increase EnergyMax":
@@ -505,21 +509,20 @@ public class CellManager : MonoBehaviour
     {
         gm.CloseCellMenu();
         loadBarPicture = GUI_Event.BtnEnergycap;
-        gm.OpenLoadBar(GUI_Event.BtnEnergycap);
+        //gm.OpenLoadBar(GUI_Event.BtnEnergycap);
 
         JobCache jobCache = gm.transform.GetChild(6).gameObject.GetComponent<JobCache>();
 
-        //energyMax += jobCache.dif;
-        BuildManager.Build(jobCache.seconds, jobCache.juice, jobCache.title);
+        BuildManager.Build(jobCache.seconds, jobCache.juice, jobCache.title, jobCache.dif);
     }
     void LowerEnergyUse(GUIManager gm)
     {
         gm.CloseCellMenu();
         loadBarPicture = GUI_Event.BtnEnergyuse;
-        gm.OpenLoadBar(GUI_Event.BtnEnergyuse);
+        //gm.OpenLoadBar(GUI_Event.BtnEnergyuse);
 
         JobCache jobCache = gm.transform.GetChild(6).gameObject.GetComponent<JobCache>();
-        BuildManager.Build(jobCache.seconds, jobCache.juice, jobCache.title);
+        BuildManager.Build(jobCache.seconds, jobCache.juice, jobCache.title, jobCache.dif);
     }
 
     // Specialize slider menu

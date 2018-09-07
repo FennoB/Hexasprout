@@ -158,13 +158,13 @@ public class StorageCellSpec : MonoBehaviour
     {
         // Sprout
         buildName = "Build Sprout";
-        this.gameObject.GetComponent<BuildManager>().Build(1, new Juice(0f, 0f, 0f, 0f, 0f, 0.02f), buildName);
+        this.gameObject.GetComponent<BuildManager>().Build(1, new Juice(0f, 0f, 0f, 0f, 0f, 0.02f), buildName, 0);
         CellManager.loadBarPicture = GUI_Event.BtnDegenerate;
     }
     void OrderNewConnection()
     {
         buildName = "Make Connection";
-        this.gameObject.GetComponent<BuildManager>().Build(1, new Juice(0f, 0f, 0f, 0f, 0f, 0.02f), buildName);
+        this.gameObject.GetComponent<BuildManager>().Build(1, new Juice(0f, 0f, 0f, 0f, 0f, 0.02f), buildName, 0);
         CellManager.loadBarPicture = GUI_Event.BtnDegenerate;
     }
     void MakeCell()
@@ -172,7 +172,7 @@ public class StorageCellSpec : MonoBehaviour
         buildName = "Build Cell";
 
         //first parameter is time in seconds, second the required juice, third the Name of the Buildevent
-        this.gameObject.GetComponent<BuildManager>().Build(1, new Juice(0f, 0f, 0f, 0f, 0f, 0.02f), buildName);
+        this.gameObject.GetComponent<BuildManager>().Build(1, new Juice(0f, 0f, 0f, 0f, 0f, 0.02f), buildName, 0);
         GameObject.Find("World").GetComponent<WorldGenerator>().CreateStemCell(buildTarget);
 
         GameObject p = (GameObject)Resources.Load("Prefabs/Connections/buildegg", typeof(GameObject));

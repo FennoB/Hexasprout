@@ -13,6 +13,8 @@ public class BuildManager : MonoBehaviour {
     public float seconds;
     public Juice goalJuice;
 
+    // the value of improvement for the build
+    public float dif = 0;
     //just for testing
     public float duration = 0;
 
@@ -28,7 +30,7 @@ public class BuildManager : MonoBehaviour {
      *then the event is triggered, that the 
      * BuildJob is completed
      */
-	public void Build(float seconds, Juice juice, string name)
+	public void Build(float seconds, Juice juice, string name, float dif)
     {
         //says that this Manager is already used
         buildFlag = true;
@@ -37,6 +39,7 @@ public class BuildManager : MonoBehaviour {
        
         buildName = name;
         this.seconds = seconds;
+        this.dif = dif;
         goalJuice = juice;
 
         //add juice so long, until the goal is reached
@@ -70,6 +73,11 @@ public class BuildManager : MonoBehaviour {
             //send Event to build to that cell, which wanted to build
             cm.EventHandler(GUI_Event.BuildReady, null);
         }
+    }
+
+    public void QuitBuildJob()
+    {
+
     }
 
     void HandleJuiceComponent(int i)
@@ -120,7 +128,7 @@ public class BuildManager : MonoBehaviour {
     {
         if (buildFlag)
         {
-            Build(seconds, goalJuice, buildName);
+            Build(seconds, goalJuice, buildName, dif);
         }
     }
 }

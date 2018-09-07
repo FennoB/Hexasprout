@@ -443,9 +443,22 @@ MonoBehaviour:
     blueCharged: 0
     yellow: 0
     black: 0
+    Length: 6
   buildFlag: 0
   progress: 0
   cm: {fileID: 0}
+  buildName: 
+  seconds: 0
+  goalJuice:
+    red: 0
+    green: 0
+    blue: 0
+    blueCharged: 0
+    yellow: 0
+    black: 0
+    Length: 6
+  dif: 0
+  duration: 0
 --- !u!114 &114867805372082870
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -464,6 +477,7 @@ MonoBehaviour:
     blueCharged: 3
     yellow: 1
     black: 5
+    Length: 6
   capacities:
     red: 1
     green: 1
@@ -471,6 +485,7 @@ MonoBehaviour:
     blueCharged: 3
     yellow: 1
     black: 5
+    Length: 6
   target:
     red: 0.9
     green: 0.9
@@ -478,6 +493,7 @@ MonoBehaviour:
     blueCharged: 2.7
     yellow: 0.9
     black: 4.7
+    Length: 6
   maxSpeedPerSecond: 0.1
   Field: {fileID: 0}
   CellManager: {fileID: 0}
@@ -513,6 +529,7 @@ MonoBehaviour:
     blueCharged: 0
     yellow: 0
     black: 0
+    Length: 6
   diffusionDelta:
     red: 0
     green: 0
@@ -520,6 +537,7 @@ MonoBehaviour:
     blueCharged: 0
     yellow: 0
     black: 0
+    Length: 6
   ConnectionCounter: 0
   ConnectionMax: 1
   connections: []

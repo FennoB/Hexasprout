@@ -139,9 +139,22 @@ MonoBehaviour:
     blueCharged: 0
     yellow: 0
     black: 0
+    Length: 6
   buildFlag: 0
   progress: 0
   cm: {fileID: 0}
+  buildName: 
+  seconds: 0
+  goalJuice:
+    red: 0
+    green: 0
+    blue: 0
+    blueCharged: 0
+    yellow: 0
+    black: 0
+    Length: 6
+  dif: 0
+  duration: 0
 --- !u!114 &114405461280124104
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -189,6 +202,7 @@ MonoBehaviour:
     blueCharged: 0
     yellow: 0
     black: 0
+    Length: 6
   diffusionDelta:
     red: 0
     green: 0
@@ -196,6 +210,7 @@ MonoBehaviour:
     blueCharged: 0
     yellow: 0
     black: 0
+    Length: 6
   ConnectionCounter: 0
   ConnectionMax: 1
   connections: []

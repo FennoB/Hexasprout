@@ -417,7 +417,7 @@ public class GUIManager : MonoBehaviour
             {
                 if (CellMenuTarget.Cell.GetComponent<WorkerCellSpec>().MaxWorkerConnections < 5)
                 {
-                    transform.GetChild(6).gameObject.GetComponent<ImprovementMenuManager>().OpenCustomizedImprovePanel(0f, 6f, "Unlock WorkerConnections",
+                    transform.GetChild(6).gameObject.GetComponent<ImprovementMenuManager>().OpenCustomizedImprovePanel(1f, 5f, "Unlock WorkerConnections",
                                                GUI_Event.WorkerCount, new Juice(0, 0, 0.2f, 0, 0, 0.5f), 20f, this);
                 }
                 else
@@ -563,7 +563,7 @@ public class GUIManager : MonoBehaviour
     }
 
     // LoadBar
-    public LoadBarManager OpenLoadBar(Sprite s)
+    /*public LoadBarManager OpenLoadBar(Sprite s)
     {
         CellMenuOpen = true;
         GameObject loadbar = transform.GetChild(2).gameObject;
@@ -580,7 +580,7 @@ public class GUIManager : MonoBehaviour
         GameObject loadbar = transform.GetChild(2).gameObject;
         loadbar.GetComponent<LoadBarManager>().progress = progress;
         return loadbar.GetComponent<LoadBarManager>();
-    }
+    }*/
 
     // Is called when Single tap ocurrs
     IEnumerator SingleClicked()

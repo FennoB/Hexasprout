@@ -65,7 +65,7 @@ public class LeafCellSpec : MonoBehaviour {
     }
     void FinishBuild(string buildName)
     {
-        float dif = GameObject.FindGameObjectWithTag("GUI").transform.GetChild(6).gameObject.GetComponent<JobCache>().dif;
+        float dif = GetComponent<BuildManager>().dif;
         switch (buildName)
         {
             case "Increase Conversion Rate":
@@ -77,9 +77,9 @@ public class LeafCellSpec : MonoBehaviour {
     {
         gm.CloseCellMenu();
         CellManager.loadBarPicture = GUI_Event.BtnLeafSpeed;
-        gm.OpenLoadBar(GUI_Event.BtnLeafSpeed);
+        //gm.OpenLoadBar(GUI_Event.BtnLeafSpeed);
 
         JobCache jobCache = gm.transform.GetChild(6).gameObject.GetComponent<JobCache>();
-        CellManager.BuildManager.Build(jobCache.seconds, jobCache.juice, jobCache.title);
+        CellManager.BuildManager.Build(jobCache.seconds, jobCache.juice, jobCache.title, jobCache.dif);
     }
 }
